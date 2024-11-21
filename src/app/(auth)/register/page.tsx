@@ -10,6 +10,7 @@ interface RegisterFormProps {
   password: string;
   confirmPassword: string;
   name: string;
+  role: string;
   referralCode: string;
 }
 
@@ -57,6 +58,7 @@ const RegisterPage: FC = () => {
           password: "",
           confirmPassword: "",
           name: "",
+          role: "ATTENDEE",
           referralCode: "",
         }}
         validationSchema={ContactSchema}
@@ -113,7 +115,16 @@ const RegisterPage: FC = () => {
               <div className="text-red-500">{errors.name}</div>
             ) : null}
 
-            <label htmlFor="password">Referral Code</label>
+            <label htmlFor="role">Role</label>
+            <Field as="select" name="role">
+              <option value="ATTENDEE">ATTENDEE</option>
+              <option value="ORGANIZER">ORGANIZER</option>
+            </Field>
+            {errors.role && touched.role ? (
+              <div className="text-red-500">{errors.role}</div>
+            ) : null}
+
+            <label htmlFor="referralCode">Referral Code</label>
             <Field
               id="referralCode"
               name="referralCode"
