@@ -1,4 +1,6 @@
 "use client";
+import axios from "axios";
+import { access } from "fs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
@@ -17,6 +19,35 @@ const checkToken: () => boolean = () => {
 const Header: FC = () => {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
+
+  const logoutRequest = async () => {
+    const token = localStorage.getItem("token");
+    await axios
+      .post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+        {
+          accessToken: token,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          localStorage.removeItem("token");
+          setIsLogin(false);
+          router.push("/");
+        }
+      })
+      .catch((error) => {
+        if (error.status === 401) {
+          console.log(error.message);
+          localStorage.removeItem("token");
+          router.push("/login");
+        }
+      });
+  };
   useEffect(() => {
     setIsLogin(checkToken());
   }, []);
@@ -36,9 +67,7 @@ const Header: FC = () => {
             </Link>
             <button
               onClick={() => {
-                localStorage.removeItem("token");
-                router.push("/");
-                setIsLogin(false);
+                logoutRequest();
               }}
             >
               Logout
