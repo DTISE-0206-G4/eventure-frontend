@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { FC } from "react";
 import {
@@ -10,7 +11,12 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
 const EventList: FC = () => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/event_page");
+  };
   return (
     <div className="w-full mx-5">
       <div className="flex justify-between items-center">
@@ -108,7 +114,10 @@ const EventList: FC = () => {
         </div>
       </div>
       <div className="my-5 flex flex-col gap-5">
-        <div className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum">
+        <div
+          onClick={handleClick}
+          className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum hover:cursor-pointer hover:bg-azureish-white"
+        >
           <Image
             className="rounded-md w-[45px] h-[45px]"
             src="/images/default-profile.jpg"
@@ -163,7 +172,10 @@ const EventList: FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum">
+        <div
+          onClick={handleClick}
+          className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum hover:cursor-pointer hover:bg-azureish-white"
+        >
           <Image
             className="rounded-md w-[45px] h-[45px]"
             src="/images/default-profile.jpg"
@@ -218,7 +230,10 @@ const EventList: FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum">
+        <div
+          onClick={handleClick}
+          className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum hover:cursor-pointer hover:bg-azureish-white"
+        >
           <Image
             className="rounded-md w-[45px] h-[45px]"
             src="/images/default-profile.jpg"
