@@ -5,7 +5,7 @@ const ProfilePage: FC = () => {
   return (
     <div className="container mx-auto min-h-[calc(100vh-150px)]">
       <div className="my-5">
-        <div className="font-semibold text-xl">Profile</div>
+        <div className="font-semibold text-xl">User Dashboard</div>
         <div className="flex gap-5 justify-between mt-5 bg-white border border-platinum rounded-sm p-5">
           <div className="w-1/5 border-r border-platinum">
             <div className="bg-azureish-white p-5 font-semibold hover:bg-azureish-white hover:cursor-pointer">
