@@ -11,7 +11,6 @@ export default function Home() {
           <EventFilter />
           <EventList />
         </div>
-        <Footer />
       </div>
     </div>
   );

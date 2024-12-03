@@ -59,7 +59,6 @@ const Header: FC = () => {
       <div className="container h-full flex justify-between items-center mx-auto">
         <div>
           <Link href="/">
-            {/* <div>Eventure</div> */}
             <Image
               src="/images/eventure-full.png"
               width={150}
