@@ -13,7 +13,17 @@ import Image from "next/image";
 const OrganizerEventPage: FC = () => {
   return (
     <>
-      <div className="font-semibold text-xl">My Events</div>
+      <div className="flex justify-between">
+        <div className="font-semibold text-xl">My Events</div>
+        <button className="bg-true-blue rounded-lg py-2 px-5 text-white flex gap-2">
+          <FontAwesomeIcon
+            className="w-[25px] h-[25px] shrink-0 text-white"
+            icon={faPlus}
+          />
+          <div>Add Event</div>
+        </button>
+      </div>
+
       <div className="flex justify-between items-center mt-5">
         <div>
           <label
@@ -112,10 +122,10 @@ const OrganizerEventPage: FC = () => {
         <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
           <div className="flex gap-5 items-center">
             <Image
-              className="rounded-md w-[45px] h-[45px]"
-              src="/images/default-profile.jpg"
-              width={45}
-              height={45}
+              className="rounded-md w-[100px] h-[50px] object-cover"
+              src="/images/carousel-1.svg"
+              width={50}
+              height={100}
               alt="Picture of the author"
             />
             <div className="flex flex-col gap-2 w-full">
@@ -229,10 +239,10 @@ const OrganizerEventPage: FC = () => {
         <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
           <div className="flex gap-5 items-center">
             <Image
-              className="rounded-md w-[45px] h-[45px]"
-              src="/images/default-profile.jpg"
-              width={45}
-              height={45}
+              className="rounded-md w-[100px] h-[50px] object-cover"
+              src="/images/carousel-1.svg"
+              width={50}
+              height={100}
               alt="Picture of the author"
             />
             <div className="flex flex-col gap-2 w-full">
