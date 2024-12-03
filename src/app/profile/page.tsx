@@ -1,120 +1,137 @@
-"use client";
-import { FC, useEffect, useState } from "react";
-import DiscountList from "./components/DiscountList";
-import TicketList from "./components/TicketList";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
-
-interface ProfileProps {
-  name: string;
-  email: string;
-  description: string;
-  referralCode: string;
-}
-
-interface JwtPayload {
-  [key: string]: any;
-}
+import Image from "next/image";
+import { FC } from "react";
 
 const ProfilePage: FC = () => {
-  const [profile, setProfile] = useState<ProfileProps | null>(null);
-  const router = useRouter();
-  const [scope, setScope] = useState<string>("ATTENDEE");
-
-  const [activeTab, setActiveTab] = useState(
-    scope === "ATTENDEE" ? "tickets" : "events"
-  );
-  const fetchProfile = async () => {
-    const token = localStorage.getItem("token");
-    await axios
-      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setProfile(response.data.data);
-      })
-      .catch((error) => {
-        if (error.status === 401) {
-          console.log(error.message);
-          localStorage.removeItem("token");
-          router.push("/login");
-        }
-      });
-  };
-
-  const getScope = () => {
-    const token = localStorage.getItem("token");
-    const decodedToken = jwtDecode(token as string) as JwtPayload;
-    return decodedToken?.scope;
-  };
-
-  useEffect(() => {
-    const scope = getScope();
-    if (scope === "ORGANIZER") {
-      setActiveTab("events");
-    }
-    setScope(scope);
-    fetchProfile();
-  }, []);
-  const handleTabClick = (tab: string) => {
-    setActiveTab(tab);
-  };
-
-  if (!profile) return null;
   return (
-    <div>
-      <div className="py-5 text-3xl">PROFILE</div>
-      <div className="flex gap-20 items-center py-5">
-        <div className="bg-slate-500 w-[200px] h-[200px]">Image</div>
-        <div>
-          <div>Name: {profile.name}</div>
-          <div>Email: {profile.email}</div>
-          <div>Referral Code: {profile.referralCode}</div>
-          <div>Description: {profile.description}</div>
+    <div className="container mx-auto min-h-[calc(100vh-150px)]">
+      <div className="my-5">
+        <div className="font-semibold text-xl">Profile</div>
+        <div className="flex gap-5 justify-between mt-5 bg-white border border-platinum rounded-sm p-5">
+          <div className="w-1/5 border-r border-platinum">
+            <div className="bg-azureish-white p-5 font-semibold hover:bg-azureish-white hover:cursor-pointer">
+              Profile Settings
+            </div>
+            <div className="p-5 font-semibold hover:bg-azureish-white hover:cursor-pointer">
+              Tickets
+            </div>
+            <div className="p-5 font-semibold hover:bg-azureish-white hover:cursor-pointer">
+              Reviews
+            </div>
+          </div>
+          <div className="w-4/5">
+            <div className="font-semibold text-xl">Profile Settings</div>
+            <div className="mt-5 flex flex-col gap-2">
+              <div className="text-lg font-medium text-slate-gray">
+                Profile Image
+              </div>
+              <div className="flex gap-5">
+                <Image
+                  className="rounded-md"
+                  src="/images/default-profile.jpg"
+                  width={150}
+                  height={150}
+                  alt="User Profile"
+                />
+                <div className="flex flex-col justify-center gap-5">
+                  <button className="bg-white rounded-lg px-5 py-2 border border-platinum font-semibold">
+                    Change image
+                  </button>
+                  <button className="bg-white rounded-lg px-5 py-2 border border-platinum text-red-500 font-semibold">
+                    Delete image
+                  </button>
+                  {/* <div>Gora Asep</div>
+                <div className="text-slate-gray text-xs">ATTENDEE</div> */}
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 flex flex-col gap-2">
+              <div className="text-lg font-medium text-slate-gray">
+                Profile Details
+              </div>
+              <div className="flex flex-col gap-2 w-full">
+                <div>
+                  <label
+                    className="block text-slate-gray text-sm font-bold mb-2"
+                    htmlFor="email"
+                  >
+                    Email
+                  </label>
+                  <input
+                    className="shadow appearance-none border border-platinum rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none bg-azureish-white"
+                    name="name"
+                    type="text"
+                    placeholder="Your email"
+                    defaultValue={"test@email.com"}
+                    disabled
+                  ></input>
+                </div>
+                <div>
+                  <label
+                    className="block text-slate-gray text-sm font-bold mb-2"
+                    htmlFor="name"
+                  >
+                    Name
+                  </label>
+                  <input
+                    className="shadow appearance-none border border-platinum rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                    name="name"
+                    type="text"
+                    placeholder="Your name"
+                    defaultValue={"Gora Asep"}
+                  ></input>
+                </div>
+                <div>
+                  <label
+                    className="block text-slate-gray text-sm font-bold mb-2"
+                    htmlFor="description"
+                  >
+                    Profile Description
+                  </label>
+                  <textarea
+                    name="description"
+                    id=""
+                    className="shadow appearance-none border border-platinum rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                  ></textarea>
+                </div>
+              </div>
+              <div className="mt-5 flex flex-col gap-2">
+                <div className="text-lg font-medium text-slate-gray">
+                  Refferal Code Setting
+                </div>
+                <div className="flex gap-5 justify-start">
+                  <div>
+                    <label
+                      className="block text-slate-gray text-sm font-bold mb-2"
+                      htmlFor="referralCode"
+                    >
+                      Refferal Code
+                    </label>
+                    <div className="flex gap-5 items-center">
+                      <input
+                        className="shadow appearance-none border border-platinum rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                        name="referralCode"
+                        type="text"
+                        placeholder="Referral Code"
+                        defaultValue={"GORAASEPUHUY"}
+                      ></input>
+                      <button className="bg-white rounded-lg px-5 py-2 border border-platinum font-semibold text-nowrap">
+                        Check availability
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 flex justify-end">
+                <button className="bg-true-blue text-white rounded-lg px-5 py-2 border border-platinum font-semibold text-nowrap">
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      {scope === "ATTENDEE" && (
-        <div className="flex gap-5 justify-center">
-          <div className="flex flex-col gap-5 items-start">
-            <button onClick={() => handleTabClick("tickets")}>Tickets</button>
-            <hr className="bg-slate-500 w-full" />
-            <button onClick={() => handleTabClick("discounts")}>
-              Discounts
-            </button>
-            <hr className="bg-slate-500 w-full" />
-          </div>
-          <div className="w-px bg-gray-400"></div>
-          <div className="flex flex-col gap-5 w-full">
-            {activeTab === "tickets" && <TicketList />}
-            {activeTab === "discounts" && <DiscountList />}
-          </div>
-        </div>
-      )}
-      {scope === "ORGANIZER" && (
-        <div className="flex gap-5 justify-center">
-          <div className="flex flex-col gap-5 items-start">
-            <button onClick={() => handleTabClick("events")}>Events</button>
-            <hr className="bg-slate-500 w-full" />
-            <button onClick={() => handleTabClick("discounts")}>
-              Discounts
-            </button>
-            <hr className="bg-slate-500 w-full" />
-            <button onClick={() => handleTabClick("analytics")}>
-              Analytics
-            </button>
-            <hr className="bg-slate-500 w-full" />
-          </div>
-          <div className="w-px bg-gray-400"></div>
-          <div className="flex flex-col gap-5 w-full">
-            {activeTab === "events" && <div>Events list</div>}
-            {activeTab === "discounts" && <div>Discount list</div>}
-            {activeTab === "analytics" && <div>Analytics Dashboard</div>}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
+
 export default ProfilePage;

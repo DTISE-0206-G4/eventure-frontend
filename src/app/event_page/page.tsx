@@ -15,7 +15,7 @@ const EventPage: FC = () => {
       <div className="my-5">
         <div className="font-semibold text-xl">Pesta Wibu 2024</div>
         <div className="flex gap-5 justify-between mt-5 items-start">
-          <div className="w-2/3 bg-white border border-platinum rounder-sm p-5">
+          <div className="w-2/3 bg-white border border-platinum rounded-sm p-5">
             <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 my-5">
               <Carousel>
                 <img
@@ -59,7 +59,7 @@ const EventPage: FC = () => {
               </div>
             </div>
           </div>
-          <div className="w-1/3 bg-white border border-platinum rounder-sm p-5 flex flex-col gap-5">
+          <div className="w-1/3 bg-white border border-platinum rounded-sm p-5 flex flex-col gap-5">
             <div className="flex flex-col gap-2">
               <div className="flex gap-2 items-center">
                 <FontAwesomeIcon
