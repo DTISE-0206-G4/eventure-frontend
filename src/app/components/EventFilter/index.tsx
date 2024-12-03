@@ -10,19 +10,19 @@ const EventFilter: FC = () => {
             id="Online"
             className="text-true-blue focus:ring-true-blue border-blue-300"
           />
-          <Label htmlFor="Online" className="flex">
+          <Label htmlFor="Online" className="flex text-slate-gray">
             Online
           </Label>
         </div>
         <div className="flex items-center gap-2 my-2">
           <Checkbox id="Offline" className="text-true-blue  border-blue-300" />
-          <Label htmlFor="Offline" className="flex">
+          <Label htmlFor="Offline" className="flex text-slate-gray">
             Offline
           </Label>
         </div>
         <div className="flex items-center gap-2 my-2">
           <Checkbox id="Concert" className="text-true-blue  border-blue-300" />
-          <Label htmlFor="Concert" className="flex">
+          <Label htmlFor="Concert" className="flex text-slate-gray">
             Concert
           </Label>
         </div>
@@ -31,14 +31,14 @@ const EventFilter: FC = () => {
             id="MeetNGreet"
             className="text-true-blue  border-blue-300"
           />
-          <Label htmlFor="MeetNGreet" className="flex">
+          <Label htmlFor="MeetNGreet" className="flex text-slate-gray">
             MeetNGreet
           </Label>
         </div>
 
         <div className="flex items-center gap-2 my-2">
           <Checkbox id="Seminar" className="text-true-blue  border-blue-300" />
-          <Label htmlFor="Seminar" className="flex">
+          <Label htmlFor="Seminar" className="flex text-slate-gray">
             Seminar
           </Label>
         </div>
@@ -47,22 +47,22 @@ const EventFilter: FC = () => {
             id="Exhibition"
             className="text-true-blue  border-blue-300"
           />
-          <Label htmlFor="Exhibition" className="flex">
+          <Label htmlFor="Exhibition" className="flex text-slate-gray">
             Exhibition
           </Label>
         </div>
         <div className="flex items-center gap-2 my-2">
           <Checkbox id="Sport" className="text-true-blue  border-blue-300" />
-          <Label htmlFor="Sport" className="flex">
+          <Label htmlFor="Sport" className="flex text-slate-gray">
             Sport
           </Label>
         </div>
       </div>
-      <div className="mt-10">
+      <div className="mt-5">
         <div className="font-medium">Price Range</div>
         <div className="my-2">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-slate-gray text-sm font-bold mb-2"
             htmlFor="from"
           >
             From
@@ -76,7 +76,7 @@ const EventFilter: FC = () => {
         </div>
         <div className="my-2">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-slate-gray text-sm font-bold mb-2"
             htmlFor="from"
           >
             To
@@ -89,14 +89,14 @@ const EventFilter: FC = () => {
           ></input>
         </div>
       </div>
-      <div className="mt-10">
+      <div className="mt-5">
         <div className="font-medium">Location</div>
         <div className="my-2">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-slate-gray text-sm font-bold mb-2"
             htmlFor="province"
           >
-            Country
+            Province
           </label>
           <select
             name="province"
@@ -110,7 +110,7 @@ const EventFilter: FC = () => {
         </div>
         <div className="my-2">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-slate-gray text-sm font-bold mb-2"
             htmlFor="city"
           >
             City

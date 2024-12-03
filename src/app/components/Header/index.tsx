@@ -64,20 +64,20 @@ const Header: FC = () => {
               src="/images/eventure-full.png"
               width={150}
               height={50}
-              alt="Picture of the author"
+              alt="logo"
             />
           </Link>
         </div>
 
         <Dropdown
           label={
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center justify-start">
               <Image
                 className="rounded-md"
                 src="/images/default-profile.jpg"
                 width={45}
                 height={45}
-                alt="Picture of the author"
+                alt="User Profile"
               />
               <div className="flex flex-col justify-center">
                 <div>Gora Asep</div>
