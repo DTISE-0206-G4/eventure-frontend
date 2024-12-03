@@ -14,8 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>
-        <div className="container mx-auto">
+      <body className={`antialiased bg-ghost-white`}>
+        <div className="mx-auto">
           <Header />
           {children}
         </div>

@@ -4,7 +4,9 @@ import { access } from "fs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
-
+import { Dropdown, DropdownItem } from "flowbite-react";
+import Image from "next/image";
+import defaultProfileImage from "../../public/image/default-profile.jpg";
 const checkToken: () => boolean = () => {
   const token: string | null = localStorage.getItem("token");
   if (token) {
@@ -53,36 +55,45 @@ const Header: FC = () => {
   }, []);
   //   const isLogin: boolean = checkToken();
   return (
-    <div className="h-[96px] bg-slate-500 flex justify-between items-center px-5">
-      <div>
-        <Link href="/">
-          <div>Eventure</div>
-        </Link>
-      </div>
-      <div className="flex gap-5">
-        {isLogin ? (
-          <>
-            <Link href="/profile">
-              <div>Profile</div>
-            </Link>
-            <button
-              onClick={() => {
-                logoutRequest();
-              }}
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link href="/login">
-              <div>Login</div>
-            </Link>
-            <Link href="/register">
-              <div>Register</div>
-            </Link>
-          </>
-        )}
+    <div className="h-[60px] bg-white  border-b-2 border-platinum">
+      <div className="container h-full flex justify-between items-center mx-auto">
+        <div>
+          <Link href="/">
+            {/* <div>Eventure</div> */}
+            <Image
+              src="/images/eventure-full.png"
+              width={150}
+              height={50}
+              alt="Picture of the author"
+            />
+          </Link>
+        </div>
+
+        <Dropdown
+          label={
+            <div className="flex gap-2 items-center">
+              <Image
+                className="rounded-md"
+                src="/images/default-profile.jpg"
+                width={45}
+                height={45}
+                alt="Picture of the author"
+              />
+              <div className="flex flex-col justify-center">
+                <div>Gora Asep</div>
+                <div className="text-slate-gray text-xs">ATTENDEE</div>
+              </div>
+            </div>
+          }
+          inline
+          arrowIcon={false}
+        >
+          <DropdownItem>Profile</DropdownItem>
+          <DropdownItem>Events</DropdownItem>
+          <DropdownItem>Tickets</DropdownItem>
+          <DropdownItem>Feedback</DropdownItem>
+          <DropdownItem>Logout</DropdownItem>
+        </Dropdown>
       </div>
     </div>
   );
