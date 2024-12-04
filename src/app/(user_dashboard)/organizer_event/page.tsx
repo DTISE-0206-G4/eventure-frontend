@@ -1,4 +1,5 @@
-import { FC } from "react";
+'use client'
+import { FC, useState } from "react";
 import {
   faChevronLeft,
   faChevronRight,
@@ -10,7 +11,27 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { Modal } from "flowbite-react";
+
+interface IEventToDelete {
+  id: number;
+  name: string;
+}
+
 const OrganizerEventPage: FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState<IEventToDelete | null>(null); 
+
+  const handleDeleteClick = (event: IEventToDelete) => {
+    setEventToDelete(event); 
+    setIsModalOpen(true); 
+  };
+
+  const handleConfirmDelete = () => {
+    // Logic to delete the event
+    console.log(`Deleting event: ${eventToDelete}`);
+    setIsModalOpen(false); 
+  };
   return (
     <>
       <div className="flex justify-between">
@@ -135,7 +156,10 @@ const OrganizerEventPage: FC = () => {
                   <button className="bg-american-green rounded-lg py-2 px-5 text-white">
                     Edit
                   </button>
-                  <button className="border border-red-500 rounded-lg py-2 px-5 text-red-500">
+                  <button 
+                    className="border border-red-500 rounded-lg py-2 px-5 text-red-500"
+                    onClick={() => handleDeleteClick("Pesta Wibu 2024")}
+                    >
                     Delete
                   </button>
                   <button className="bg-true-blue rounded-lg py-2 px-5 text-white">
@@ -318,6 +342,31 @@ const OrganizerEventPage: FC = () => {
             </div>
           </div>
         </div>
+
+
+        <Modal
+          show={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
+          <Modal.Header>Delete Event</Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you want to delete the event "{eventToDelete}"?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              className="bg-gray-500 text-white rounded-lg px-4 py-2"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="bg-red-500 text-white rounded-lg px-4 py-2"
+              onClick={handleConfirmDelete}
+            >
+              Delete
+            </button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );
