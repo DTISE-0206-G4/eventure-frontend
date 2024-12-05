@@ -140,7 +140,7 @@ const refreshToken = async (refreshToken: string) => {
     console.error("Failed to refresh access token");
     return null;
   }
-  const { data } = (await response.json()) as LoginResponse;
+  const { data } = await response.json();
 
   // Verify the JWT signature
   const secret = process.env.JWT_SECRET;
@@ -150,16 +150,16 @@ const refreshToken = async (refreshToken: string) => {
   }
 
   try {
-    jwt.verify(data.accessToken, secret);
+    jwt.verify(data, secret);
   } catch (err) {
     console.error("JWT verification failed:", err);
     return null;
   }
 
-  const decodedToken = jwtDecode<TokenClaims>(data.accessToken);
+  const decodedToken = jwtDecode<TokenClaims>(data);
 
   return {
     claims: decodedToken,
-    value: data.accessToken,
+    value: data,
   };
 };
