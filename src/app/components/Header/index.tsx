@@ -60,38 +60,49 @@ const Header: FC = () => {
         </div>
 
         {session && (
-          <Dropdown
-            label={
-              <div className="flex gap-2 items-start justify-start text-start">
-                <Image
-                  className="rounded-md"
-                  src="/images/default-profile.jpg"
-                  width={45}
-                  height={45}
-                  alt="User Profile"
-                />
-                <div className="flex flex-col justify-center">
-                  <div>{session.user.email}</div>
-                  <div className="text-slate-gray text-xs">
-                    {session.user.roles[0]}
+          <>
+            <Dropdown
+              label={
+                <div className="flex gap-2 items-start justify-start text-start">
+                  <Image
+                    className="rounded-md"
+                    src="/images/default-profile.jpg"
+                    width={45}
+                    height={45}
+                    alt="User Profile"
+                  />
+                  <div className="flex flex-col justify-center">
+                    <div>{session.user.email}</div>
+                    <div className="text-slate-gray text-xs">
+                      {session.user.roles[0]}
+                    </div>
                   </div>
                 </div>
-              </div>
-            }
-            inline
-            arrowIcon={false}
-          >
-            <DropdownItem onClick={() => router.push("/profile")}>
-              Profile
-            </DropdownItem>
-            <DropdownItem onClick={() => router.push("/organizer_event")}>
-              Events
-            </DropdownItem>
-            <DropdownItem onClick={() => router.push("/ticket")}>
-              Tickets
-            </DropdownItem>
-            <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
-          </Dropdown>
+              }
+              inline
+              arrowIcon={false}
+            >
+              <DropdownItem onClick={() => router.push("/profile")}>
+                Profile
+              </DropdownItem>
+              {session.user.roles[0] === "ORGANIZER" && (
+                <>
+                  <DropdownItem onClick={() => router.push("/organizer_event")}>
+                    Events
+                  </DropdownItem>
+                </>
+              )}
+              {session.user.roles[0] === "ATTENDEE" && (
+                <>
+                  <DropdownItem onClick={() => router.push("/ticket")}>
+                    Tickets
+                  </DropdownItem>
+                </>
+              )}
+
+              <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+            </Dropdown>
+          </>
         )}
         {!session && (
           <div className="flex gap-5">
