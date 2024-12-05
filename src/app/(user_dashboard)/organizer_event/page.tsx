@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { FC, useState } from "react";
 import {
   faChevronLeft,
@@ -26,12 +26,16 @@ interface IEventToRelease {
 const OrganizerEventPage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
-  const [eventToDelete, setEventToDelete] = useState<IEventToDelete | null>(null); 
-  const [eventToRelease, setEventToRelease] = useState<IEventToRelease | null>(null);
+  const [eventToDelete, setEventToDelete] = useState<IEventToDelete | null>(
+    null
+  );
+  const [eventToRelease, setEventToRelease] = useState<IEventToRelease | null>(
+    null
+  );
 
   const handleDeleteClick = (event: IEventToDelete) => {
-    setEventToDelete(event); 
-    setIsModalOpen(true); 
+    setEventToDelete(event);
+    setIsModalOpen(true);
   };
 
   const handleReleaseClick = (event: IEventToRelease) => {
@@ -41,7 +45,7 @@ const OrganizerEventPage: FC = () => {
 
   const handleConfirmDelete = () => {
     console.log(`Deleting event: ${eventToDelete}`);
-    setIsModalOpen(false); 
+    setIsModalOpen(false);
   };
 
   const handleConfirmRelease = () => {
@@ -174,10 +178,12 @@ const OrganizerEventPage: FC = () => {
                   <button className="bg-american-green rounded-lg py-2 px-5 text-white">
                     Edit
                   </button>
-                  <button 
+                  <button
                     className="border border-red-500 rounded-lg py-2 px-5 text-red-500"
-                    onClick={() => handleDeleteClick("Pesta Wibu 2024")}
-                    >
+                    onClick={() =>
+                      handleDeleteClick({ id: 1, name: "Pesta Wibu 2024" })
+                    }
+                  >
                     Delete
                   </button>
                   <button className="bg-true-blue rounded-lg py-2 px-5 text-white">
@@ -241,10 +247,12 @@ const OrganizerEventPage: FC = () => {
                 <button className="bg-american-green rounded-lg py-2 px-5 text-white">
                   Edit
                 </button>
-                <button 
+                <button
                   className="bg-true-blue rounded-lg py-2 px-5 text-white"
-                  onClick={() => handleReleaseClick("Pesta Wibu 2024")}
-                  >
+                  onClick={() =>
+                    handleReleaseClick({ id: 1, name: "Pesta Wibu 2024" })
+                  }
+                >
                   Release
                 </button>
                 <button className="border border-red-500 rounded-lg py-2 px-5 text-red-500">
@@ -364,14 +372,12 @@ const OrganizerEventPage: FC = () => {
           </div>
         </div>
 
-
-        <Modal
-          show={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        >
+        <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <Modal.Header>Delete Event</Modal.Header>
           <Modal.Body>
-            <p>Are you sure you want to delete the event "{eventToDelete?.name}"?</p>
+            <p>
+              Are you sure you want to delete the event "{eventToDelete?.name}"?
+            </p>
           </Modal.Body>
           <Modal.Footer>
             <button
@@ -396,7 +402,10 @@ const OrganizerEventPage: FC = () => {
           <Modal.Header>Release Event</Modal.Header>
           <Modal.Body>
             {eventToRelease && (
-              <p>Are you sure you want to release the event "{eventToRelease?.name}"?</p>
+              <p>
+                Are you sure you want to release the event "
+                {eventToRelease?.name}"?
+              </p>
             )}
           </Modal.Body>
           <Modal.Footer>

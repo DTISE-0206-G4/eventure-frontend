@@ -7,53 +7,44 @@ import { FC, useEffect, useState } from "react";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import Image from "next/image";
 import defaultProfileImage from "../../public/image/default-profile.jpg";
-const checkToken: () => boolean = () => {
-  const token: string | null = localStorage.getItem("token");
-  if (token) {
-    console.log("Token exists:", token);
-    return true;
-  } else {
-    console.log("Token does not exist");
-    return false;
-  }
-};
+import { signOut, useSession } from "next-auth/react";
 
 const Header: FC = () => {
   const router = useRouter();
-  const [isLogin, setIsLogin] = useState(false);
+  const { data: session } = useSession();
 
-  const logoutRequest = async () => {
-    const token = localStorage.getItem("token");
-    await axios
-      .post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
-        {
-          accessToken: token,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        if (response.status === 200) {
-          localStorage.removeItem("token");
-          setIsLogin(false);
-          router.push("/");
-        }
+  console.log(session);
+  const handleLogout = async () => {
+    if (!session) {
+      alert("You are not logged in.");
+      return;
+    }
+    // Call your custom logout API
+    const response = await fetch("http://localhost:8080/api/v1/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+      body: JSON.stringify({
+        accessToken: session.accessToken,
+        refreshToken: session.refreshToken,
+      }),
+    });
+    console.log(
+      JSON.stringify({
+        accessToken: session.accessToken,
+        refreshToken: session.refreshToken,
       })
-      .catch((error) => {
-        if (error.status === 401) {
-          console.log(error.message);
-          localStorage.removeItem("token");
-          router.push("/login");
-        }
-      });
+    );
+    if (response.ok) {
+      // Sign out from NextAuth (clears the session)
+      await signOut({ redirect: false });
+      router.push("/login");
+    } else {
+      alert("Failed to log out, please try again.");
+    }
   };
-  useEffect(() => {
-    setIsLogin(checkToken());
-  }, []);
-  //   const isLogin: boolean = checkToken();
   return (
     <div className="h-[60px] bg-white  border-b-2 border-platinum">
       <div className="container h-full flex justify-between items-center mx-auto">
@@ -68,31 +59,56 @@ const Header: FC = () => {
           </Link>
         </div>
 
-        <Dropdown
-          label={
-            <div className="flex gap-2 items-center justify-start">
-              <Image
-                className="rounded-md"
-                src="/images/default-profile.jpg"
-                width={45}
-                height={45}
-                alt="User Profile"
-              />
-              <div className="flex flex-col justify-center">
-                <div>Gora Asep</div>
-                <div className="text-slate-gray text-xs">ATTENDEE</div>
+        {session && (
+          <Dropdown
+            label={
+              <div className="flex gap-2 items-start justify-start text-start">
+                <Image
+                  className="rounded-md"
+                  src="/images/default-profile.jpg"
+                  width={45}
+                  height={45}
+                  alt="User Profile"
+                />
+                <div className="flex flex-col justify-center">
+                  <div>{session.user.email}</div>
+                  <div className="text-slate-gray text-xs">
+                    {session.user.roles[0]}
+                  </div>
+                </div>
               </div>
+            }
+            inline
+            arrowIcon={false}
+          >
+            <DropdownItem onClick={() => router.push("/profile")}>
+              Profile
+            </DropdownItem>
+            <DropdownItem onClick={() => router.push("/organizer_event")}>
+              Events
+            </DropdownItem>
+            <DropdownItem onClick={() => router.push("/ticket")}>
+              Tickets
+            </DropdownItem>
+            <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+          </Dropdown>
+        )}
+        {!session && (
+          <div className="flex gap-5">
+            <div
+              className="text-tufts-blue hover:cursor-pointer"
+              onClick={() => router.push("/login")}
+            >
+              Login
             </div>
-          }
-          inline
-          arrowIcon={false}
-        >
-          <DropdownItem>Profile</DropdownItem>
-          <DropdownItem>Events</DropdownItem>
-          <DropdownItem>Tickets</DropdownItem>
-          <DropdownItem>Feedback</DropdownItem>
-          <DropdownItem>Logout</DropdownItem>
-        </Dropdown>
+            <div
+              className="text-tufts-blue  hover:cursor-pointer"
+              onClick={() => router.push("/register")}
+            >
+              Register
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

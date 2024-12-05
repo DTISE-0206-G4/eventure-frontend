@@ -1,9 +1,11 @@
 "use client";
 import axios from "axios";
+import { Spinner } from "flowbite-react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import * as Yup from "yup";
 
 interface LoginFormProps {
@@ -19,24 +21,42 @@ const ContactSchema = Yup.object().shape({
     .required("Required"),
 });
 const LoginPage: FC = () => {
+  const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const handleSubmit = async (
     values: LoginFormProps,
     formikHelpers: FormikHelpers<LoginFormProps>
   ) => {
-    const { status, data } = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
-      values
-    );
-    if (status !== 200) {
-      console.error("Failed to login");
-      return;
+    setError(null);
+    setIsLoading(true);
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+      });
+
+      if (result?.error) {
+        if (result.error === "CredentialsSignin") {
+          setError("Invalid email or password");
+        } else {
+          setError(
+            result?.error || "An unexpected error occurred. Please try again."
+          );
+        }
+      } else if (!result?.error) {
+        router.push("/");
+      }
+      console.log("stil running");
+      formikHelpers.resetForm();
+    } catch (error) {
+      console.error("An unexpected error occurred:", error);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    localStorage.setItem("token", data.data.accessToken);
-    console.log(values);
-    formikHelpers.resetForm();
-    alert("Login success");
-    router.push("/");
   };
   return (
     <div className="container mx-auto flex flex-col justify-center items-center min-h-[calc(100vh-150px)]">
@@ -79,13 +99,16 @@ const LoginPage: FC = () => {
               {errors.password && touched.password ? (
                 <div className="text-red-500">{errors.password}</div>
               ) : null}
-
-              <button
-                className="bg-true-blue rounded-sm px-8 py-2 w-full text-white font-medium"
-                type="submit"
-              >
-                Sign in
-              </button>
+              {error && <span className="text-red-500">{error}</span>}
+              {isLoading && <Spinner />}
+              {!isLoading && (
+                <button
+                  className="bg-true-blue rounded-sm px-8 py-2 w-full text-white font-medium"
+                  type="submit"
+                >
+                  Sign in
+                </button>
+              )}
             </Form>
           )}
         </Formik>
