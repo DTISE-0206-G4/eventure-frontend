@@ -23,3 +23,8 @@ export interface ChangePasswordRequest {
   newPassword: string;
   confirmPassword: string;
 }
+
+interface ChangeProfileRequest {
+  name: string;
+  description: string;
+}

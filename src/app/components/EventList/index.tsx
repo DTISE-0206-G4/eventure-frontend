@@ -42,7 +42,7 @@ const EventList: FC = () => {
         start: 0,
       }));
       inputRef.current?.focus();
-    }, 500); // Set debounce delay (500ms)
+    }, 1000); // Set debounce delay (500ms)
     return () => {
       clearTimeout(handler);
     };
