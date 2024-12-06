@@ -12,7 +12,7 @@ const PROTECTED_PATHS = [
 ];
 const ROLE_PATHS = {
   ATTENDEE: ["/profile", "/ticket"],
-  ORGANIZER: ["/profile", "/organizer_event", "/analytics"],
+  ORGANIZER: ["/profile", "/organizer_event", "/analytics", "/add_event"],
   // Admin can access everything
   ADMIN: ["*"],
 };
