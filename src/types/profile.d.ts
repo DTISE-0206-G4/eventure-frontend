@@ -18,3 +18,8 @@ export interface Role {
   updatedAt: string;
   deletedAt: any;
 }
+export interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}

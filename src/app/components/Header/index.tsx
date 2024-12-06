@@ -12,8 +12,6 @@ import { signOut, useSession } from "next-auth/react";
 const Header: FC = () => {
   const router = useRouter();
   const { data: session } = useSession();
-
-  console.log(session);
   const handleLogout = async () => {
     if (!session) {
       alert("You are not logged in.");
@@ -31,12 +29,7 @@ const Header: FC = () => {
         refreshToken: session.refreshToken,
       }),
     });
-    console.log(
-      JSON.stringify({
-        accessToken: session.accessToken,
-        refreshToken: session.refreshToken,
-      })
-    );
+
     if (response.ok) {
       // Sign out from NextAuth (clears the session)
       await signOut({ redirect: false });
