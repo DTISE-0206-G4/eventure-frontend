@@ -1,5 +1,5 @@
 import { Formik, Field, Form, FormikHelpers } from "formik";
-import { Modal } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import * as Yup from "yup";
 import axios from "axios";
 import { ChangePasswordRequest } from "@/types/profile";
@@ -132,21 +132,24 @@ const ChangePasswordModal = ({
                     )}
                   </div>
                 </div>
+                <div className="flex justify-between bg-ghost-white"></div>
               </div>
             </Modal.Body>
             <Modal.Footer className="flex justify-between bg-ghost-white">
-              <button
-                className="bg-white rounded-lg py-2 px-5 border border-platinum"
+              <Button
+                color="light"
+                className="bg-white rounded-lg border border-platinum focus:ring-platinum"
                 onClick={() => setOpenModalPassword(false)}
               >
                 Decline
-              </button>
-              <button
-                className="bg-true-blue rounded-lg py-2 px-5 text-white"
+              </Button>
+              <Button
+                color="blue"
+                className="bg-true-blue rounded-lg text-white"
                 type="submit"
               >
                 Accept
-              </button>
+              </Button>
             </Modal.Footer>
           </Form>
         )}
