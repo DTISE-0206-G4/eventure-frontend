@@ -54,6 +54,14 @@ const ProfileLayout: FC<NestedLayoutProps> = ({ children }) => {
                 >
                   My Tickets
                 </Link>
+                <Link
+                  href="/discount"
+                  className={`${
+                    pathname === "/discount" ? "bg-azureish-white" : ""
+                  }  p-5 font-semibold hover:bg-azureish-white hover:cursor-pointer`}
+                >
+                  My Discount Vouchers
+                </Link>
               </>
             )}
           </div>

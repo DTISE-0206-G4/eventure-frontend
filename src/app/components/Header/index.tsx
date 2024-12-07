@@ -90,6 +90,9 @@ const Header: FC = () => {
                   <DropdownItem onClick={() => router.push("/ticket")}>
                     Tickets
                   </DropdownItem>
+                  <DropdownItem onClick={() => router.push("/discount")}>
+                    Discounts
+                  </DropdownItem>
                 </>
               )}
 

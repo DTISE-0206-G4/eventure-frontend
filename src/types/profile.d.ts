@@ -28,3 +28,8 @@ interface ChangeProfileRequest {
   name: string;
   description: string;
 }
+
+export interface ProfileOnEventResponse {
+  id: number;
+  name: string;
+}

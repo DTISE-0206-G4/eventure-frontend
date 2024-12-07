@@ -48,8 +48,8 @@ const EventList: FC = () => {
     };
   }, [search]);
 
-  const handleClick = () => {
-    router.push("/event_page");
+  const handleClick = (eventId: number) => {
+    router.push("/event/" + eventId);
   };
 
   const handleDataFromChild = (childData: EventDatatableRequest) => {
