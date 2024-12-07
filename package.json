@@ -18,6 +18,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/react-select": "^5.0.0",
     "axios": "^1.7.7",
+    "classnames": "^2.5.1",
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
     "jquery": "^3.7.1",

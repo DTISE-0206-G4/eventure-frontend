@@ -22,7 +22,7 @@ const useUserDiscounts = (accessToken: string) => {
     error,
     data: discounts,
   } = useQuery({
-    queryKey: ["fetchUserDiscounts"],
+    queryKey: ["fetchUserDiscounts", accessToken],
     queryFn: async () => fetchUserDiscounts(accessToken),
     staleTime: 60 * 1000,
     gcTime: 60 * 1000,

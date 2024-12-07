@@ -28,7 +28,7 @@ const useAnalytics = (accessToken: string, rangeProp: number) => {
     error,
     data: analyticsData,
   } = useQuery({
-    queryKey: ["fetchAnalytics", range],
+    queryKey: ["fetchAnalytics", range, accessToken],
     queryFn: async () => fetchAnalytics(accessToken, range),
     staleTime: 60 * 1000,
     gcTime: 60 * 1000,

@@ -22,7 +22,7 @@ const useProfile = (accessToken: string) => {
     error,
     data: profile,
   } = useQuery({
-    queryKey: ["fetchProfile"],
+    queryKey: ["fetchProfile", accessToken],
     queryFn: async () => fetchProfile(accessToken),
     staleTime: 60 * 1000,
     gcTime: 60 * 1000,

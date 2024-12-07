@@ -37,7 +37,7 @@ const ProfileLayout: FC<NestedLayoutProps> = ({ children }) => {
                 <Link
                   href="/analytics"
                   className={`${
-                    pathname === "/analitycs" ? "bg-azureish-white" : ""
+                    pathname === "/analytics" ? "bg-azureish-white" : ""
                   }  p-5 font-semibold hover:bg-azureish-white hover:cursor-pointer`}
                 >
                   Analytics
