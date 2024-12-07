@@ -22,6 +22,8 @@ import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { UserDiscountRespond } from "@/types/userDiscountType";
 import useEventDiscounts from "@/hooks/useEventDiscounts";
 import { EventDiscountRespond } from "@/types/eventDiscountType";
+import EventDescriptionSection from "./EventDescriptionSection";
+import EventDetailsSection from "./EventDetailsSection";
 interface PageProps {
   params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
 }
@@ -151,98 +153,10 @@ const EventPage: FC<PageProps> = ({ params }) => {
       <div className="my-5">
         <div className="font-semibold text-xl">{event?.title}</div>
         <div className="flex gap-5 justify-between mt-5 items-start">
-          <div className="w-2/3 bg-white border border-platinum rounded-sm p-5">
-            <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 my-5">
-              <Carousel>
-                <img
-                  src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-                  alt="..."
-                />
-                <img
-                  src="https://flowbite.com/docs/images/carousel/carousel-2.svg"
-                  alt="..."
-                />
-                <img
-                  src="https://flowbite.com/docs/images/carousel/carousel-3.svg"
-                  alt="..."
-                />
-                <img
-                  src="https://flowbite.com/docs/images/carousel/carousel-4.svg"
-                  alt="..."
-                />
-                <img
-                  src="https://flowbite.com/docs/images/carousel/carousel-5.svg"
-                  alt="..."
-                />
-              </Carousel>
-            </div>
-            <div>
-              <div className="font-semibold text-lg">About this event</div>
-              <div className="text-justify">{event?.description}</div>
-            </div>
-          </div>
+          {event && <EventDescriptionSection event={event} />}
           <div className="w-1/3 bg-white border border-platinum rounded-sm p-5 flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2 items-center">
-                <FontAwesomeIcon
-                  className="h-5 w-5 text-slate-gray"
-                  icon={faBuilding}
-                />
-                <div className="font-semibold text-lg">Organized by</div>
-              </div>
+            {event && <EventDetailsSection event={event} />}
 
-              <div className="flex gap-2 items-center justify-start">
-                <Image
-                  className="rounded-full"
-                  src="/images/default-profile.jpg"
-                  width={45}
-                  height={45}
-                  alt="User Profile"
-                />
-                <div className="flex flex-col justify-center">
-                  <div>Gora Asep</div>
-                  <div className="flex gap-1">
-                    <FontAwesomeIcon
-                      className="h-5 w-5 text-yellow-300"
-                      icon={faStar}
-                    />{" "}
-                    <div>4.7</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2 items-center">
-                <FontAwesomeIcon
-                  className="h-5 w-5 text-slate-gray"
-                  icon={faLocationDot}
-                />
-                <div className="font-semibold text-lg">Location</div>
-              </div>
-              <div>
-                {/* <div>Jawa Barat, Bandung</div> */}
-                <div>{event?.location}</div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2 items-center">
-                <FontAwesomeIcon
-                  className="h-5 w-5 text-slate-gray"
-                  icon={faClock}
-                />
-                <div className="font-semibold text-lg">Time</div>
-              </div>
-              <div className="flex gap-2">
-                <div>
-                  <div>Start </div>
-                  <div>End </div>
-                </div>
-                <div>
-                  <div>: {formatDate(event?.startTime as string)}</div>
-                  <div>: {formatDate(event?.endTime as string)}</div>
-                </div>
-              </div>
-            </div>
             <div className="flex gap-5 flex-wrap items-center justify-center">
               {session?.user?.roles[0] === "ATTENDEE" && (
                 <>
