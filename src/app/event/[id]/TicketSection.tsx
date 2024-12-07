@@ -1,3 +1,4 @@
+"use client";
 import useEventDiscounts from "@/hooks/useEventDiscounts";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { Event, Ticket } from "@/types/event";

@@ -1,27 +1,8 @@
 "use client";
-import Image from "next/image";
-import { FC, use, useEffect, useState } from "react";
-import { Button, Carousel, Modal } from "flowbite-react";
-import {
-  faStar,
-  faBuilding,
-  faLocationDot,
-  faClock,
-  faSearch,
-  faCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FC, use } from "react";
 import { notFound } from "next/navigation";
 import useEvent from "@/hooks/useEvent";
 import { useSession } from "next-auth/react";
-import formatDate from "@/utils/formatDate";
-import Link from "next/link";
-import { Ticket } from "@/types/event";
-import axios from "axios";
-import useUserDiscounts from "@/hooks/useUserDiscounts";
-import { UserDiscountRespond } from "@/types/userDiscountType";
-import useEventDiscounts from "@/hooks/useEventDiscounts";
-import { EventDiscountRespond } from "@/types/eventDiscountType";
 import EventDescriptionSection from "./EventDescriptionSection";
 import EventDetailsSection from "./EventDetailsSection";
 import TicketSection from "./TicketSection";
