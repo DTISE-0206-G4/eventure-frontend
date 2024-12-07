@@ -21,6 +21,7 @@ const useUserDiscounts = (accessToken: string) => {
     isLoading,
     error,
     data: discounts,
+    refetch,
   } = useQuery({
     queryKey: ["fetchUserDiscounts", accessToken],
     queryFn: async () => fetchUserDiscounts(accessToken),
@@ -31,6 +32,7 @@ const useUserDiscounts = (accessToken: string) => {
     isLoading,
     error,
     discounts,
+    refetch,
   };
 };
 export default useUserDiscounts;

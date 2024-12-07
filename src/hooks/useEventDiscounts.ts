@@ -26,6 +26,7 @@ const useEventDiscounts = (accessToken: string, eventId: number) => {
     isLoading,
     error,
     data: discounts,
+    refetch,
   } = useQuery({
     queryKey: ["fetchEventDiscounts", accessToken],
     queryFn: async () => fetchEventDiscounts(accessToken, eventId),
@@ -36,6 +37,7 @@ const useEventDiscounts = (accessToken: string, eventId: number) => {
     isLoading,
     error,
     discounts,
+    refetch,
   };
 };
 export default useEventDiscounts;
