@@ -1,4 +1,4 @@
-export interface UserDiscountRespond {
+export interface UserDiscountResponse {
   id: number;
   userId: number;
   name: string;

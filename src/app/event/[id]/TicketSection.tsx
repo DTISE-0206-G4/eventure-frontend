@@ -2,8 +2,8 @@
 import useEventDiscounts from "@/hooks/useEventDiscounts";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { Event, Ticket } from "@/types/event";
-import { EventDiscountRespond } from "@/types/eventDiscountType";
-import { UserDiscountRespond } from "@/types/userDiscountType";
+import { EventDiscountResponse } from "@/types/eventDiscountType";
+import { UserDiscountResponse } from "@/types/userDiscountType";
 import formatDate from "@/utils/formatDate";
 import { faCheck, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,10 +33,10 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
   const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [userDiscountsState, setUserDiscountsState] = useState<
-    UserDiscountRespond[]
+    UserDiscountResponse[]
   >([]);
   const [eventDiscountsState, setEventDiscountsState] = useState<
-    EventDiscountRespond[]
+    EventDiscountResponse[]
   >([]);
   useEffect(() => {
     if (modalTicket) {
@@ -73,7 +73,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     setOpenModal(true);
   };
 
-  const handleUserDiscountClick = (discount: UserDiscountRespond) => {
+  const handleUserDiscountClick = (discount: UserDiscountResponse) => {
     if (userDiscountsState.includes(discount)) {
       setUserDiscountsState(
         userDiscountsState.filter((d) => d.id !== discount.id)
@@ -83,7 +83,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     }
   };
 
-  const handleEventDiscountClick = (discount: EventDiscountRespond) => {
+  const handleEventDiscountClick = (discount: EventDiscountResponse) => {
     if (eventDiscountsState.includes(discount)) {
       setEventDiscountsState(
         eventDiscountsState.filter((d) => d.id !== discount.id)
@@ -214,7 +214,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                     No Discount
                   </div>
                 )}
-                {userDiscounts?.map((discount: UserDiscountRespond) => (
+                {userDiscounts?.map((discount: UserDiscountResponse) => (
                   <div
                     key={discount.id}
                     onClick={() => handleUserDiscountClick(discount)}
@@ -286,7 +286,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                     No Discount
                   </div>
                 )}
-                {eventDiscounts?.map((discount: EventDiscountRespond) => (
+                {eventDiscounts?.map((discount: EventDiscountResponse) => (
                   <div
                     onClick={() => handleEventDiscountClick(discount)}
                     key={discount.id}

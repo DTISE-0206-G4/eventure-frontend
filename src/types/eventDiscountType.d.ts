@@ -1,4 +1,4 @@
-export interface EventDiscountRespond {
+export interface EventDiscountResponse {
   id: number;
   eventId: number;
   title: string;
