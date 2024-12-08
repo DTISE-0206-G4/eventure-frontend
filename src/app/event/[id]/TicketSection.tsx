@@ -172,14 +172,6 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
           </div>
         </div>
       )}
-      {!session && (
-        <Link
-          href="/login"
-          className="bg-true-blue text-white rounded-lg py-2 px-5 text-center hover:cursor-pointer"
-        >
-          <div className="font-semibold text-lg">Login to buy ticket</div>
-        </Link>
-      )}
       <Modal
         dismissible
         show={openModal}
