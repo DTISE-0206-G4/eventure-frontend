@@ -83,12 +83,18 @@ const Header: FC = () => {
                   <DropdownItem onClick={() => router.push("/organizer_event")}>
                     Events
                   </DropdownItem>
+                  <DropdownItem onClick={() => router.push("/analytics")}>
+                    Analytics
+                  </DropdownItem>
                 </>
               )}
               {session.user.roles[0] === "ATTENDEE" && (
                 <>
                   <DropdownItem onClick={() => router.push("/ticket")}>
                     Tickets
+                  </DropdownItem>
+                  <DropdownItem onClick={() => router.push("/discount")}>
+                    Discounts
                   </DropdownItem>
                 </>
               )}

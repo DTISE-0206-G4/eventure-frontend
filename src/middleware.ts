@@ -9,9 +9,10 @@ const PROTECTED_PATHS = [
   "/ticket",
   "/organizer_event",
   "/analytics",
+  "/discount",
 ];
 const ROLE_PATHS = {
-  ATTENDEE: ["/profile", "/ticket"],
+  ATTENDEE: ["/profile", "/ticket", "/discount"],
   ORGANIZER: ["/profile", "/organizer_event", "/analytics"],
   // Admin can access everything
   ADMIN: ["*"],

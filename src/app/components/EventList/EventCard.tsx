@@ -7,14 +7,25 @@ import formatDate from "@/utils/formatDate";
 
 interface EventCardProps {
   event: Event;
-  handleClick: () => void;
+  handleClick: (eventId: number) => void;
 }
 
 const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
+  const ticketPriceRange = event.tickets.reduce(
+    (range, ticket) => {
+      return {
+        min: Math.min(range.min, ticket.price),
+        max: Math.max(range.max, ticket.price),
+      };
+    },
+    { min: Infinity, max: -Infinity }
+  );
   return (
     <div
       key={event.id}
-      onClick={handleClick}
+      onClick={() => {
+        handleClick(event.id);
+      }}
       className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum hover:cursor-pointer hover:bg-azureish-white"
     >
       <Image
@@ -27,7 +38,13 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
       <div className="flex flex-col gap-2 w-full">
         <div className="flex justify-between">
           <div className="font-semibold">{event.title}</div>
-          <div className="text-american-green">Rp 100.000 - Rp 1.000.000</div>
+          <div className="text-american-green">
+            {event.tickets.length > 0 ? (
+              <>
+                IDR {ticketPriceRange.min} - IDR {ticketPriceRange.max}
+              </>
+            ) : null}
+          </div>
         </div>
 
         <div className="flex justify-between">
@@ -51,18 +68,14 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
           </div>
 
           <div className="flex gap-2 flex-wrap flex-row-reverse">
-            <div className="text-slate-gray rounded-full px-2 border border-slate-gray">
-              Offline
-            </div>
-            <div className="text-slate-gray rounded-full px-2 border border-slate-gray">
-              Concert
-            </div>
-            <div className="text-slate-gray rounded-full px-2 border border-slate-gray">
-              MeetNGreet
-            </div>
-            <div className="text-slate-gray rounded-full px-2 border border-slate-gray">
-              Exhibition
-            </div>
+            {event.categories.map((category) => (
+              <div
+                key={category.id}
+                className="text-slate-gray rounded-full px-2 border border-slate-gray"
+              >
+                {category.name}
+              </div>
+            ))}
           </div>
         </div>
       </div>

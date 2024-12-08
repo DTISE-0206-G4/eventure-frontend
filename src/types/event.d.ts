@@ -9,6 +9,7 @@ export interface Event {
   id: number;
   userId: number;
   title: string;
+  tickets: Ticket[];
   description: string;
   startTime: string;
   endTime: string;
@@ -35,4 +36,18 @@ export interface EventDatatableRequest {
   orderDir: string;
   orderColumn: string;
   userId: number | null;
+}
+
+export interface Ticket {
+  id: number;
+  eventId: number;
+  name: string;
+  price: number;
+  availableSeat: number;
+  soldSeat: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: any;
+  isReleased: boolean;
+  isClosed: boolean;
 }
