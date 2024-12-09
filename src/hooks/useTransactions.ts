@@ -2,7 +2,6 @@ import {
   TransactionDatatableResponse,
   TransactionsRequest,
 } from "@/types/transaction";
-import { UserDiscountResponse } from "@/types/userDiscountType";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
@@ -12,7 +11,7 @@ const fetchTransactions = async (
   params: TransactionsRequest
 ): Promise<TransactionDatatableResponse> => {
   const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction/user`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction/datatable`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

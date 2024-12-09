@@ -14,7 +14,7 @@ export interface TransactionDatatableResponse {
 
 export interface Transaction {
   id: number;
-  userId: number;
+  user: UserTransaction;
   ticket: TicketTransaction;
   ticketPrice: number;
   totalPrice: number;
@@ -23,6 +23,12 @@ export interface Transaction {
   createdAt: string;
   updatedAt: string;
   deletedAt: any;
+}
+
+export interface UserTransaction {
+  id: number;
+  name: string;
+  email: string;
 }
 
 export interface TicketTransaction {
@@ -41,7 +47,7 @@ export interface TicketTransaction {
 
 export interface EventTransaction {
   id: number;
-  userId: number;
+  user: UserTransaction;
   title: string;
   description: string;
   startTime: string;

@@ -7,7 +7,7 @@ export interface EventDatatableResponse {
 
 export interface Event {
   id: number;
-  userId: number;
+  user: UserEvent;
   title: string;
   tickets: Ticket[];
   description: string;
@@ -18,6 +18,12 @@ export interface Event {
   createdAt: string;
   updatedAt: string;
   deletedAt: any;
+}
+
+export interface UserEvent {
+  id: number;
+  name: string;
+  email: string;
 }
 
 export interface Category {

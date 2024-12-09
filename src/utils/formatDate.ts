@@ -16,3 +16,8 @@ const formatDate = (dateString: string) => {
   return formattedDate;
 };
 export default formatDate;
+
+export const formatDateForInvoice = (isoString: string) => {
+  const date = new Date(isoString);
+  return date.toISOString().split("T")[0].replace(/-/g, "/");
+};
