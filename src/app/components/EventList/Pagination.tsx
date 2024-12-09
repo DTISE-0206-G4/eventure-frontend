@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   faChevronLeft,
   faChevronRight,
@@ -20,12 +20,7 @@ const Pagination: FC<PaginationProps> = ({
   sendDataToParent,
   setPage,
 }) => {
-  const {
-    isLoading,
-    error,
-    data: eventsData,
-    setParams,
-  } = useEvents(paginationParams);
+  const { isLoading, error, data: eventsData } = useEvents(paginationParams);
 
   if (isLoading) return <div>Loading...</div>;
   if (error || !eventsData) return <div>Error</div>;

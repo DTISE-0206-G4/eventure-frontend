@@ -1,11 +1,10 @@
 "use client";
-import axios from "axios";
 import { Spinner } from "flowbite-react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import * as Yup from "yup";
 
 interface LoginFormProps {
@@ -25,6 +24,9 @@ const LoginPage: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  if (session) {
+    router.push("/");
+  }
   const handleSubmit = async (
     values: LoginFormProps,
     formikHelpers: FormikHelpers<LoginFormProps>
@@ -114,7 +116,7 @@ const LoginPage: FC = () => {
         </Formik>
       </div>
       <div className="my-2">
-        Don't have account yet?{" "}
+        Don&apos;t have account yet?&nbsp;
         <Link href="/register" className="text-true-blue">
           Sign up
         </Link>

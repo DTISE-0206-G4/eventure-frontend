@@ -17,7 +17,7 @@ export interface Event {
   categories: Category[];
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
 }
 
 export interface UserEvent {
@@ -31,7 +31,7 @@ export interface Category {
   name: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
 }
 
 export interface EventDatatableRequest {
@@ -53,7 +53,7 @@ export interface Ticket {
   soldSeat: number;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
   isReleased: boolean;
   isClosed: boolean;
 }

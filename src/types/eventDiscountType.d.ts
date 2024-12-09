@@ -10,7 +10,7 @@ export interface EventDiscountResponse {
   used: number;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
   expiredAt: string;
   isReleased: boolean;
   isClosed: boolean;

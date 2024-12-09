@@ -376,7 +376,8 @@ const OrganizerEventPage: FC = () => {
           <Modal.Header>Delete Event</Modal.Header>
           <Modal.Body>
             <p>
-              Are you sure you want to delete the event "{eventToDelete?.name}"?
+              Are you sure you want to delete the event &quot;
+              {eventToDelete?.name}&quot;?
             </p>
           </Modal.Body>
           <Modal.Footer>
@@ -403,8 +404,8 @@ const OrganizerEventPage: FC = () => {
           <Modal.Body>
             {eventToRelease && (
               <p>
-                Are you sure you want to release the event "
-                {eventToRelease?.name}"?
+                Are you sure you want to release the event &quot;
+                {eventToRelease?.name}&quot;?
               </p>
             )}
           </Modal.Body>

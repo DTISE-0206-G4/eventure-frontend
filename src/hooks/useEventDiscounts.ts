@@ -1,5 +1,4 @@
 import { EventDiscountResponse } from "@/types/eventDiscountType";
-import { UserDiscountResponse } from "@/types/userDiscountType";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

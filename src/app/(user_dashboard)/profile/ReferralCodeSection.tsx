@@ -1,4 +1,5 @@
 "use client";
+import { ProfileResponse } from "@/types/profile";
 import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -8,7 +9,10 @@ import * as Yup from "yup";
 interface referralFormProps {
   referralCode: string;
 }
-const ReferralCodeSection = ({ profile }: any) => {
+interface ReferralCodeSectionProps {
+  profile: ProfileResponse;
+}
+const ReferralCodeSection = ({ profile }: ReferralCodeSectionProps) => {
   const { data: session } = useSession();
   const [openModalReferral, setOpenModalReferral] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
@@ -24,7 +28,7 @@ const ReferralCodeSection = ({ profile }: any) => {
     formikHelpers: FormikHelpers<referralFormProps>
   ) => {
     try {
-      const { data, status } = await axios.put(
+      const { data } = await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/change_referral_code`,
         {
           referralCode: values.referralCode,
@@ -52,7 +56,7 @@ const ReferralCodeSection = ({ profile }: any) => {
   };
   const checkAvailability = async (referralCode: string) => {
     try {
-      const { data, status } = await axios.get(
+      const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/check_availability`,
         {
           headers: {

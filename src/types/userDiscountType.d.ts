@@ -8,7 +8,7 @@ export interface UserDiscountResponse {
   code: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
   expiredAt: string;
   isUsed: boolean;
 }

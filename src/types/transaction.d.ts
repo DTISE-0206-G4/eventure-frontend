@@ -1,7 +1,3 @@
-import { Ticket } from "./event";
-import { EventDiscountResponse } from "./eventDiscountType";
-import { UserDiscountResponse } from "./userDiscountType";
-
 export interface TransactionsRequest {
   start: number;
   length: number;
@@ -22,7 +18,7 @@ export interface Transaction {
   userDiscounts: UserDiscountTransaction[];
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
 }
 
 export interface UserTransaction {
@@ -38,7 +34,7 @@ export interface TicketTransaction {
   soldSeat: number;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
   name: string;
   price: number;
   isReleased: boolean;
@@ -56,7 +52,7 @@ export interface EventTransaction {
   categories: CategoryTransaction[];
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
 }
 
 export interface CategoryTransaction {
@@ -64,7 +60,7 @@ export interface CategoryTransaction {
   name: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
 }
 
 export interface EventDiscountTransaction {
@@ -79,7 +75,7 @@ export interface EventDiscountTransaction {
   used: number;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
   expiredAt: string;
   isReleased: boolean;
   isClosed: boolean;
@@ -95,7 +91,7 @@ export interface UserDiscountTransaction {
   code: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
   expiredAt: string;
   isUsed: boolean;
 }

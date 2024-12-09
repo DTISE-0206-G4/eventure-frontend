@@ -5,7 +5,7 @@ import { faMoneyBill, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import { useSession } from "next-auth/react";
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   LineChart,
   Line,

@@ -1,8 +1,6 @@
-import { EventDatatableRequest, EventDatatableResponse } from "@/types/event";
 import { ProfileResponse } from "@/types/profile";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
 
 const fetchProfile = async (accessToken: string): Promise<ProfileResponse> => {
   const { data } = await axios.get(

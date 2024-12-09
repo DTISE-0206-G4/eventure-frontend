@@ -3,11 +3,8 @@ import useTransactions from "@/hooks/useTransactions";
 import { Transaction, TransactionsRequest } from "@/types/transaction";
 import formatDate from "@/utils/formatDate";
 import {
-  faChevronLeft,
-  faChevronRight,
   faClock,
   faLocationDot,
-  faSearch,
   faUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,8 +16,9 @@ import Link from "next/link";
 
 const TicketPage: FC = () => {
   const { data: session } = useSession();
-  const { error, isLoading, transactions, setParams, params, refetch } =
-    useTransactions(session?.accessToken as string);
+  const { error, isLoading, transactions, setParams, params } = useTransactions(
+    session?.accessToken as string
+  );
   const [page, setPage] = useState(1);
   console.log(transactions);
   console.log(params);

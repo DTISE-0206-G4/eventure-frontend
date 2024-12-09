@@ -1,15 +1,27 @@
 "use client";
-import { Field, Form, ErrorMessage } from "formik";
+import { Field, Form, FormikErrors, FormikTouched } from "formik";
 import ConfirmationModal from "@/common/ConfirmationModal";
 import { useState } from "react";
+import { ProfileResponse } from "@/types/profile";
+
+interface SubmitProps {
+  name: string;
+  description: string;
+}
+
+interface ProfileDetailsFormProps {
+  profile: ProfileResponse;
+  handleSubmit: () => void;
+  errors: FormikErrors<SubmitProps>; // Specify the generic type
+  touched: FormikTouched<SubmitProps>;
+}
 
 const ProfileDetailsForm = ({
   profile,
   handleSubmit,
-  // submitForm,
   errors,
   touched,
-}: any) => {
+}: ProfileDetailsFormProps) => {
   const [isModalConfirmationOpen, setIsModalConfirmationOpen] =
     useState<boolean>(false);
   const handleConfirm = (): void => {
@@ -92,8 +104,8 @@ const ProfileDetailsForm = ({
         isOpen={isModalConfirmationOpen}
         onClose={handleCancel}
         onConfirm={handleConfirm}
-        title="Buy Confirmation"
-        message="Are you sure you want to buy this item?"
+        title="Changes Confirmation"
+        message="Are you sure you want to change your profile?"
       />
     </Form>
   );

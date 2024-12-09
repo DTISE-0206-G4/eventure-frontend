@@ -19,7 +19,6 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
     isLoading,
     error,
     transaction: invoice,
-    refetch,
   } = useInvoice(session?.accessToken as string, parseInt(id, 10));
   const divRef = useRef<HTMLDivElement>(null);
   if (isLoading) return <div>Loading...</div>;

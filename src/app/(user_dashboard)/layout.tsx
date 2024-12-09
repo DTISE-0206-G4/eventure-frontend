@@ -2,7 +2,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, use } from "react";
+import { FC } from "react";
 
 interface NestedLayoutProps {
   children: React.ReactNode;

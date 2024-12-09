@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 interface TicketSectionProps {
@@ -119,7 +118,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       eventDiscounts: eventDiscountsState.map((d) => d.id),
     });
     try {
-      const { data, status } = await axios.post(
+      const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction`,
         {
           ticketId: modalTicket?.id,
@@ -192,7 +191,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       {session?.user?.roles[0] === "ORGANIZER" && (
         <div className="bg-platinum text-white rounded-lg py-2 px-5 text-center hover:cursor-pointer">
           <div className="font-semibold text-lg">
-            Can't buy ticket as Organizer
+            Can&apos;t buy ticket as Organizer
           </div>
         </div>
       )}

@@ -1,11 +1,10 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TransactionsRequest } from "@/types/transaction";
-import useTransactions from "@/hooks/useTransactions";
 interface PaginationProps {
   paginationParams: TransactionsRequest;
   page: number;

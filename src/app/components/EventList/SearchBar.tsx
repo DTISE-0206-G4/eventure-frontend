@@ -7,11 +7,6 @@ interface SearchBarProps {
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   ref?: React.Ref<HTMLInputElement>;
 }
-// type SearchBarProps = {
-//     search: string;
-//     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//     // other properties
-//   } & Omit<React.HTMLAttributes<HTMLInputElement>, 'ref'>;
 
 const SearchBar: FC<SearchBarProps> = ({
   search,
