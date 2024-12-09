@@ -3,8 +3,8 @@ import useInvoice from "@/hooks/useInvoice";
 import formatDate, { formatDateForInvoice } from "@/utils/formatDate";
 import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
-import { FC, use } from "react";
-
+import { FC, use, useRef } from "react";
+import html2canvas from "html2canvas";
 interface PageProps {
   params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
 }
@@ -21,25 +21,39 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
     transaction: invoice,
     refetch,
   } = useInvoice(session?.accessToken as string, parseInt(id, 10));
+  const divRef = useRef<HTMLDivElement>(null);
   if (isLoading) return <div>Loading...</div>;
   if (error) {
     notFound();
   }
 
+  const downloadImage = () => {
+    if (divRef.current) {
+      html2canvas(divRef.current).then((canvas) => {
+        // Create a link to download the image
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png"); // or 'image/jpeg'
+        link.download = "Invoice.png"; // Set the name of the downloaded file
+        link.click();
+      });
+    }
+  };
   return (
     <div className="container mx-auto h-[calc(100vh-150px)]">
       <div className="flex items-center justify-center h-full">
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 border border-gray-300 w-1/2">
           <div className="text-center border border-platinum rounded-lg hover:cursor-pointer mb-4">
-            <div className="text-sm">Download Invoice</div>
+            <div onClick={downloadImage} className="text-sm">
+              Download Invoice
+            </div>
           </div>
-          <div>
+          <div ref={divRef} className="p-5">
             {/* Header */}
             <div className="flex justify-between items-center border-b border-gray-200 pb-6 mb-6">
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">Invoice</h1>
                 <p className="text-sm text-gray-500">
-                  #
+                  #INV
                   {formatDateForInvoice(invoice?.createdAt as string) +
                     "/" +
                     invoice?.id}
@@ -76,14 +90,18 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
                 <div className="w-1/5 text-right">Price</div>
               </div>
               <div className="flex items-center text-gray-700 border-b border-gray-100 py-3">
-                <div className="w-4/5">[{invoice?.ticket.name}]</div>
+                <div className="w-4/5">
+                  {invoice?.ticket.event.title} - [{invoice?.ticket.name}]
+                </div>
                 <div className="w-1/5 text-right">
                   IDR {invoice?.ticket.price}
                 </div>
               </div>
+
               <div className="flex font-semibold text-gray-700 border-b border-gray-200 pb-2">
                 <div className="w-full">Discount</div>
               </div>
+
               {invoice?.eventDiscounts.map((discount) => (
                 <div
                   key={discount.id}

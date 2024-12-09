@@ -1,4 +1,5 @@
 "use client";
+import ConfirmationModal from "@/common/ConfirmationModal";
 import useEventDiscounts from "@/hooks/useEventDiscounts";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { Event, Ticket } from "@/types/event";
@@ -11,6 +12,7 @@ import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 interface TicketSectionProps {
   event: Event;
@@ -32,12 +34,15 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
   const [openModal, setOpenModal] = useState(false);
   const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isModalConfirmationOpen, setIsModalConfirmationOpen] =
+    useState<boolean>(false);
   const [userDiscountsState, setUserDiscountsState] = useState<
     UserDiscountResponse[]
   >([]);
   const [eventDiscountsState, setEventDiscountsState] = useState<
     EventDiscountResponse[]
   >([]);
+  const route = useRouter();
   useEffect(() => {
     if (modalTicket) {
       let totalPriceTemp: number = modalTicket.price;
@@ -64,9 +69,15 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       setTotalPrice(totalPriceTemp);
     }
   }, [userDiscountsState, eventDiscountsState]);
+  useEffect(() => {
+    refetchUserDiscounts();
+    refetchEventDiscounts();
+  }, []);
   if (isLoadingDiscount || isLoadingEventDiscount) return <div>Loading...</div>;
   if (errorDiscount) return <div>Error: {errorDiscount.message}</div>;
   if (errorEventDiscount) return <div>Error: {errorEventDiscount.message}</div>;
+  if (event.endTime < new Date().toISOString())
+    return <div>Event has ended</div>;
 
   const handleClickTicket = (ticket: Ticket) => {
     setModalTicket(ticket);
@@ -93,6 +104,14 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     }
   };
 
+  const handleConfirm = (): void => {
+    handleSubmitTransaction();
+  };
+
+  const handleCancel = (): void => {
+    setIsModalConfirmationOpen(false);
+  };
+
   const handleSubmitTransaction = async () => {
     console.log({
       ticketId: modalTicket?.id,
@@ -114,13 +133,18 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
           },
         }
       );
-      alert(data.message);
+
       setEventDiscountsState([]);
       setUserDiscountsState([]);
-      setOpenModal(false);
 
-      await refetchUserDiscounts(); // Refetch user discounts
-      await refetchEventDiscounts(); // Refetch event discounts
+      // await refetchUserDiscounts(); // Refetch user discounts
+      // await refetchEventDiscounts(); // Refetch event discounts
+      alert(data.message);
+      console.log(data);
+      if (data.success) {
+        route.push(`/invoice/${data.data.id}`);
+      }
+      setOpenModal(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alert(error.response?.data.message);
@@ -172,12 +196,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
           </div>
         </div>
       )}
-      <Modal
-        dismissible
-        show={openModal}
-        onClose={() => setOpenModal(false)}
-        size="5xl"
-      >
+      <Modal show={openModal} onClose={() => setOpenModal(false)} size="5xl">
         <Modal.Header>Buy Ticket</Modal.Header>
         <Modal.Body>
           <div className="grid grid-cols-3 gap-5">
@@ -409,12 +428,20 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
           <Button
             color="blue"
             className="bg-true-blue rounded-lg text-white"
-            onClick={handleSubmitTransaction}
+            // onClick={handleSubmitTransaction}
+            onClick={() => setIsModalConfirmationOpen(true)}
           >
             Accept
           </Button>
         </Modal.Footer>
       </Modal>
+      <ConfirmationModal
+        isOpen={isModalConfirmationOpen}
+        onClose={handleCancel}
+        onConfirm={handleConfirm}
+        title="Buy Confirmation"
+        message="Are you sure you want to buy this item?"
+      />
     </div>
   );
 };

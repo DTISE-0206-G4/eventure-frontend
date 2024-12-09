@@ -79,9 +79,12 @@ const TicketPage: FC = () => {
                       "]"}
                   </div>
                   <div className="flex gap-2">
-                    <button className="bg-american-green rounded-lg py-2 px-5 text-white">
+                    <Link
+                      href={"/invoice/" + transaction.id}
+                      className="bg-american-green rounded-lg py-2 px-5 text-white"
+                    >
                       Invoice
-                    </button>
+                    </Link>
                     <button className="bg-slate-gray rounded-lg py-2 px-5 text-white">
                       Reviewed
                     </button>

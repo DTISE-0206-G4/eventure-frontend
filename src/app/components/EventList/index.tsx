@@ -16,7 +16,7 @@ const EventList: FC = () => {
     start: 0,
     length: 10,
     orderColumn: "id",
-    orderDir: "asc",
+    orderDir: "desc",
     search: search,
     userId: null,
   };

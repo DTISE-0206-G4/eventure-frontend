@@ -1,12 +1,25 @@
+"use client";
 import { Field, Form, ErrorMessage } from "formik";
-import { ChangeProfileRequest } from "@/types/profile";
+import ConfirmationModal from "@/common/ConfirmationModal";
+import { useState } from "react";
 
 const ProfileDetailsForm = ({
   profile,
   handleSubmit,
+  // submitForm,
   errors,
   touched,
 }: any) => {
+  const [isModalConfirmationOpen, setIsModalConfirmationOpen] =
+    useState<boolean>(false);
+  const handleConfirm = (): void => {
+    handleSubmit();
+    setIsModalConfirmationOpen(false);
+  };
+
+  const handleCancel = (): void => {
+    setIsModalConfirmationOpen(false);
+  };
   return (
     <Form>
       <div className="mt-5 flex flex-col gap-2">
@@ -67,14 +80,21 @@ const ProfileDetailsForm = ({
           </div>
         </div>
         <div className="flex">
-          <button
-            type="submit"
-            className="bg-true-blue text-white rounded-lg px-5 py-2 border border-platinum font-semibold text-nowrap"
+          <div
+            onClick={() => setIsModalConfirmationOpen(true)}
+            className="bg-true-blue text-white rounded-lg px-5 py-2 border border-platinum font-semibold text-nowrap hover:cursor-pointer"
           >
             Save changes
-          </button>
+          </div>
         </div>
       </div>
+      <ConfirmationModal
+        isOpen={isModalConfirmationOpen}
+        onClose={handleCancel}
+        onConfirm={handleConfirm}
+        title="Buy Confirmation"
+        message="Are you sure you want to buy this item?"
+      />
     </Form>
   );
 };
