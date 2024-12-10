@@ -53,6 +53,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (session && isPublicPath(pathname)) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   if (isProtectedPath(pathname)) {
     if (!session) {
       return NextResponse.redirect(new URL("/login", request.url));

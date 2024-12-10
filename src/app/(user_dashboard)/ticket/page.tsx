@@ -13,6 +13,7 @@ import Image from "next/image";
 import { FC, useState } from "react";
 import Pagination from "./Pagination";
 import Link from "next/link";
+import ReviewModal from "./ReviewModal";
 
 const TicketPage: FC = () => {
   const { data: session } = useSession();
@@ -20,8 +21,6 @@ const TicketPage: FC = () => {
     session?.accessToken as string
   );
   const [page, setPage] = useState(1);
-  console.log(transactions);
-  console.log(params);
   const handleDataFromChild = (childData: TransactionsRequest) => {
     setParams(childData);
     // refetch();
@@ -83,9 +82,11 @@ const TicketPage: FC = () => {
                     >
                       Invoice
                     </Link>
-                    <button className="bg-slate-gray rounded-lg py-2 px-5 text-white">
-                      Reviewed
-                    </button>
+                    <ReviewModal
+                      eventId={transaction.ticket.event.id}
+                      accessToken={session?.accessToken as string}
+                      eventTitle={transaction.ticket.event.title}
+                    />
                     <Link
                       href={"/event/" + transaction.ticket.event.id}
                       className="bg-azureish-white rounded-lg py-2 px-5  flex gap-2 items-center"

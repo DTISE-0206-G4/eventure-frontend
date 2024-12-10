@@ -1,7 +1,7 @@
 "use client";
 import { Spinner } from "flowbite-react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
@@ -20,13 +20,9 @@ const ContactSchema = Yup.object().shape({
     .required("Required"),
 });
 const LoginPage: FC = () => {
-  const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  if (session) {
-    router.push("/");
-  }
   const handleSubmit = async (
     values: LoginFormProps,
     formikHelpers: FormikHelpers<LoginFormProps>
