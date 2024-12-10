@@ -2,13 +2,13 @@ export interface ProfileResponse {
   id: number;
   name: string;
   email: string;
-  description: any;
-  profileImage: any;
+  description: string;
+  profileImage: string;
   referralCode: string;
   roles: Role[];
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
 }
 
 export interface Role {
@@ -16,7 +16,7 @@ export interface Role {
   name: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
 }
 export interface ChangePasswordRequest {
   oldPassword: string;

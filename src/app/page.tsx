@@ -1,6 +1,5 @@
 import EventFilter from "./components/EventFilter";
 import EventList from "./components/EventList";
-import Footer from "./components/Footer";
 
 export default function Home() {
   return (

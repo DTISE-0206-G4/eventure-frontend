@@ -1,6 +1,6 @@
 "use client";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
-import { UserDiscountRespond } from "@/types/userDiscountType";
+import { UserDiscountResponse } from "@/types/userDiscountType";
 import formatDate from "@/utils/formatDate";
 import { useSession } from "next-auth/react";
 import { FC } from "react";
@@ -21,7 +21,7 @@ const DiscountPage: FC = () => {
             No discount voucher found
           </div>
         )}
-        {discounts?.map((discount: UserDiscountRespond) => (
+        {discounts?.map((discount: UserDiscountResponse) => (
           <div
             key={discount.id}
             className="flex flex-col gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum"

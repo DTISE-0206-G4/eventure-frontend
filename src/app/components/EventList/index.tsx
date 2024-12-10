@@ -16,7 +16,7 @@ const EventList: FC = () => {
     start: 0,
     length: 10,
     orderColumn: "id",
-    orderDir: "asc",
+    orderDir: "desc",
     search: search,
     userId: null,
   };
@@ -36,7 +36,7 @@ const EventList: FC = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setPage(1);
-      setParams((prevParams: any) => ({
+      setParams((prevParams: EventDatatableRequest) => ({
         ...prevParams,
         search: search,
         start: 0,

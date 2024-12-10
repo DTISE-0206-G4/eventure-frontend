@@ -1,12 +1,9 @@
 "use client";
-import axios from "axios";
-import { access } from "fs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import Image from "next/image";
-import defaultProfileImage from "../../public/image/default-profile.jpg";
 import { signOut, useSession } from "next-auth/react";
 
 const Header: FC = () => {

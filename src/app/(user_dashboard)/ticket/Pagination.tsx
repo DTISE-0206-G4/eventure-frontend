@@ -4,13 +4,12 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useEvents from "@/hooks/useEvents";
-import { EventDatatableRequest } from "@/types/event";
+import { TransactionsRequest } from "@/types/transaction";
 interface PaginationProps {
-  paginationParams: EventDatatableRequest;
+  paginationParams: TransactionsRequest;
   page: number;
   totalPage: number;
-  sendDataToParent: (params: EventDatatableRequest) => void;
+  sendDataToParent: (params: TransactionsRequest) => void;
   setPage: (page: number) => void;
 }
 const Pagination: FC<PaginationProps> = ({
@@ -20,10 +19,13 @@ const Pagination: FC<PaginationProps> = ({
   sendDataToParent,
   setPage,
 }) => {
-  const { isLoading, error, data: eventsData } = useEvents(paginationParams);
+  //   const { isLoading, error, transactions, params, setParams } = useTransactions(
+  //     accessToken,
+  //     paginationParams
+  //   );
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error || !eventsData) return <div>Error</div>;
+  //   if (isLoading) return <div>Loading...</div>;
+  //   if (error || !transactions) return <div>Error</div>;
 
   const renderedItems = [];
   const handleClick = (page: number) => {

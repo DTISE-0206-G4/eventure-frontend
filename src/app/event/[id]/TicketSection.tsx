@@ -1,16 +1,17 @@
 "use client";
+import ConfirmationModal from "@/common/ConfirmationModal";
 import useEventDiscounts from "@/hooks/useEventDiscounts";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { Event, Ticket } from "@/types/event";
-import { EventDiscountRespond } from "@/types/eventDiscountType";
-import { UserDiscountRespond } from "@/types/userDiscountType";
+import { EventDiscountResponse } from "@/types/eventDiscountType";
+import { UserDiscountResponse } from "@/types/userDiscountType";
 import formatDate from "@/utils/formatDate";
 import { faCheck, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { Button, Modal } from "flowbite-react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 interface TicketSectionProps {
   event: Event;
@@ -32,12 +33,15 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
   const [openModal, setOpenModal] = useState(false);
   const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isModalConfirmationOpen, setIsModalConfirmationOpen] =
+    useState<boolean>(false);
   const [userDiscountsState, setUserDiscountsState] = useState<
-    UserDiscountRespond[]
+    UserDiscountResponse[]
   >([]);
   const [eventDiscountsState, setEventDiscountsState] = useState<
-    EventDiscountRespond[]
+    EventDiscountResponse[]
   >([]);
+  const route = useRouter();
   useEffect(() => {
     if (modalTicket) {
       let totalPriceTemp: number = modalTicket.price;
@@ -64,16 +68,22 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       setTotalPrice(totalPriceTemp);
     }
   }, [userDiscountsState, eventDiscountsState]);
+  useEffect(() => {
+    refetchUserDiscounts();
+    refetchEventDiscounts();
+  }, []);
   if (isLoadingDiscount || isLoadingEventDiscount) return <div>Loading...</div>;
   if (errorDiscount) return <div>Error: {errorDiscount.message}</div>;
   if (errorEventDiscount) return <div>Error: {errorEventDiscount.message}</div>;
+  if (event.endTime < new Date().toISOString())
+    return <div>Event has ended</div>;
 
   const handleClickTicket = (ticket: Ticket) => {
     setModalTicket(ticket);
     setOpenModal(true);
   };
 
-  const handleUserDiscountClick = (discount: UserDiscountRespond) => {
+  const handleUserDiscountClick = (discount: UserDiscountResponse) => {
     if (userDiscountsState.includes(discount)) {
       setUserDiscountsState(
         userDiscountsState.filter((d) => d.id !== discount.id)
@@ -83,7 +93,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     }
   };
 
-  const handleEventDiscountClick = (discount: EventDiscountRespond) => {
+  const handleEventDiscountClick = (discount: EventDiscountResponse) => {
     if (eventDiscountsState.includes(discount)) {
       setEventDiscountsState(
         eventDiscountsState.filter((d) => d.id !== discount.id)
@@ -93,6 +103,14 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     }
   };
 
+  const handleConfirm = (): void => {
+    handleSubmitTransaction();
+  };
+
+  const handleCancel = (): void => {
+    setIsModalConfirmationOpen(false);
+  };
+
   const handleSubmitTransaction = async () => {
     console.log({
       ticketId: modalTicket?.id,
@@ -100,7 +118,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       eventDiscounts: eventDiscountsState.map((d) => d.id),
     });
     try {
-      const { data, status } = await axios.post(
+      const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/transaction`,
         {
           ticketId: modalTicket?.id,
@@ -114,13 +132,18 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
           },
         }
       );
-      alert(data.message);
+
       setEventDiscountsState([]);
       setUserDiscountsState([]);
-      setOpenModal(false);
 
-      await refetchUserDiscounts(); // Refetch user discounts
-      await refetchEventDiscounts(); // Refetch event discounts
+      // await refetchUserDiscounts(); // Refetch user discounts
+      // await refetchEventDiscounts(); // Refetch event discounts
+      alert(data.message);
+      console.log(data);
+      if (data.success) {
+        route.push(`/invoice/${data.data.id}`);
+      }
+      setOpenModal(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         alert(error.response?.data.message);
@@ -168,16 +191,11 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       {session?.user?.roles[0] === "ORGANIZER" && (
         <div className="bg-platinum text-white rounded-lg py-2 px-5 text-center hover:cursor-pointer">
           <div className="font-semibold text-lg">
-            Can't buy ticket as Organizer
+            Can&apos;t buy ticket as Organizer
           </div>
         </div>
       )}
-      <Modal
-        dismissible
-        show={openModal}
-        onClose={() => setOpenModal(false)}
-        size="5xl"
-      >
+      <Modal show={openModal} onClose={() => setOpenModal(false)} size="5xl">
         <Modal.Header>Buy Ticket</Modal.Header>
         <Modal.Body>
           <div className="grid grid-cols-3 gap-5">
@@ -214,7 +232,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                     No Discount
                   </div>
                 )}
-                {userDiscounts?.map((discount: UserDiscountRespond) => (
+                {userDiscounts?.map((discount: UserDiscountResponse) => (
                   <div
                     key={discount.id}
                     onClick={() => handleUserDiscountClick(discount)}
@@ -286,7 +304,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                     No Discount
                   </div>
                 )}
-                {eventDiscounts?.map((discount: EventDiscountRespond) => (
+                {eventDiscounts?.map((discount: EventDiscountResponse) => (
                   <div
                     onClick={() => handleEventDiscountClick(discount)}
                     key={discount.id}
@@ -409,12 +427,20 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
           <Button
             color="blue"
             className="bg-true-blue rounded-lg text-white"
-            onClick={handleSubmitTransaction}
+            // onClick={handleSubmitTransaction}
+            onClick={() => setIsModalConfirmationOpen(true)}
           >
             Accept
           </Button>
         </Modal.Footer>
       </Modal>
+      <ConfirmationModal
+        isOpen={isModalConfirmationOpen}
+        onClose={handleCancel}
+        onConfirm={handleConfirm}
+        title="Buy Confirmation"
+        message="Are you sure you want to buy this item?"
+      />
     </div>
   );
 };

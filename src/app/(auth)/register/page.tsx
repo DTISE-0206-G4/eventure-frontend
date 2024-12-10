@@ -36,19 +36,26 @@ const RegisterPage: FC = () => {
     values: RegisterFormProps,
     formikHelpers: FormikHelpers<RegisterFormProps>
   ) => {
-    const { status, data } = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
-      values
-    );
-    if (status !== 200) {
-      console.error("Failed to register");
-      return;
+    try {
+      const { status } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
+        values
+      );
+      if (status !== 200) {
+        console.error("Failed to register");
+        return;
+      }
+      console.log(values);
+      formikHelpers.resetForm();
+      alert("Register success");
+      router.push("/login");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data.message);
+      } else {
+        alert("An unexpected error occurred. Please try again.");
+      }
     }
-    // localStorage.setItem("token", JSON.stringify(data.data.accessToken));
-    console.log(values);
-    formikHelpers.resetForm();
-    alert("Register success");
-    router.push("/login");
   };
   return (
     <div className="container mx-auto flex flex-col justify-center items-center min-h-[calc(100vh-150px)]">

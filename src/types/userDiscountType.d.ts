@@ -1,4 +1,4 @@
-export interface UserDiscountRespond {
+export interface UserDiscountResponse {
   id: number;
   userId: number;
   name: string;
@@ -8,7 +8,7 @@ export interface UserDiscountRespond {
   code: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: any;
+  deletedAt: string;
   expiredAt: string;
   isUsed: boolean;
 }

@@ -9,6 +9,13 @@ import ChangePasswordModal from "./ChangePasswordModal";
 import ReferralCodeSection from "./ReferralCodeSection";
 import useProfile from "@/hooks/useProfile";
 import axios from "axios";
+import { ProfileResponse } from "@/types/profile";
+import { Session } from "next-auth";
+
+interface SubmitProps {
+  name: string;
+  description: string;
+}
 
 const ProfilePage: FC = () => {
   const { data: session } = useSession();
@@ -18,7 +25,7 @@ const ProfilePage: FC = () => {
   );
   const [openModalPassword, setOpenModalPassword] = useState(false);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: SubmitProps) => {
     const { data } = await axios.put(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user`,
       values,
@@ -51,7 +58,10 @@ const ProfilePage: FC = () => {
         onSubmit={handleSubmit}
       >
         {(formikProps) => (
-          <ProfileDetailsForm {...formikProps} profile={profile} />
+          <ProfileDetailsForm
+            {...formikProps}
+            profile={profile as ProfileResponse}
+          />
         )}
       </Formik>
       <div className="mt-5 flex flex-col gap-2 justify-start items-start">
@@ -68,10 +78,10 @@ const ProfilePage: FC = () => {
       <ChangePasswordModal
         openModalPassword={openModalPassword}
         setOpenModalPassword={setOpenModalPassword}
-        session={session}
+        session={session as Session}
       />
       {session?.user.roles[0] === "ATTENDEE" && (
-        <ReferralCodeSection profile={profile} />
+        <ReferralCodeSection profile={profile as ProfileResponse} />
       )}
     </>
   );

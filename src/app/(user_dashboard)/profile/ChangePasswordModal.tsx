@@ -3,12 +3,19 @@ import { Button, Modal } from "flowbite-react";
 import * as Yup from "yup";
 import axios from "axios";
 import { ChangePasswordRequest } from "@/types/profile";
+import { Session } from "next-auth";
+
+interface ChangePasswordModalProps {
+  openModalPassword: boolean;
+  setOpenModalPassword: React.Dispatch<React.SetStateAction<boolean>>;
+  session: Session;
+}
 
 const ChangePasswordModal = ({
   openModalPassword,
   setOpenModalPassword,
   session,
-}: any) => {
+}: ChangePasswordModalProps) => {
   const ChangePasswordSchema = Yup.object().shape({
     oldPassword: Yup.string()
       .required("Old password is required")
@@ -31,7 +38,7 @@ const ChangePasswordModal = ({
     formikHelpers: FormikHelpers<ChangePasswordRequest>
   ) => {
     try {
-      const { data, status } = await axios.post(
+      const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/change_password`,
         {
           oldPassword: values.oldPassword,

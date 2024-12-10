@@ -34,7 +34,7 @@ const EventDetailsSection: FC<EventDetailsSectionProps> = ({ event }) => {
             alt="User Profile"
           />
           <div className="flex flex-col justify-center">
-            <div>Gora Asep</div>
+            <div>{event.user.name}</div>
             <div className="flex gap-1">
               <FontAwesomeIcon
                 className="h-5 w-5 text-yellow-300"

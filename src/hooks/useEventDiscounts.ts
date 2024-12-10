@@ -1,12 +1,11 @@
-import { EventDiscountRespond } from "@/types/eventDiscountType";
-import { UserDiscountRespond } from "@/types/userDiscountType";
+import { EventDiscountResponse } from "@/types/eventDiscountType";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const fetchEventDiscounts = async (
   accessToken: string,
   eventId: number
-): Promise<EventDiscountRespond[]> => {
+): Promise<EventDiscountResponse[]> => {
   const { data } = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/event_discount`,
     {
@@ -18,7 +17,7 @@ const fetchEventDiscounts = async (
       },
     }
   );
-  return data.data as EventDiscountRespond[];
+  return data.data as EventDiscountResponse[];
 };
 
 const useEventDiscounts = (accessToken: string, eventId: number) => {

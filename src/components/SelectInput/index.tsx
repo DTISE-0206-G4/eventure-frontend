@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Select, { ActionMeta, StylesConfig } from "react-select";
+import { StylesConfig } from "react-select";
 
 interface Option {
   value: string;
@@ -53,7 +53,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
     return null;
   }
 
-  const handleChange = (newValue: unknown, actionMeta: ActionMeta<unknown>) => {
+  const handleChange = (newValue: unknown) => {
     const selectedOption = newValue as Option | null;
     onChange(selectedOption);
   };
