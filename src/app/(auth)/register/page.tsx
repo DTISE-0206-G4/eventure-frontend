@@ -1,4 +1,5 @@
 "use client";
+import { useToast } from "@/providers/ToastProvider";
 import axios from "axios";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import Link from "next/link";
@@ -32,28 +33,28 @@ const ContactSchema = Yup.object().shape({
 });
 const RegisterPage: FC = () => {
   const router = useRouter();
+  const { showToast } = useToast();
   const handleSubmit = async (
     values: RegisterFormProps,
     formikHelpers: FormikHelpers<RegisterFormProps>
   ) => {
     try {
-      const { status } = await axios.post(
+      const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
         values
       );
-      if (status !== 200) {
-        console.error("Failed to register");
-        return;
+      if (data.success) {
+        showToast(data.message, "success");
+        formikHelpers.resetForm();
+        router.push("/login");
+      } else {
+        showToast(data.message, "error");
       }
-      console.log(values);
-      formikHelpers.resetForm();
-      alert("Register success");
-      router.push("/login");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        showToast(error.response?.data.message, "error");
       } else {
-        alert("An unexpected error occurred. Please try again.");
+        showToast("An unexpected error occurred. Please try again.", "error");
       }
     }
   };

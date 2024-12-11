@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { ChangePasswordRequest } from "@/types/profile";
 import { Session } from "next-auth";
+import { useToast } from "@/providers/ToastProvider";
 
 interface ChangePasswordModalProps {
   openModalPassword: boolean;
@@ -11,28 +12,28 @@ interface ChangePasswordModalProps {
   session: Session;
 }
 
+const ChangePasswordSchema = Yup.object().shape({
+  oldPassword: Yup.string()
+    .required("Old password is required")
+    .max(50, "Password must be 50 characters or less"),
+  newPassword: Yup.string()
+    .required("New password is required")
+    .min(8, "New password must be at least 8 characters")
+    .max(50, "New password must be 50 characters or less")
+    .notOneOf(
+      [Yup.ref("oldPassword")],
+      "New password cannot be the same as the old password"
+    ),
+  confirmPassword: Yup.string()
+    .required("Confirm password is required")
+    .oneOf([Yup.ref("newPassword")], "Passwords must match"),
+});
 const ChangePasswordModal = ({
   openModalPassword,
   setOpenModalPassword,
   session,
 }: ChangePasswordModalProps) => {
-  const ChangePasswordSchema = Yup.object().shape({
-    oldPassword: Yup.string()
-      .required("Old password is required")
-      .max(50, "Password must be 50 characters or less"),
-    newPassword: Yup.string()
-      .required("New password is required")
-      .min(8, "New password must be at least 8 characters")
-      .max(50, "New password must be 50 characters or less")
-      .notOneOf(
-        [Yup.ref("oldPassword")],
-        "New password cannot be the same as the old password"
-      ),
-    confirmPassword: Yup.string()
-      .required("Confirm password is required")
-      .oneOf([Yup.ref("newPassword")], "Passwords must match"),
-  });
-
+  const { showToast } = useToast();
   const handleChangePassword = async (
     values: ChangePasswordRequest,
     formikHelpers: FormikHelpers<ChangePasswordRequest>
@@ -51,17 +52,20 @@ const ChangePasswordModal = ({
           },
         }
       );
-      alert(data.message);
-      formikHelpers.resetForm();
-      setOpenModalPassword(false);
+      if (data.success) {
+        showToast(data.message, "success");
+      } else {
+        showToast(data.message, "error");
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        formikHelpers.setErrors({ oldPassword: error.response?.data.message });
+        showToast(error.response?.data.message, "error");
       } else {
-        formikHelpers.setErrors({
-          oldPassword: "An unexpected error occurred",
-        });
+        showToast("An unexpected error occurred. Please try again.", "error");
       }
+    } finally {
+      formikHelpers.resetForm();
+      setOpenModalPassword(false);
     }
   };
 
