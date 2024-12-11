@@ -1,5 +1,6 @@
 "use client";
 import useReview from "@/hooks/useReview";
+import { useToast } from "@/providers/ToastProvider";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
@@ -35,6 +36,7 @@ const ReviewModal: FC<ReviewModalProps> = ({
   const [openModal, setOpenModal] = useState(false);
   const { refetch, error, review } = useReview(accessToken, eventId);
   const [isReviewed, setIsReviewed] = useState(false);
+  const { showToast } = useToast();
   const handleSubmitReview = async (
     values: ReviewFormValues,
     formikHelpers: FormikHelpers<ReviewFormValues>
@@ -54,18 +56,19 @@ const ReviewModal: FC<ReviewModalProps> = ({
         }
       );
       if (data.success) {
-        alert(data.message);
-        setOpenModal(false);
-        refetch();
+        showToast(data.message, "success");
+      } else {
+        showToast(data.message, "error");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        formikHelpers.setErrors({ description: error.response?.data.message });
+        showToast(error.response?.data.message, "error");
       } else {
-        formikHelpers.setErrors({
-          description: "An unexpected error occurred",
-        });
+        showToast("An unexpected error occurred. Please try again.", "error");
       }
+    } finally {
+      setOpenModal(false);
+      refetch();
     }
   };
 
@@ -82,7 +85,7 @@ const ReviewModal: FC<ReviewModalProps> = ({
         color="blue"
         className="bg-true-blue"
       >
-        Review
+        {isReviewed ? "Reviewed" : "Add Review"}
       </Button>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Formik

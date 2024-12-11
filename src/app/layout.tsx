@@ -4,7 +4,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
-import ClientProvider from "@/providers/ClientProviders";
+import ClientProvider from "@/providers/ClientProvider";
+import { ToastProvider } from "@/providers/ToastProvider";
 export const metadata: Metadata = {
   title: "Eventure",
   description: "Eventure",
@@ -26,7 +27,7 @@ export default async function RootLayout({
           <body className={`antialiased bg-ghost-white`}>
             <div className="mx-auto">
               <Header />
-              {children}
+              <ToastProvider>{children}</ToastProvider>
               <Footer />
             </div>
           </body>

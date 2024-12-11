@@ -11,6 +11,7 @@ import useProfile from "@/hooks/useProfile";
 import axios from "axios";
 import { ProfileResponse } from "@/types/profile";
 import { Session } from "next-auth";
+import { useToast } from "@/providers/ToastProvider";
 
 interface SubmitProps {
   name: string;
@@ -19,26 +20,34 @@ interface SubmitProps {
 
 const ProfilePage: FC = () => {
   const { data: session } = useSession();
-
+  const { showToast } = useToast();
   const { error, isLoading, profile } = useProfile(
     session?.accessToken as string
   );
   const [openModalPassword, setOpenModalPassword] = useState(false);
 
   const handleSubmit = async (values: SubmitProps) => {
-    const { data } = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/user`,
-      values,
-      {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
-        },
+    try {
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/user`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      );
+      if (data.success) {
+        showToast(data.message, "success");
+      } else {
+        showToast(data.message, "error");
       }
-    );
-    if (!data.success) {
-      alert(data.message);
-    } else {
-      alert("Profile saved!");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        showToast(error.response?.data.message, "error");
+      } else {
+        showToast("An unexpected error occurred. Please try again.", "error");
+      }
     }
   };
 

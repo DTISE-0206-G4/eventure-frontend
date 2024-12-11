@@ -1,4 +1,5 @@
 "use client";
+import { useToast } from "@/providers/ToastProvider";
 import { ProfileResponse } from "@/types/profile";
 import axios from "axios";
 import { Button, Modal } from "flowbite-react";
@@ -12,17 +13,18 @@ interface referralFormProps {
 interface ReferralCodeSectionProps {
   profile: ProfileResponse;
 }
+const ChangeReferralSchema = Yup.object().shape({
+  referralCode: Yup.string()
+    .required("Referral code is required")
+    .matches(/^\S*$/, "Referral code cannot contain spaces")
+    .min(8, "Referral code must be at least 8 characters")
+    .max(50, "Referral code must be 50 characters or less"),
+});
 const ReferralCodeSection = ({ profile }: ReferralCodeSectionProps) => {
   const { data: session } = useSession();
   const [openModalReferral, setOpenModalReferral] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
-  const ChangeReferralSchema = Yup.object().shape({
-    referralCode: Yup.string()
-      .required("Referral code is required")
-      .matches(/^\S*$/, "Referral code cannot contain spaces")
-      .min(8, "Referral code must be at least 8 characters")
-      .max(50, "Referral code must be 50 characters or less"),
-  });
+  const { showToast } = useToast();
   const handleChangeReferral = async (
     values: referralFormProps,
     formikHelpers: FormikHelpers<referralFormProps>
@@ -40,9 +42,12 @@ const ReferralCodeSection = ({ profile }: ReferralCodeSectionProps) => {
         }
       );
       if (data.success) {
-        alert(data.message);
+        showToast(data.message, "success");
         setOpenModalReferral(false);
         profile.referralCode = values.referralCode;
+        setIsAvailable(false);
+      } else {
+        showToast(data.message, "error");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -74,9 +79,9 @@ const ReferralCodeSection = ({ profile }: ReferralCodeSectionProps) => {
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        showToast(error.response?.data.message, "error");
       } else {
-        alert("An unexpected error occurred");
+        showToast("An unexpected error occurred. Please try again.", "error");
       }
     }
   };

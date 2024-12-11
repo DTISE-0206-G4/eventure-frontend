@@ -1,4 +1,5 @@
 "use client";
+import { useToast } from "@/providers/ToastProvider";
 import { Spinner } from "flowbite-react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { signIn } from "next-auth/react";
@@ -20,6 +21,7 @@ const ContactSchema = Yup.object().shape({
     .required("Required"),
 });
 const LoginPage: FC = () => {
+  const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -45,6 +47,7 @@ const LoginPage: FC = () => {
           );
         }
       } else if (!result?.error) {
+        showToast("Login success", "success");
         router.push("/");
       }
       console.log("stil running");

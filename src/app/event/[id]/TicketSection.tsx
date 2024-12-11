@@ -2,6 +2,7 @@
 import ConfirmationModal from "@/common/ConfirmationModal";
 import useEventDiscounts from "@/hooks/useEventDiscounts";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
+import { useToast } from "@/providers/ToastProvider";
 import { Event, Ticket } from "@/types/event";
 import { EventDiscountResponse } from "@/types/eventDiscountType";
 import { UserDiscountResponse } from "@/types/userDiscountType";
@@ -30,6 +31,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     error: errorEventDiscount,
     refetch: refetchEventDiscounts,
   } = useEventDiscounts(session?.accessToken as string, event.id);
+  const { showToast } = useToast();
   const [openModal, setOpenModal] = useState(false);
   const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -133,23 +135,23 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
         }
       );
 
-      setEventDiscountsState([]);
-      setUserDiscountsState([]);
-
-      // await refetchUserDiscounts(); // Refetch user discounts
-      // await refetchEventDiscounts(); // Refetch event discounts
-      alert(data.message);
-      console.log(data);
       if (data.success) {
+        showToast(data.message, "success");
         route.push(`/invoice/${data.data.id}`);
+      } else {
+        showToast(data.message, "error");
       }
-      setOpenModal(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.message);
+        showToast(error.response?.data.message, "error");
       } else {
-        alert("An unexpected error occurred. Please try again.");
+        showToast("An unexpected error occurred. Please try again.", "error");
       }
+    } finally {
+      setEventDiscountsState([]);
+      setUserDiscountsState([]);
+      setOpenModal(false);
+      setIsModalConfirmationOpen(false);
     }
   };
   return (
