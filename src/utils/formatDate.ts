@@ -2,7 +2,7 @@ const formatDate = (dateString: string) => {
   const date = new Date(dateString);
 
   // Convert to UTC+7 (by adding 7 hours)
-  date.setHours(date.getHours() + 7);
+  date.setHours(date.getHours());
 
   // Format the date to the desired format
   const formattedDate = date.toLocaleString("en-GB", {

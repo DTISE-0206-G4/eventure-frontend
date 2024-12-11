@@ -5,34 +5,46 @@ import { FC } from "react";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
+import { useToast } from "@/providers/ToastProvider";
+import axios from "axios";
 
 const Header: FC = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  const { showToast } = useToast();
   const handleLogout = async () => {
     if (!session) {
       alert("You are not logged in.");
       return;
     }
     // Call your custom logout API
-    const response = await fetch("http://localhost:8080/api/v1/auth/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      body: JSON.stringify({
-        accessToken: session.accessToken,
-        refreshToken: session.refreshToken,
-      }),
-    });
-
-    if (response.ok) {
-      // Sign out from NextAuth (clears the session)
-      await signOut({ redirect: false });
-      router.push("/login");
-    } else {
-      alert("Failed to log out, please try again.");
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+        {
+          accessToken: session.accessToken,
+          refreshToken: session.refreshToken,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (data.success) {
+        showToast(data.message, "success");
+        await signOut({ redirect: false });
+        router.push("/login");
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        showToast(error.response?.data.message, "error");
+      } else {
+        showToast("An unexpected error occurred. Please try again.", "error");
+      }
     }
   };
   return (

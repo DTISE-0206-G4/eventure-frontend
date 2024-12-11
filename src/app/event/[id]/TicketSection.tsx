@@ -136,8 +136,8 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       );
 
       if (data.success) {
-        showToast(data.message, "success");
         route.push(`/invoice/${data.data.id}`);
+        showToast(data.message, "success");
       } else {
         showToast(data.message, "error");
       }

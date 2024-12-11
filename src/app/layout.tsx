@@ -25,11 +25,13 @@ export default async function RootLayout({
       <SessionProvider refetchInterval={120} session={session}>
         <ClientProvider>
           <body className={`antialiased bg-ghost-white`}>
-            <div className="mx-auto">
-              <Header />
-              <ToastProvider>{children}</ToastProvider>
-              <Footer />
-            </div>
+            <ToastProvider>
+              <div className="mx-auto">
+                <Header />
+                {children}
+                <Footer />
+              </div>
+            </ToastProvider>
           </body>
         </ClientProvider>
       </SessionProvider>
