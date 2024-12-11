@@ -14,6 +14,7 @@ import { FC, useState } from "react";
 import Pagination from "./Pagination";
 import Link from "next/link";
 import ReviewModal from "./ReviewModal";
+import CustomSpinner from "@/common/CustomSpinner";
 
 const TicketPage: FC = () => {
   const { data: session } = useSession();
@@ -28,7 +29,7 @@ const TicketPage: FC = () => {
   const totalPage = Math.ceil(
     (transactions?.recordsFiltered ?? 0) / params.length
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CustomSpinner />;
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>

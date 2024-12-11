@@ -6,6 +6,7 @@ import { Event, EventDatatableRequest } from "@/types/event";
 import Pagination from "./Pagination";
 import SearchBar from "./SearchBar";
 import EventCard from "./EventCard";
+import CustomSpinner from "@/common/CustomSpinner";
 
 const EventList: FC = () => {
   const [search, setSearch] = useState("");
@@ -57,7 +58,7 @@ const EventList: FC = () => {
   };
 
   if (error && !eventsData) return <div>Error</div>;
-  if (isLoading || !eventsData) return <div>Loading...</div>;
+  if (isLoading || !eventsData) return <CustomSpinner />;
 
   const totalPage = Math.ceil(
     eventsData.recordsFiltered / paginationParams.length

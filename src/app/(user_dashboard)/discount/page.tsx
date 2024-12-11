@@ -1,4 +1,5 @@
 "use client";
+import CustomSpinner from "@/common/CustomSpinner";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { UserDiscountResponse } from "@/types/userDiscountType";
 import formatDate from "@/utils/formatDate";
@@ -10,7 +11,7 @@ const DiscountPage: FC = () => {
   const { error, isLoading, discounts } = useUserDiscounts(
     session?.accessToken as string
   );
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CustomSpinner />;
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>

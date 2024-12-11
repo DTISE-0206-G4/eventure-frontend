@@ -7,6 +7,7 @@ import EventDescriptionSection from "./EventDescriptionSection";
 import EventDetailsSection from "./EventDetailsSection";
 import TicketSection from "./TicketSection";
 import Link from "next/link";
+import CustomSpinner from "@/common/CustomSpinner";
 interface PageProps {
   params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
 }
@@ -22,7 +23,7 @@ const EventPage: FC<PageProps> = ({ params }) => {
     error: errorEvent,
     event,
   } = useEvent(parseInt(id, 10));
-  if (isLoadingEvent) return <div>Loading...</div>;
+  if (isLoadingEvent) return <CustomSpinner />;
   if (errorEvent) return <div>Error: {errorEvent.message}</div>;
 
   //todo add organizer data from get event

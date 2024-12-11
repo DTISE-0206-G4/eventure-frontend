@@ -12,6 +12,7 @@ import axios from "axios";
 import { ProfileResponse } from "@/types/profile";
 import { Session } from "next-auth";
 import { useToast } from "@/providers/ToastProvider";
+import CustomSpinner from "@/common/CustomSpinner";
 
 interface SubmitProps {
   name: string;
@@ -52,7 +53,7 @@ const ProfilePage: FC = () => {
   };
 
   // Loading and error handling
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CustomSpinner />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
