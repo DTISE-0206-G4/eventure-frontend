@@ -5,6 +5,7 @@ import {
   faClock,
   faLocationDot,
   faStar,
+  faTags,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -45,6 +46,23 @@ const EventDetailsSection: FC<EventDetailsSectionProps> = ({ event }) => {
           </div>
         </div>
       </div>
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-2 items-center">
+          <FontAwesomeIcon className="h-5 w-5 text-slate-gray" icon={faTags} />
+          <div className="font-semibold text-lg">Categories</div>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {event.categories.map((category) => (
+            <div
+              key={category.id}
+              className="text-slate-gray rounded-full px-2 border border-slate-gray"
+            >
+              {category.name}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="flex flex-col gap-2">
         <div className="flex gap-2 items-center">
           <FontAwesomeIcon
