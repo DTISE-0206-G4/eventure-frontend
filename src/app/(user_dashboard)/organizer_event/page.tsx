@@ -12,6 +12,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { Modal } from "flowbite-react";
+import Link from "next/link";
+import TicketCard from "./TicketCard";
 
 interface IEventToDelete {
   id: number;
@@ -58,13 +60,15 @@ const OrganizerEventPage: FC = () => {
     <>
       <div className="flex justify-between">
         <div className="font-semibold text-xl">My Events</div>
-        <button className="bg-true-blue rounded-lg py-2 px-5 text-white flex gap-2">
-          <FontAwesomeIcon
-            className="w-[25px] h-[25px] shrink-0 text-white"
-            icon={faPlus}
-          />
-          <div>Add Event</div>
-        </button>
+        <Link href="/add_event">
+          <button className="bg-true-blue rounded-lg py-2 px-5 text-white flex gap-2">
+            <FontAwesomeIcon
+              className="w-[25px] h-[25px] shrink-0 text-white"
+              icon={faPlus}
+            />
+            <div>Add Event</div>
+          </button>
+        </Link>
       </div>
 
       <div className="flex justify-between items-center mt-5">
@@ -162,6 +166,8 @@ const OrganizerEventPage: FC = () => {
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-5">
+
+        {/* Event Container */}
         <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
           <div className="flex gap-5 items-center">
             <Image
@@ -175,7 +181,17 @@ const OrganizerEventPage: FC = () => {
               <div className="flex justify-between">
                 <div className="font-semibold">Pesta Wibu 2024</div>
                 <div className="flex gap-2">
-                  <button className="bg-american-green rounded-lg py-2 px-5 text-white">
+                  {/* <button className="bg-american-green rounded-lg py-2 px-5 text-white">
+                    Add Ticket
+                  </button> */}
+                  <button className="bg-american-green rounded-lg py-2 px-5 text-white flex gap-2">
+                    <FontAwesomeIcon
+                      className="w-[25px] h-[25px] shrink-0 text-white"
+                      icon={faPlus}
+                    />
+                    <div>Add Ticket</div>
+                  </button>
+                  <button className="bg-true-blue rounded-lg py-2 px-5 text-white">
                     Edit
                   </button>
                   <button
@@ -237,59 +253,30 @@ const OrganizerEventPage: FC = () => {
               </div>
             </div>
           </div>
+          {/* Ticket List Container */}
           <div className="flex gap-5 flex-wrap">
-            <div className="border border-platinum rounded-lg py-2 px-5 text-center">
-              <div className="font-semibold text-lg">Regular</div>
-              <div>Available : 10</div>
-              <div>Sold: 25</div>
-              <div>Rp. 50.000</div>
-              <div className="flex gap-2 mt-2">
-                <button className="bg-american-green rounded-lg py-2 px-5 text-white">
-                  Edit
-                </button>
-                <button
-                  className="bg-true-blue rounded-lg py-2 px-5 text-white"
-                  onClick={() =>
-                    handleReleaseClick({ id: 1, name: "Pesta Wibu 2024" })
-                  }
-                >
-                  Release
-                </button>
-                <button className="border border-red-500 rounded-lg py-2 px-5 text-red-500">
-                  Close
-                </button>
-              </div>
-            </div>
-            <div className="border border-platinum rounded-lg py-2 px-5 text-center">
-              <div className="font-semibold text-lg">VIP</div>
-              <div>Available : 10</div>
-              <div>Sold: 25</div>
-              <div>Rp. 100.000</div>
-              <div className="flex gap-2 mt-2">
-                <button className="bg-azureish-white rounded-lg py-2 px-5 text-slate-gray">
-                  Edit
-                </button>
-                <button className="bg-azureish-white rounded-lg py-2 px-5 text-slate-gray">
-                  Released
-                </button>
-                <button className="bg-azureish-white rounded-lg py-2 px-5 text-slate-gray">
-                  Closed
-                </button>
-              </div>
-            </div>
-            <div className="py-2 px-5 text-center flex items-center">
-              <button className="bg-true-blue rounded-lg p-5 text-white flex gap-2">
-                <FontAwesomeIcon
-                  className="w-[25px] h-[25px] shrink-0 text-white"
-                  icon={faPlus}
-                />
-                <div>Add Ticket</div>
-              </button>
-            </div>
+            <TicketCard 
+              title="Regular"
+              available={10}
+              sold={25}
+              price="Rp. 50.000"
+              onEdit={() => console.log("edit")}
+              onRelease={() => console.log("release")}
+              onClose={() => console.log("close")}
+            />
+            <TicketCard 
+              title="VIP"
+              available={10}
+              sold={25}
+              price="Rp. 100.000"
+              onEdit={() => console.log("edit VIP")}
+              onRelease={() => console.log("release VIP")}
+              onClose={() => console.log("close VIP")}
+            />
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
+        {/* <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
           <div className="flex gap-5 items-center">
             <Image
               className="rounded-md w-[100px] h-[50px] object-cover"
@@ -370,7 +357,7 @@ const OrganizerEventPage: FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <Modal.Header>Delete Event</Modal.Header>

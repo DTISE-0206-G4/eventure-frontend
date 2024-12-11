@@ -3,44 +3,26 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { TextInput, Textarea, Button, Select, Checkbox, Modal } from 'flowbite-react';
-
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import parseAndReformatDateTime from '@/utils/formatDateTimeForm';
 
 interface FormValues {
   title: string;
   description: string;
   startTime: string;
   endTime: string;
-  address: string;
-  categories: never[];
-  province: string;
-  regency: string;
+  location: string;
 }
 
-interface Province {
-  id: number;
-  name: string;
-}
-
-interface Regency {
-  id: number;
-  name: string;
-}
 
 const AddEventPage: React.FC = () => {
-  const [provinces, setProvinces] = useState<Province[]>([]);
-  const [regencies, setRegencies] = useState<Regency[]>([]);
-  const [selectedProvince, setSelectedProvince] = useState('');
-  const [categories] = useState([
-    { id: 1, name: 'Online' },
-    { id: 2, name: 'Offline' },
-    { id: 3, name: 'Concert' },
-    { id: 4, name: 'MeetNGreet' },
-    { id: 5, name: 'Seminar' },
-    { id: 6, name: 'Exhibition' },
-    { id: 7, name: 'Sport' },
-  ]);
-
   const [modalOpen, setModalOpen] = useState(false); 
+  const router = useRouter();
+
+  const { data: session } = useSession();
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
@@ -53,68 +35,44 @@ const AddEventPage: React.FC = () => {
         const { startTime } = this.parent; 
         return value && startTime ? value > startTime : true; 
       }),
-    address: Yup.string().required('Address is required'), 
-    categories: Yup.array()
-      .of(Yup.number().required('Category is required'))
-      .min(1, 'At least one category is required'),
-    province: Yup.string().required('Province is required'),
-    regency: Yup.string().required('Regency is required'),
+    location: Yup.string().required('Address is required'), 
   });
-
-  const handleProvinceChange = (event: React.ChangeEvent<HTMLSelectElement>, setFieldValue: (field: string, value: any) => void) => {
-    const provinceId = event.target.value; 
-    setSelectedProvince(provinceId);
-    setRegencies([]); 
-
-    
-    setFieldValue('province', provinceId); 
-
-    if (provinceId) {
-      fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
-        .then(response => response.json())
-        .then(data => {
-          setRegencies(data); 
-        });
-    }
-  };
-
-
-
-  
-  // const handleSubmit = async (values: FormValues,formikHelpers: FormikHelpers<FormValues>) => {
-  //    try {
-  //     console.log('Form data submitted: ', JSON.stringify(values, null, 2)); 
-  //     setModalOpen(true); 
-  //    } catch (error) {
-  //     console.log("hehe")
-  //   }
-  // };
-  const handleSubmit = async (values: FormValues) => {
-    try {
-      const selectedProvinceName = provinces.find(p => p.id === Number(values.province))?.name;
-      const selectedRegencyName = regencies.find(r => r.id === Number(values.regency))?.name;
-
-    
-      const submittedData = {
-        ...values,
-        province: selectedProvinceName, 
-        regency: selectedRegencyName, 
+const handleSubmit = async (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
+  try {
+      const parsedValues = {
+          ...values,
+          startTime: parseAndReformatDateTime(values.startTime, '+07:00'),
+          endTime: parseAndReformatDateTime(values.endTime, '+07:00'),
+          // startTime: parseAndReformatDateTime(values.startTime),
+          // endTime: parseAndReformatDateTime(values.endTime),
+          categories: [],
       };
 
-      console.log('Form data submitted: ', JSON.stringify(submittedData, null, 2)); // Log modified data
-      setModalOpen(true); 
-    } catch (error) {
-      console.error('Error submitting form', error); 
-    };
-  }
+      console.log('Parsed Form data submitted: ', JSON.stringify(parsedValues, null, 2));
 
-  useEffect(() => {
-    fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json`)
-      .then(response => response.json())
-      .then(data => {
-        setProvinces(data); 
-      });
-  }, []); 
+      const { status, data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/event`,
+          parsedValues,
+          {
+              headers: {
+                  Authorization: `Bearer ${session?.accessToken}`,
+                  'Content-Type': 'application/json',
+              },
+          },
+          
+      );
+
+      if (status === 200) {
+          setModalOpen(true);
+          formikHelpers.resetForm();
+          router.push('/organizer_event');
+      } else {
+          console.error('Failed to create event', status);
+      }
+  } catch (error) {
+      console.error('Error submitting form', error);
+  }
+};
 
   return (
     <div className="mt-10 w-1/4">
@@ -126,10 +84,7 @@ const AddEventPage: React.FC = () => {
           description: '',
           startTime: '',
           endTime: '',
-          address: '',
-          categories: [],
-          province: '',
-          regency: '',
+          location: '',
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -197,82 +152,17 @@ const AddEventPage: React.FC = () => {
                   </div>
 
                   <div className="location-container">
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                      Location
-                    </label>
                     <div>
-                      <Field 
-                        as={Select}
-                        id="province"
-                        name="province"
-                        className="mt-1"
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleProvinceChange(e, setFieldValue)}
-                      >
-                        <option value="">Select a province</option>
-                          {provinces.map((province: { id: number, name: string }) => (
-                            <option key={province.id} value={province.id}>{province.name}</option>
-                          ))}                        
-                      </Field>
-                      <ErrorMessage name="province" component="div" className="text-red-600 text-sm" />
-                    </div>
-
-
-                    <div>
-                      <label htmlFor="regency" className="block text-sm font-medium text-gray-700">Regency</label>
-                      <Field
-                        as={Select}
-                        id="regency"
-                        name="regency"
-                        className="mt-1"
-                      >
-                        <option value="">Select a regency</option>
-                        {regencies.map((regency: { id: number, name: string }) => (
-                          <option key={regency.id} value={regency.id}>{regency.name}</option>
-                        ))}
-                      </Field>
-                      <ErrorMessage name="regency" component="div" className="text-red-600 text-sm" />
-                    </div>
-
-                    <div>
-                      <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+                      <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
                       <Field
                         as={Textarea}
-                        id="address"
-                        name="address"
+                        id="location"
+                        name="location"
                         className="mt-1"
                         rows={4} 
                       />
-                      <ErrorMessage name="address" component="div" className="text-red-600 text-sm" />
+                      <ErrorMessage name="location" component="div" className="text-red-600 text-sm" />
                     </div>
-                  </div>
-
-                  <div className='categories-container'>
-                    <label className="block text-sm font-medium text-gray-700">Categories</label>
-                    <div className="space-y-2 mt-2">
-                      {categories.map(category => (
-                        <div key={category.id} className="flex items-center">
-                          <Field
-                            type="checkbox"
-                            id={`category-${category.id}`}
-                            name="categories"
-                            value={category.id}
-                            onChange={({ target }: React.ChangeEvent<HTMLInputElement>) => {
-                              const { checked } = target;
-                              const newCategories = checked
-                                ? [...values.categories, Number(category.id)]
-                                : values.categories.filter(id => id !== Number(category.id));
-                              setFieldValue('categories', newCategories);
-                              console.log('Selected categories:', newCategories);
-                            }}
-                            as={Checkbox}
-                          />
-                          <label htmlFor={`category-${category.id}`} className="ml-2 text-sm text-gray-700">
-                            {category.name}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                    <ErrorMessage name="categories" component="div" className="text-red-600 text-sm" />
                   </div>
               </div>
                 
