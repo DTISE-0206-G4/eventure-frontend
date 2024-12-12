@@ -78,6 +78,13 @@ const EventList: FC = () => {
     }));
   };
 
+  useEffect(() => {
+    setParams((prevParams: EventDatatableRequest) => ({
+      ...prevParams,
+      search: debouncedSearch,
+    }));
+  }, [debouncedSearch]);
+
   // Handling empty states and loading states
   if (error && !eventsData) return <div>Error</div>;
   if (isLoading || !eventsData) return <CustomSpinner />;
