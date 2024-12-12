@@ -1,7 +1,6 @@
 export interface EventDatatableResponse {
   recordsFiltered: number;
   data: Event[];
-  draw: number;
   recordsTotal: number;
 }
 
@@ -35,13 +34,11 @@ export interface Category {
 }
 
 export interface EventDatatableRequest {
-  draw: number;
   start: number;
   length: number;
   search: string | null;
-  orderDir: string;
-  orderColumn: string;
   userId: number | null;
+  category: string;
 }
 
 export interface Ticket {

@@ -42,9 +42,7 @@ const AddEventPage: React.FC = () => {
 
   const { data: session } = useSession();
 
-  const { categories, isLoading: isLoadingCategories } = useCategories(
-    session?.accessToken as string
-  );
+  const { categories, isLoading: isLoadingCategories } = useCategories();
 
   const { showToast } = useToast();
 

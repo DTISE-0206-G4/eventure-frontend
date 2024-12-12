@@ -11,14 +11,12 @@ interface PaginationProps {
   paginationParams: EventDatatableRequest;
   page: number;
   totalPage: number;
-  sendDataToParent: (params: EventDatatableRequest) => void;
   setPage: (page: number) => void;
 }
 const Pagination: FC<PaginationProps> = ({
   paginationParams,
   page,
   totalPage,
-  sendDataToParent,
   setPage,
 }) => {
   const { isLoading, error, data: eventsData } = useEvents(paginationParams);
@@ -28,11 +26,6 @@ const Pagination: FC<PaginationProps> = ({
 
   const renderedItems = [];
   const handleClick = (page: number) => {
-    const newParams = {
-      ...paginationParams,
-      start: (page - 1) * paginationParams.length,
-    };
-    sendDataToParent(newParams);
     setPage(page);
   };
   const handlePrevClick = () => {

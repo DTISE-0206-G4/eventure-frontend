@@ -51,9 +51,7 @@ const EditEventPage: FC<PageProps> = ({ params }) => {
 
   const { data: session } = useSession();
 
-  const { categories, isLoading: isLoadingCategories } = useCategories(
-    session?.accessToken as string
-  );
+  const { categories, isLoading: isLoadingCategories } = useCategories();
   const { isLoading: isLoadingEvent, event } = useEvent(parseInt(id, 10));
 
   const { showToast } = useToast();
