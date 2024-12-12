@@ -1,3 +1,5 @@
+import CustomSpinner from "@/common/CustomSpinner";
+import useAvgStars from "@/hooks/useAvgStars";
 import { Event } from "@/types/event";
 import formatDate from "@/utils/formatDate";
 import {
@@ -15,6 +17,8 @@ interface EventDetailsSectionProps {
   event: Event;
 }
 const EventDetailsSection: FC<EventDetailsSectionProps> = ({ event }) => {
+  const { isLoading: isLoadingAvgStars, avgStars } = useAvgStars(event.user.id);
+  if (isLoadingAvgStars) return <CustomSpinner />;
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -41,7 +45,7 @@ const EventDetailsSection: FC<EventDetailsSectionProps> = ({ event }) => {
                 className="h-5 w-5 text-yellow-300"
                 icon={faStar}
               />{" "}
-              <div>4.7</div>
+              <div>{avgStars}</div>
             </div>
           </div>
         </div>

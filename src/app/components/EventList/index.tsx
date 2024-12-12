@@ -11,7 +11,6 @@ import CustomSpinner from "@/common/CustomSpinner";
 const EventList: FC = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const inputRef = useRef<HTMLInputElement>(null);
   const paginationParams = {
     draw: 1,
     start: 0,
@@ -42,7 +41,6 @@ const EventList: FC = () => {
         search: search,
         start: 0,
       }));
-      inputRef.current?.focus();
     }, 1000); // Set debounce delay (500ms)
     return () => {
       clearTimeout(handler);
@@ -67,7 +65,7 @@ const EventList: FC = () => {
   return (
     <div className="w-full mx-5">
       <div className="flex justify-between items-center">
-        <SearchBar search={search} handleSearch={handleSearch} ref={inputRef} />
+        <SearchBar search={search} handleSearch={handleSearch} />
         <div>
           <nav aria-label="Page navigation example">
             <ul className="flex items-center -space-x-px h-8 text-sm">
