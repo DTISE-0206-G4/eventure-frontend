@@ -28,3 +28,24 @@ function parseAndReformatDateTime(inputDate: string): string {
 }
 
 export default parseAndReformatDateTime;
+
+export const formatDateTimeForInput = (inputDate: string): string => {
+  const date = new Date(inputDate);
+
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date string");
+  }
+
+  // Pad function to ensure two digits
+  const pad = (num: number): string => String(num).padStart(2, "0");
+
+  // Extract and format date components
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1); // Months are zero-based
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+
+  // Return formatted string
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};

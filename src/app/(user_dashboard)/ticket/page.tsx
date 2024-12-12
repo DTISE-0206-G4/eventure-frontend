@@ -11,9 +11,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FC, useState } from "react";
-import Pagination from "./Pagination";
+import Pagination from "./components/Pagination";
 import Link from "next/link";
-import ReviewModal from "./ReviewModal";
+import ReviewModal from "./components/ReviewModal";
 import CustomSpinner from "@/common/CustomSpinner";
 
 const TicketPage: FC = () => {
