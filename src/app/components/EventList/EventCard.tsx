@@ -21,7 +21,7 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
     { min: Infinity, max: -Infinity }
   );
   return (
-    <div
+    <div  
       key={event.id}
       onClick={() => {
         handleClick(event.id);

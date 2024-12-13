@@ -7,7 +7,7 @@ const fetchEvents = async (
   params: EventDatatableRequest
 ): Promise<EventDatatableResponse> => {
   const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/event/datatable`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/event`,
     {
       params,
     }
@@ -17,11 +17,13 @@ const fetchEvents = async (
 
 const useEvents = (props?: Partial<EventDatatableRequest>) => {
   const [params, setParams] = useState<EventDatatableRequest>({
+    draw: props?.draw ?? 1,
     start: props?.start ?? 0,
     length: props?.length ?? 10,
+    orderColumn: props?.orderColumn ?? "id",
+    orderDir: props?.orderDir ?? "asc",
     search: props?.search ?? "",
     userId: props?.userId ?? null,
-    category: props?.category ?? "",
   });
   //   setParams({ ...params, ...props });
 
