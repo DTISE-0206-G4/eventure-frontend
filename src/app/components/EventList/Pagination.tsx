@@ -6,32 +6,26 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useEvents from "@/hooks/useEvents";
 import { EventDatatableRequest } from "@/types/event";
+import CustomSpinner from "@/common/CustomSpinner";
 interface PaginationProps {
   paginationParams: EventDatatableRequest;
   page: number;
   totalPage: number;
-  sendDataToParent: (params: EventDatatableRequest) => void;
   setPage: (page: number) => void;
 }
 const Pagination: FC<PaginationProps> = ({
   paginationParams,
   page,
   totalPage,
-  sendDataToParent,
   setPage,
 }) => {
   const { isLoading, error, data: eventsData } = useEvents(paginationParams);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CustomSpinner />;
   if (error || !eventsData) return <div>Error</div>;
 
   const renderedItems = [];
   const handleClick = (page: number) => {
-    const newParams = {
-      ...paginationParams,
-      start: (page - 1) * paginationParams.length,
-    };
-    sendDataToParent(newParams);
     setPage(page);
   };
   const handlePrevClick = () => {

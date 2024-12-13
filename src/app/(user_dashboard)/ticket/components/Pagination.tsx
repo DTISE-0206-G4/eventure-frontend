@@ -19,14 +19,6 @@ const Pagination: FC<PaginationProps> = ({
   sendDataToParent,
   setPage,
 }) => {
-  //   const { isLoading, error, transactions, params, setParams } = useTransactions(
-  //     accessToken,
-  //     paginationParams
-  //   );
-
-  //   if (isLoading) return <div>Loading...</div>;
-  //   if (error || !transactions) return <div>Error</div>;
-
   const renderedItems = [];
   const handleClick = (page: number) => {
     const newParams = {

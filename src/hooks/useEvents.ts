@@ -17,13 +17,11 @@ const fetchEvents = async (
 
 const useEvents = (props?: Partial<EventDatatableRequest>) => {
   const [params, setParams] = useState<EventDatatableRequest>({
-    draw: props?.draw ?? 1,
     start: props?.start ?? 0,
     length: props?.length ?? 10,
-    orderColumn: props?.orderColumn ?? "id",
-    orderDir: props?.orderDir ?? "asc",
     search: props?.search ?? "",
     userId: props?.userId ?? null,
+    category: props?.category ?? "",
   });
   //   setParams({ ...params, ...props });
 

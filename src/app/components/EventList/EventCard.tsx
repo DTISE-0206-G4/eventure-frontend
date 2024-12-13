@@ -26,7 +26,9 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
       onClick={() => {
         handleClick(event.id);
       }}
-      className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum hover:cursor-pointer hover:bg-azureish-white"
+      className={`flex gap-5 items-center ${
+        event.endTime < new Date().toISOString() ? "bg-platinum" : "bg-white"
+      } rounded-md w-full p-5 border border-platinum hover:cursor-pointer hover:bg-azureish-white`}
     >
       <Image
         className="rounded-md w-[100px] h-[50px] object-cover"
@@ -39,11 +41,17 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
         <div className="flex justify-between">
           <div className="font-semibold">{event.title}</div>
           <div className="text-american-green">
-            {event.tickets.length > 0 ? (
+            {event.endTime < new Date().toISOString() ? (
+              <div>Event has ended</div>
+            ) : (
               <>
-                IDR {ticketPriceRange.min} - IDR {ticketPriceRange.max}
+                {event.tickets.length > 0 ? (
+                  <>
+                    IDR {ticketPriceRange.min} - IDR {ticketPriceRange.max}
+                  </>
+                ) : null}
               </>
-            ) : null}
+            )}
           </div>
         </div>
 

@@ -3,15 +3,16 @@
 import { FC, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Formik } from "formik";
-import ProfileImageSection from "./ProfileImageSection";
-import ProfileDetailsForm from "./ProfileDetailsForm";
-import ChangePasswordModal from "./ChangePasswordModal";
-import ReferralCodeSection from "./ReferralCodeSection";
+import ProfileImageSection from "./components/ProfileImageSection";
+import ProfileDetailsForm from "./components/ProfileDetailsForm";
+import ChangePasswordModal from "./components/ChangePasswordModal";
+import ReferralCodeSection from "./components/ReferralCodeSection";
 import useProfile from "@/hooks/useProfile";
 import axios from "axios";
 import { ProfileResponse } from "@/types/profile";
 import { Session } from "next-auth";
 import { useToast } from "@/providers/ToastProvider";
+import CustomSpinner from "@/common/CustomSpinner";
 
 interface SubmitProps {
   name: string;
@@ -52,7 +53,7 @@ const ProfilePage: FC = () => {
   };
 
   // Loading and error handling
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CustomSpinner />;
   if (error) return <div>Error: {error.message}</div>;
 
   return (

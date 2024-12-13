@@ -84,26 +84,26 @@ const Header: FC = () => {
               inline
               arrowIcon={false}
             >
-              <DropdownItem onClick={() => router.push("/profile")}>
-                Profile
+              <DropdownItem>
+                <Link href="/profile">Profile Settings</Link>
               </DropdownItem>
               {session.user.roles[0] === "ORGANIZER" && (
                 <>
-                  <DropdownItem onClick={() => router.push("/organizer_event")}>
-                    Events
+                  <DropdownItem>
+                    <Link href="/organizer_event">My Events</Link>
                   </DropdownItem>
-                  <DropdownItem onClick={() => router.push("/analytics")}>
-                    Analytics
+                  <DropdownItem>
+                    <Link href="/analytics">Analytics</Link>
                   </DropdownItem>
                 </>
               )}
               {session.user.roles[0] === "ATTENDEE" && (
                 <>
-                  <DropdownItem onClick={() => router.push("/ticket")}>
-                    Tickets
+                  <DropdownItem>
+                    <Link href="/ticket">Tickets</Link>
                   </DropdownItem>
-                  <DropdownItem onClick={() => router.push("/discount")}>
-                    Discounts
+                  <DropdownItem>
+                    <Link href="/discount">Discount</Link>
                   </DropdownItem>
                 </>
               )}
@@ -114,17 +114,11 @@ const Header: FC = () => {
         )}
         {!session && (
           <div className="flex gap-5">
-            <div
-              className="text-tufts-blue hover:cursor-pointer"
-              onClick={() => router.push("/login")}
-            >
-              Login
+            <div className="text-tufts-blue hover:cursor-pointer">
+              <Link href="/login">Login</Link>
             </div>
-            <div
-              className="text-tufts-blue  hover:cursor-pointer"
-              onClick={() => router.push("/register")}
-            >
-              Register
+            <div className="text-tufts-blue  hover:cursor-pointer">
+              <Link href="/register">Register</Link>
             </div>
           </div>
         )}

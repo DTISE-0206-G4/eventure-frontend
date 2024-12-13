@@ -60,7 +60,7 @@ const OrganizerEventPage: FC = () => {
     <>
       <div className="flex justify-between">
         <div className="font-semibold text-xl">My Events</div>
-        <Link href="/add_event">
+        <Link href="/organizer_event/add_event">
           <button className="bg-true-blue rounded-lg py-2 px-5 text-white flex gap-2">
             <FontAwesomeIcon
               className="w-[25px] h-[25px] shrink-0 text-white"
@@ -166,7 +166,6 @@ const OrganizerEventPage: FC = () => {
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-5">
-
         {/* Event Container */}
         <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
           <div className="flex gap-5 items-center">
@@ -255,7 +254,7 @@ const OrganizerEventPage: FC = () => {
           </div>
           {/* Ticket List Container */}
           <div className="flex gap-5 flex-wrap">
-            <TicketCard 
+            <TicketCard
               title="Regular"
               available={10}
               sold={25}
@@ -264,7 +263,7 @@ const OrganizerEventPage: FC = () => {
               onRelease={() => console.log("release")}
               onClose={() => console.log("close")}
             />
-            <TicketCard 
+            <TicketCard
               title="VIP"
               available={10}
               sold={25}

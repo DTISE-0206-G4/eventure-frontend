@@ -1,5 +1,6 @@
 "use client";
 import ConfirmationModal from "@/common/ConfirmationModal";
+import CustomSpinner from "@/common/CustomSpinner";
 import useEventDiscounts from "@/hooks/useEventDiscounts";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { useToast } from "@/providers/ToastProvider";
@@ -74,7 +75,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     refetchUserDiscounts();
     refetchEventDiscounts();
   }, []);
-  if (isLoadingDiscount || isLoadingEventDiscount) return <div>Loading...</div>;
+  if (isLoadingDiscount || isLoadingEventDiscount) return <CustomSpinner />;
   if (errorDiscount) return <div>Error: {errorDiscount.message}</div>;
   if (errorEventDiscount) return <div>Error: {errorEventDiscount.message}</div>;
   if (event.endTime < new Date().toISOString())
@@ -156,7 +157,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
   };
   return (
     <div className="flex gap-5 flex-wrap items-center justify-center">
-      {session?.user?.roles[0] === "ATTENDEE" && (
+      {session?.user?.roles.includes("ATTENDEE") && (
         <>
           {event?.tickets.map((ticket) => {
             if (ticket.availableSeat - ticket.soldSeat > 0) {
@@ -190,7 +191,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
           })}
         </>
       )}
-      {session?.user?.roles[0] === "ORGANIZER" && (
+      {session?.user?.roles.includes("ORGANIZER") && (
         <div className="bg-platinum text-white rounded-lg py-2 px-5 text-center hover:cursor-pointer">
           <div className="font-semibold text-lg">
             Can&apos;t buy ticket as Organizer

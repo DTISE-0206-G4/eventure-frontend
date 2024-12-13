@@ -1,4 +1,5 @@
 "use client";
+import CustomSpinner from "@/common/CustomSpinner";
 import useAnalytics from "@/hooks/useAnalytics";
 import { RevenueData, TicketSoldData } from "@/types/analytic";
 import { faMoneyBill, faTicket } from "@fortawesome/free-solid-svg-icons";
@@ -34,10 +35,10 @@ const AnalyticsPage: FC = () => {
   );
 
   if (!analyticsData) {
-    return <div>Loading...</div>;
+    return <CustomSpinner />;
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CustomSpinner />;
   if (error) return <div>Error: {error.message}</div>;
   const dataTicketSold: DataPointTicketSold[] =
     analyticsData.ticketSoldData.map((item: TicketSoldData) => ({

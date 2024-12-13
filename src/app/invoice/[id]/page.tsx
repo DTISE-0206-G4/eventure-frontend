@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { notFound } from "next/navigation";
 import { FC, use, useRef } from "react";
 import html2canvas from "html2canvas";
+import CustomSpinner from "@/common/CustomSpinner";
 interface PageProps {
   params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
 }
@@ -21,7 +22,7 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
     transaction: invoice,
   } = useInvoice(session?.accessToken as string, parseInt(id, 10));
   const divRef = useRef<HTMLDivElement>(null);
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CustomSpinner />;
   if (error) {
     notFound();
   }
