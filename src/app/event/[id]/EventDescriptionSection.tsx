@@ -10,7 +10,7 @@ const EventDescriptionSection: FC<EventDescriptionSectionProps> = ({
   event,
 }) => {
   return (
-    <div className="w-2/3 bg-white border border-platinum rounded-sm p-5">
+    <div className="lg:w-2/3 bg-white border border-platinum rounded-sm p-5">
       <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 my-5">
         <Carousel>
           <div className="relative w-full h-full">

@@ -201,33 +201,10 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       <Modal show={openModal} onClose={() => setOpenModal(false)} size="5xl">
         <Modal.Header>Buy Ticket</Modal.Header>
         <Modal.Body>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="lg:grid lg:grid-cols-3 max-lg:flex max-lg:flex-col gap-5">
             <div>
               <div className="text-xl font-bold mb-4 text-gray-800 border-b pb-2">
                 Your Discounts
-              </div>
-              <div className="mb-5">
-                <label
-                  htmlFor="default-search"
-                  className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-                >
-                  Search
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <FontAwesomeIcon
-                      className="w-[15px] h-[15px] shrink-0 text-slate-gray"
-                      icon={faSearch}
-                    />
-                  </div>
-                  <input
-                    type="search"
-                    id="default-search"
-                    className="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search..."
-                    required
-                  />
-                </div>
               </div>
               <div className="overflow-y-scroll space-y-2 h-72">
                 {userDiscounts?.length === 0 && (
@@ -277,29 +254,6 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
             <div>
               <div className="text-xl font-bold mb-4 text-gray-800 border-b pb-2">
                 Event Discounts
-              </div>
-              <div className="mb-5">
-                <label
-                  htmlFor="default-search"
-                  className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-                >
-                  Search
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <FontAwesomeIcon
-                      className="w-[15px] h-[15px] shrink-0 text-slate-gray"
-                      icon={faSearch}
-                    />
-                  </div>
-                  <input
-                    type="search"
-                    id="default-search"
-                    className="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search..."
-                    required
-                  />
-                </div>
               </div>
               <div className="overflow-y-scroll space-y-2 h-72">
                 {eventDiscounts?.length === 0 && (

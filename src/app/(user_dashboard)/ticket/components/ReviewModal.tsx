@@ -90,8 +90,8 @@ const ReviewModal: FC<ReviewModalProps> = ({
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Formik
           initialValues={{
-            stars: 0,
-            description: "",
+            stars: review?.stars || 0,
+            description: review?.description || "",
           }}
           validationSchema={ReviewSchema}
           onSubmit={handleSubmitReview}
@@ -121,8 +121,8 @@ const ReviewModal: FC<ReviewModalProps> = ({
                             onClick={() => setFieldValue("stars", star)}
                           />
                           <FontAwesomeIcon
-                            className={`w-[25px] h-[25px] shrink-0 text-white ${
-                              (review?.stars || values.stars) >= star
+                            className={`w-[25px] h-[25px] shrink-0 ${
+                              values.stars >= star
                                 ? "text-yellow-300"
                                 : "text-slate-400"
                             }`}
@@ -146,7 +146,7 @@ const ReviewModal: FC<ReviewModalProps> = ({
                     </label>
                     <Field
                       disabled={isReviewed}
-                      value={review?.description || values.description}
+                      value={values.description}
                       as="textarea"
                       name="description"
                       placeholder="Your description"

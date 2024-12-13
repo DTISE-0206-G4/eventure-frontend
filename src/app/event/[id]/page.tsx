@@ -31,9 +31,9 @@ const EventPage: FC<PageProps> = ({ params }) => {
     <div className="container mx-auto min-h-[calc(100vh-150px)]">
       <div className="my-5">
         <div className="font-semibold text-xl">{event?.title}</div>
-        <div className="flex gap-5 justify-between mt-5 items-start">
+        <div className="flex gap-5 max-lg:flex-col lg:justify-between mt-5 lg:items-start">
           {event && <EventDescriptionSection event={event} />}
-          <div className="w-1/3 bg-white border border-platinum rounded-sm p-5 flex flex-col gap-5">
+          <div className="lg:w-1/3 bg-white border border-platinum rounded-sm p-5 flex flex-col gap-5">
             {event && (
               <>
                 <EventDetailsSection event={event} />

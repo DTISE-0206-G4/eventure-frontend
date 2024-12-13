@@ -35,7 +35,6 @@ const TicketPage: FC = () => {
     <>
       <div className="flex justify-between items-center">
         <div className="font-semibold text-xl">My Tickets</div>
-
         <div>
           <nav aria-label="Page navigation example">
             <ul className="flex items-center -space-x-px h-8 text-sm">
@@ -59,7 +58,7 @@ const TicketPage: FC = () => {
           transactions?.data.map((transaction: Transaction) => (
             <div
               key={transaction.id}
-              className="flex gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum"
+              className="flex max-lg:flex-col gap-5 items-center bg-white rounded-md w-full p-5 border border-platinum"
             >
               <Image
                 className="rounded-md w-[100px] h-[50px] object-cover"
@@ -69,14 +68,14 @@ const TicketPage: FC = () => {
                 alt="Picture of the author"
               />
               <div className="flex flex-col gap-2 w-full">
-                <div className="flex justify-between">
+                <div className="flex max-lg:flex-col max-lg:gap-5 lg:justify-between">
                   <div className="font-semibold">
                     {transaction.ticket.event.title +
                       " - [" +
                       transaction.ticket.name +
                       "]"}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Link
                       href={"/invoice/" + transaction.id}
                       className="bg-american-green rounded-lg py-2 px-5 text-white"
@@ -100,7 +99,7 @@ const TicketPage: FC = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex max-lg:flex-col max-lg:gap-5 lg:justify-between">
                   <div className="flex gap-5">
                     <div className="flex gap-2">
                       <FontAwesomeIcon

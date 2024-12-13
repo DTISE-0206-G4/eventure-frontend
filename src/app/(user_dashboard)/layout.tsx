@@ -14,8 +14,8 @@ const ProfileLayout: FC<NestedLayoutProps> = ({ children }) => {
     <div className="container mx-auto min-h-[calc(100vh-150px)]">
       <div className="my-5">
         <div className="font-semibold text-xl">User Dashboard</div>
-        <div className="flex gap-5 justify-between mt-5 bg-white border border-platinum rounded-sm p-5">
-          <div className="w-1/5 border-r border-platinum flex flex-col">
+        <div className="flex gap-5 max-lg:flex-col lg:justify-between mt-5 bg-white border border-platinum rounded-sm p-5">
+          <div className="lg:w-1/5 lg:border-r max-lg:border-b border-platinum flex lg:flex-col">
             <Link
               href="/profile"
               className={`${
@@ -65,7 +65,7 @@ const ProfileLayout: FC<NestedLayoutProps> = ({ children }) => {
               </>
             )}
           </div>
-          <div className="w-4/5">{children}</div>
+          <div className="lg:w-4/5">{children}</div>
         </div>
       </div>
     </div>
