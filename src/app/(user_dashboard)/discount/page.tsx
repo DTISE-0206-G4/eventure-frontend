@@ -16,7 +16,7 @@ const DiscountPage: FC = () => {
   return (
     <>
       <div className="font-semibold text-xl">My Discount Vouchers</div>
-      <div className="mt-5 grid grid-cols-3 gap-5">
+      <div className="mt-5 lg:grid lg:grid-cols-3 max-lg:flex max-lg:flex-col gap-5">
         {discounts?.length === 0 && (
           <div className="col-span-3 text-center text-slate-gray">
             No discount voucher found

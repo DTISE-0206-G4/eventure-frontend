@@ -55,8 +55,8 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
           </div>
         </div>
 
-        <div className="flex justify-between">
-          <div className="flex gap-5">
+        <div className="flex max-md:flex-col max-md:gap-2 md:justify-between">
+          <div className="flex max-md:flex-col max-md:gap-2 gap-5">
             <div className="flex gap-2">
               <FontAwesomeIcon
                 className="w-[15px] h-[15px] shrink-0 text-slate-gray"

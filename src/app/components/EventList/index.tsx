@@ -96,7 +96,7 @@ const EventList: FC = () => {
   return (
     <div className="w-full mx-5">
       {/* Header with search and category filter */}
-      <div className="flex justify-between items-center">
+      <div className="flex max-md:flex-col max-md:gap-2 md:justify-between md:items-center ">
         <div className="flex gap-4 items-center">
           <SearchBar search={search} handleSearch={handleSearch} />
           <Dropdown

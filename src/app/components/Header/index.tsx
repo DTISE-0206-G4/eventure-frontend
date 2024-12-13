@@ -34,8 +34,6 @@ const Header: FC = () => {
       );
       if (data.success) {
         showToast(data.message, "success");
-        await signOut({ redirect: false });
-        router.push("/login");
       } else {
         showToast(data.message, "error");
       }
@@ -45,12 +43,15 @@ const Header: FC = () => {
       } else {
         showToast("An unexpected error occurred. Please try again.", "error");
       }
+    } finally {
+      await signOut({ redirect: false });
+      router.push("/login");
     }
   };
   return (
     <div className="h-[60px] bg-white  border-b-2 border-platinum">
-      <div className="container h-full flex justify-between items-center mx-auto">
-        <div>
+      <div className="container h-full flex justify-between items-center lg:mx-auto">
+        <div className="max-lg:ms-2">
           <Link href="/">
             <Image
               src="/images/eventure-full.png"
@@ -65,7 +66,7 @@ const Header: FC = () => {
           <>
             <Dropdown
               label={
-                <div className="flex gap-2 items-start justify-start text-start">
+                <div className="flex gap-2 items-start justify-start text-start flex-wrap max-lg:me-2">
                   <Image
                     className="rounded-md"
                     src="/images/default-profile.jpg"
@@ -73,7 +74,7 @@ const Header: FC = () => {
                     height={45}
                     alt="User Profile"
                   />
-                  <div className="flex flex-col justify-center">
+                  <div className="flex flex-col justify-center max-sm:hidden">
                     <div>{session.user.email}</div>
                     <div className="text-slate-gray text-xs">
                       {session.user.roles[0]}
@@ -113,7 +114,7 @@ const Header: FC = () => {
           </>
         )}
         {!session && (
-          <div className="flex gap-5">
+          <div className="flex gap-5 max-lg:me-2">
             <div className="text-tufts-blue hover:cursor-pointer">
               <Link href="/login">Login</Link>
             </div>

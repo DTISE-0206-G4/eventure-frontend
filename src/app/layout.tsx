@@ -28,7 +28,7 @@ export default async function RootLayout({
             <ToastProvider>
               <div className="mx-auto">
                 <Header />
-                {children}
+                <div className="max-lg:mx-2">{children}</div>
                 <Footer />
               </div>
             </ToastProvider>
