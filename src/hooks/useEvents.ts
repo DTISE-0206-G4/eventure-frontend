@@ -31,13 +31,7 @@ const useEvents = (props?: Partial<EventDatatableRequest>) => {
     data: data,
   } = useQuery({
     queryKey: ["fetchEvents", params],
-    queryFn: async () => {
-      console.log("Fetching events with params:", params);
-      const response = await fetchEvents(params)
-      console.log("Fetched events:", response);
-      return response
-    },
-
+    queryFn: async () => fetchEvents(params),
     staleTime: 60 * 1000,
     gcTime: 60 * 1000,
   });

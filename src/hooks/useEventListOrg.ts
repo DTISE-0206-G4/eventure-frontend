@@ -7,7 +7,7 @@ const fetchEvents = async (
   params: EventDatatableRequest
 ): Promise<EventDatatableResponse> => {
   const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/event`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/event/datatable`,
     {
       params,
     }
@@ -17,13 +17,15 @@ const fetchEvents = async (
 
 const useEvents = (props?: Partial<EventDatatableRequest>) => {
   const [params, setParams] = useState<EventDatatableRequest>({
-    draw: props?.draw ?? 1,
+    // draw: props?.draw ?? 1,
     start: props?.start ?? 0,
     length: props?.length ?? 10,
-    orderColumn: props?.orderColumn ?? "id",
-    orderDir: props?.orderDir ?? "asc",
+    // orderColumn: props?.orderColumn ?? "id",
+    // orderDir: props?.orderDir ?? "asc",
     search: props?.search ?? "",
     userId: props?.userId ?? null,
+    category:  "",
+
   });
   //   setParams({ ...params, ...props });
 
@@ -31,22 +33,18 @@ const useEvents = (props?: Partial<EventDatatableRequest>) => {
     isLoading,
     error,
     data: data,
+    refetch
   } = useQuery({
-    queryKey: ["fetchEvents", params],
-    queryFn: async () => {
-      console.log("Fetching events with params:", params);
-      const response = await fetchEvents(params)
-      console.log("Fetched events:", response);
-      return response
-    },
-
+    queryKey: ["fetchEventsOrg", params],
+    queryFn: async () =>  fetchEvents(params),
     staleTime: 60 * 1000,
-    gcTime: 60 * 1000,
+    gcTime: 60 * 1000
   });
   return {
     isLoading,
     error,
     data,
+    refetch,
     params,
     setParams,
   };

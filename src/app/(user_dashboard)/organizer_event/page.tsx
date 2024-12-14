@@ -11,72 +11,47 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { Modal } from "flowbite-react";
+import { Modal, Button } from "flowbite-react";
 import Link from "next/link";
 import TicketCard from "./TicketCard";
 import useEventsListOrg from "@/hooks/useEventListOrg";
-import { useRouter } from "next/router";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Event, EventDatatableRequest } from "@/types/event";
-
-interface IEventToDelete {
-  id: number;
-  name: string;
-}
-
-interface IEventToRelease {
-  id: number;
-  name: string;
-}
-
-interface EventCardProps {
-  event: Event;
-}
-
-const EventCard: FC<EventCardProps> = ({ event }) => {
-  return (
-    <div 
-      className="flex gap-5 items-center" 
-      key={event.id}
-    >
-    <Image
-      className="rounded-md w-[100px] h-[50px] object-cover border-2 border-red-600"
-      src="/images/carousel-1.svg"
-      width={50}
-      height={100}
-      alt="Picture of the author"
-    />
-    <div className="flex flex-col gap-2 w-full border-2 border-red-600">
-      <div className="flex justify-between">
-        <div className="font-semibold">{event.title}</div>
-      </div>
-    </div>
-  </div>
-  )
-}
+import CustomSpinner from "@/common/CustomSpinner";
+import ActionButton from "@/app/(user_dashboard)/organizer_event/ActionButton";
+import EventContainer from "./EventContainer";
 
 const OrganizerEventPage: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
-  const [eventToDelete, setEventToDelete] = useState<IEventToDelete | null>(
-    null
-  );
-  const [eventToRelease, setEventToRelease] = useState<IEventToRelease | null>(
-    null
-  );
+  const [eventToDelete, setEventToDelete] = useState<number | null>(null);
+  const router = useRouter();
+
+  
 
   const {
     isLoading,
     error,
     data: eventsData,
+    refetch,
     setParams,
   } = useEventsListOrg();
 
-  // const router = useRouter();
-  if (error && !eventsData) return <div>Error</div>;
-  if (isLoading || !eventsData) return <div>Loading...</div>;
   
 
+  // const router = useRouter();
+  if (error && !eventsData) return <div>Error</div>;
+  if (isLoading || !eventsData) return <CustomSpinner />;
   
+  console.log("Events data:", eventsData.data);
+
+  const handleEventClick = (eventId: number) => {
+    router.push("/event/" + eventId);
+  };
+
+  
+  
+
+
   return (
     <>
       <div className="flex justify-between">
@@ -92,125 +67,13 @@ const OrganizerEventPage: FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
-
+      <div className="flex flex-col gap-5">
         {eventsData?.data.map((event: Event) => (
-          <EventCard key={event.id} event={event}  />
+          <EventContainer key={event.id} event={event} handleClick={handleEventClick} refetchEvents={refetch} />
         ))}
       </div>
-        {/* <div className="flex gap-5 items-center">
-          <Image
-              className="rounded-md w-[100px] h-[50px] object-cover border-2 border-red-600"
-              src="/images/carousel-1.svg"
-              width={50}
-              height={100}
-              alt="Picture of the author"
-            />
-            <div className="flex flex-col gap-2 w-full border-2 border-red-600">
-              <div className="flex justify-between">
-                <div className="font-semibold">Pesta Wibu 2024</div>
-              </div>
-            </div>
-        </div> */}
-        {/* <div className="flex gap-5 items-center">
-          <Image
-              className="rounded-md w-[100px] h-[50px] object-cover border-2 border-red-600"
-              src="/images/carousel-1.svg"
-              width={50}
-              height={100}
-              alt="Picture of the author"
-            />
-            <div className="flex flex-col gap-2 w-full border-2 border-red-600">
-              <div className="flex justify-between">
-                <div className="font-semibold">Pesta Wibu 2024</div>
-              </div>
-            </div>
-          </div>
-          {/* Ticket List Container */}
-          <div className="flex gap-5 flex-wrap">
-            <TicketCard 
-              title="Regular"
-              available={10}
-              sold={25}
-              price="Rp. 50.000"
-              onEdit={() => console.log("edit")}
-              onRelease={() => console.log("release")}
-              onClose={() => console.log("close")}
-            />
-            <TicketCard 
-              title="VIP"
-              available={10}
-              sold={25}
-              price="Rp. 100.000"
-              onEdit={() => console.log("edit VIP")}
-              onRelease={() => console.log("release VIP")}
-              onClose={() => console.log("close VIP")}
-            />
-          </div>
-        </div>
 
-        {/* <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
-          <div className="flex gap-5 items-center">
-            <Image
-              className="rounded-md w-[100px] h-[50px] object-cover"
-              src="/images/carousel-1.svg"
-              width={50}
-              height={100}
-              alt="Picture of the author"
-            />
-            <div className="flex flex-col gap-2 w-full">
-              
-              
-              <div className="flex justify-between">
-                <div className="font-semibold">Pesta Wibu 2024</div>
-                <div className="flex gap-2">
-                  <button className="bg-azureish-white rounded-lg py-2 px-5  flex gap-2 items-center">
-                    <div>Event page</div>
-                    <FontAwesomeIcon
-                      className="w-[15px] h-[15px] shrink-0 text-slate-gray"
-                      icon={faUpRightFromSquare}
-                    />
-                  </button>
-                </div>
-              </div>
-              
-              
-              <div className="flex justify-between">
-                <div className="flex gap-5">
-                  
-                  
-                  <div className="flex gap-2">
-                    <FontAwesomeIcon
-                      className="w-[15px] h-[15px] shrink-0 text-slate-gray"
-                      icon={faLocationDot}
-                    />
-                    <div className="text-sm text-slate-gray">
-                      Jawa Barat, Bandung
-                    </div>
-                  </div>
-                  
-                  
-                  <div className="flex gap-2">
-                    <FontAwesomeIcon
-                      className="w-[15px] h-[15px] shrink-0 text-slate-gray"
-                      icon={faClock}
-                    />
-                    <div className="text-sm text-slate-gray">
-                      29 January 2025 19:00 WIB
-                    </div>
-                  </div>
-
-
-
-                </div>
-              </div>
-            </div>
-          </div>
-          
-        </div> */}
-
-      
-      
+    
     </>
   );
 };
