@@ -3,6 +3,12 @@ export interface TransactionsRequest {
   length: number;
 }
 
+export interface TransactionsRequestOrg {
+  start: number;
+  length: number;
+  eventId: number;
+}
+
 export interface TransactionDatatableResponse {
   recordsFiltered: number;
   data: Transaction[];
