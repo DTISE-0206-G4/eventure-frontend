@@ -60,6 +60,11 @@ const EventPage: FC<PageProps> = ({ params }) => {
         <div className="mt-10">
           <div className="font-semibold text-xl">Reviews</div>
           <div className="grid max-lg:grid-cols-1 lg:grid-cols-3 gap-5 mt-5">
+            {reviews?.length === 0 && (
+              <div className="col-span-3 text-center text-slate-gray">
+                No review found
+              </div>
+            )}
             {reviews?.map((review) => (
               <div
                 key={review.id}
