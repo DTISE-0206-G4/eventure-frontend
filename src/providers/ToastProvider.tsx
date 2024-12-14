@@ -1,5 +1,5 @@
 "use client";
-import { faCheck, faCross, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Toast, ToastToggle } from "flowbite-react";
 import { createContext, useContext, useState, ReactNode } from "react";

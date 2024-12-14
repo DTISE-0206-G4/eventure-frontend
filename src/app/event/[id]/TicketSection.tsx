@@ -8,7 +8,7 @@ import { Event, Ticket } from "@/types/event";
 import { EventDiscountResponse } from "@/types/eventDiscountType";
 import { UserDiscountResponse } from "@/types/userDiscountType";
 import formatDate from "@/utils/formatDate";
-import { faCheck, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { Button, Modal } from "flowbite-react";
