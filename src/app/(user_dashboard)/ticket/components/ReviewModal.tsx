@@ -5,7 +5,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { Button, Modal } from "flowbite-react";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik } from "formik";
 import { FC, useEffect, useState } from "react";
 import * as Yup from "yup";
 
@@ -39,7 +39,7 @@ const ReviewModal: FC<ReviewModalProps> = ({
   const { showToast } = useToast();
   const handleSubmitReview = async (
     values: ReviewFormValues,
-    formikHelpers: FormikHelpers<ReviewFormValues>
+  
   ) => {
     try {
       const { data } = await axios.post(

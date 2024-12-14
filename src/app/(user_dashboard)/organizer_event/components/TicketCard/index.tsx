@@ -8,6 +8,7 @@ interface TicketCardProps {
   onEdit: () => void;
   onRelease: () => void;
   onClose: () => void;
+  
 }
 
 const TicketCard: FC<TicketCardProps> = ({
@@ -18,9 +19,10 @@ const TicketCard: FC<TicketCardProps> = ({
   onEdit,
   onRelease,
   onClose,
+  
 }) => {
   return (
-    <div className="border border-platinum rounded-lg py-2 px-5 text-center">
+    <div className="border border-red-600 rounded-lg py-2 px-5 text-center w-fit">
       <div className="font-semibold text-lg">{title}</div>
       <div>Available : {available}</div>
       <div>Sold: {sold}</div>

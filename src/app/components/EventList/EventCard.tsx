@@ -21,7 +21,7 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
     { min: Infinity, max: -Infinity }
   );
   return (
-    <div
+    <div  
       key={event.id}
       onClick={() => {
         handleClick(event.id);
@@ -75,7 +75,7 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
             </div>
           </div>
 
-          <div className="flex gap-2 flex-wrap flex-row-reverse">
+          <div className="flex gap-2 flex-wrap items-center flex-row-reverse">
             {event.categories.map((category) => (
               <div
                 key={category.id}
