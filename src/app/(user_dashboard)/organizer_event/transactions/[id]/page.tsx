@@ -68,6 +68,11 @@ const TransactionPage: FC<PageProps> = ({ params: pageParams }) => {
       </div>
 
       <div className="mt-5 grid max-lg:grid-cols-1 lg:grid-cols-3 gap-5">
+        {transactions?.data.length === 0 && (
+          <div className="col-span-3 text-center text-slate-gray">
+            No transaction found
+          </div>
+        )}
         {transactions?.data.map((transaction) => (
           <div
             key={transaction.id}
