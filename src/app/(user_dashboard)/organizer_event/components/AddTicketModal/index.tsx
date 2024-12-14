@@ -1,18 +1,20 @@
 import { FC } from "react";
 import { useState } from "react";
 import { Modal, Button } from "flowbite-react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useToast } from "@/providers/ToastProvider";
 import { useSession } from "next-auth/react";
 import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Ticket } from "@/types/event";
 
 interface AddTicketModalProps {
+  refetchEvents: () => void;
   eventId: number;
   eventTitle: string;
-  refetchEvents: () => void;
+  onTicketAdded: (ticket: Ticket) => void;
 }
 
 const TicketFormSchema = Yup.object().shape({
@@ -23,10 +25,14 @@ const TicketFormSchema = Yup.object().shape({
   availableSeat: Yup.number()
     .required("Available seats are required")
     .min(1, "There must be at least one seat"),
-  type: Yup.string().required("Ticket type is required"),
 });
 
-const AddTicketModal: FC<AddTicketModalProps> = ({ eventId, eventTitle, refetchEvents }) => {
+const AddTicketModal: FC<AddTicketModalProps> = ({ 
+  eventId, 
+  eventTitle, 
+  refetchEvents,
+  onTicketAdded
+ }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { showToast } = useToast();
   const { data: session } = useSession();
@@ -34,10 +40,17 @@ const AddTicketModal: FC<AddTicketModalProps> = ({ eventId, eventTitle, refetchE
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleSubmit = async (values: { name: string; price: number; availableSeat: number; }) => {
+  const handleSubmit = async (
+    values: { 
+      name: string; 
+      price: number; 
+      availableSeat: number; 
+    }, 
+    { resetForm }: FormikHelpers<any>
+  ) => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/tickets`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket`,
         {
           eventId,
           name: values.name,
@@ -53,11 +66,26 @@ const AddTicketModal: FC<AddTicketModalProps> = ({ eventId, eventTitle, refetchE
           },
         }
       );
-
+  
       if (data.success) {
+        const newTicket: Ticket = {
+          id: data.ticket.id,
+          eventId: eventId, 
+          name: data.ticket.name,
+          price: data.ticket.price,
+          availableSeat: data.ticket.availableSeat,
+          soldSeat: data.ticket.soldSeat || 0,
+          createdAt: data.ticket.createdAt, 
+          updatedAt: data.ticket.updatedAt, 
+          deletedAt: data.ticket.deletedAt, 
+          isReleased: false,
+          isClosed: false, 
+        };
+        onTicketAdded(newTicket); // Pass the new ticket to parent
         showToast(data.message, "success");
-        refetchEvents();
+        resetForm();
         handleCloseModal();
+        console.log("New ticket:", newTicket);
       } else {
         showToast(data.message, "error");
       }
@@ -69,6 +97,7 @@ const AddTicketModal: FC<AddTicketModalProps> = ({ eventId, eventTitle, refetchE
       }
     }
   };
+  
 
   return (
     <>
@@ -147,7 +176,6 @@ const AddTicketModal: FC<AddTicketModalProps> = ({ eventId, eventTitle, refetchE
                   />
                 </div>
 
-                
                 <div className="mt-4 flex justify-end gap-2">
                   <Button type="button" color="gray" onClick={handleCloseModal}>
                     Cancel

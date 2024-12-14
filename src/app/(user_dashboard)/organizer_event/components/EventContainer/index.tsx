@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faClock, faPlus, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FC } from "react";
 import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
-import { Event } from "@/types/event";
+import { Event, Ticket } from "@/types/event";
 import formatDate from "@/utils/formatDate";
 import { Modal, Button } from "flowbite-react";
 import { useSession } from "next-auth/react";
@@ -13,6 +13,7 @@ import axios from "axios";
 import { useToast } from "@/providers/ToastProvider";
 import Link from "next/link";
 import AddTicketModal from "../AddTicketModal";
+import TicketCard from "../TicketCard";
 
 interface IEventContainer {
   event: Event;
@@ -24,6 +25,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
   
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [tickets, setTickets] = useState<Ticket[]>(event.tickets);
   
   
   const { data: session } = useSession();
@@ -37,6 +39,11 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
   const hideDeleteModal = (): void => {
     setIsModalOpen(false);
   }
+
+  const handleAddTicket = (newTicket: Ticket) => {
+    setTickets((prevTickets) => [...prevTickets, newTicket]);
+  };
+  
 
   const handleDeleteEvent = async(event: Event): Promise<void> => {
     if(!event.id) return;
@@ -90,6 +97,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
                 eventId={event.id}
                 eventTitle={event.title}
                 refetchEvents={refetchEvents}
+                onTicketAdded={handleAddTicket}
               />
 
               {/* <ActionButton
@@ -173,7 +181,6 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
           </div>
         </div>
         
-
     
 
       {/* Delete Confirmation Modal */}
@@ -194,13 +201,22 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
 
         
     </div>
-    {/* <TicketCard title={event.title} available={0} sold={0} price={""} onEdit={function (): void {
-          throw new Error("Function not implemented.");
-        } } onRelease={function (): void {
-          throw new Error("Function not implemented.");
-        } } onClose={function (): void {
-          throw new Error("Function not implemented.");
-        } } event={event.title} /> */}
+    {/* Please for ticket */}
+    <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {tickets.map((ticket) => (
+        <TicketCard
+          key={ticket.id}
+          title={ticket.name}
+          available={ticket.availableSeat}
+          sold={ticket.soldSeat}
+          price={`$${ticket.price.toFixed(2)}`}
+          onEdit={() => console.log(`Edit ${ticket.name}`)}
+          onRelease={() => console.log(`Release ${ticket.name}`)}
+          onClose={() => console.log(`Close ${ticket.name}`)}
+        />
+      ))}
+
+      </div>
   </div>
   )
 }
