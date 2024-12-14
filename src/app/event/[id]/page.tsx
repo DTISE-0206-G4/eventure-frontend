@@ -8,6 +8,9 @@ import EventDetailsSection from "./EventDetailsSection";
 import TicketSection from "./TicketSection";
 import Link from "next/link";
 import CustomSpinner from "@/common/CustomSpinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import useReviews from "@/hooks/useReviews";
 interface PageProps {
   params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
 }
@@ -23,6 +26,7 @@ const EventPage: FC<PageProps> = ({ params }) => {
     error: errorEvent,
     event,
   } = useEvent(parseInt(id, 10));
+  const { reviews } = useReviews(parseInt(id, 10));
   if (isLoadingEvent) return <CustomSpinner />;
   if (errorEvent) return <div>Error: {errorEvent.message}</div>;
 
@@ -51,6 +55,38 @@ const EventPage: FC<PageProps> = ({ params }) => {
                 {session && <TicketSection event={event} />}
               </>
             )}
+          </div>
+        </div>
+        <div className="mt-10">
+          <div className="font-semibold text-xl">Reviews</div>
+          <div className="grid max-lg:grid-cols-1 lg:grid-cols-3 gap-5 mt-5">
+            {reviews?.map((review) => (
+              <div
+                key={review.id}
+                className="bg-white border border-platinum rounded-sm p-5"
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2 items-center">
+                    <div className="font-semibold">From:</div>
+                    <div className="font-semibold">{review.user.name}</div>
+                  </div>
+                  <div>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FontAwesomeIcon
+                        key={star}
+                        className={`w-[25px] h-[25px] shrink-0 ${
+                          review.stars >= star
+                            ? "text-yellow-300"
+                            : "text-slate-400"
+                        }`}
+                        icon={faStar}
+                      />
+                    ))}
+                  </div>
+                  <div className="font-semibold">{review.description}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

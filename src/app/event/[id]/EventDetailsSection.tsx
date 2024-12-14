@@ -76,7 +76,6 @@ const EventDetailsSection: FC<EventDetailsSectionProps> = ({ event }) => {
           <div className="font-semibold text-lg">Location</div>
         </div>
         <div>
-          {/* <div>Jawa Barat, Bandung</div> */}
           <div>{event?.location}</div>
         </div>
       </div>
