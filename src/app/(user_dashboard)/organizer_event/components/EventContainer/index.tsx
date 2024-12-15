@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot, faClock, faPlus, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faClock, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FC } from "react";
 import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
 import { Event, Ticket } from "@/types/event";
@@ -18,34 +18,66 @@ import TicketCard from "../TicketCard";
 import EditTicketModal from "../EditTicketModal";
 import AddDiscountModal from "../AddDiscountModal";
 import DiscountCard from "../DiscountCard";
+import EditDiscountModal from "../EditDiscountModal";
 
 interface IEventContainer {
   event: Event;
-  discount: EventDiscountResponse;
   handleClick: (eventId: number) => void;
   refetchEvents: () => void;
 }
 
-const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount }) => {
+const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
   
 
+  // EDIT TICKET
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedTicket, setSelectedTicket] = useState<null | Ticket>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
 
+  // DELETE TICKET
   const [isDeleteTicketModalOpen, setIsDeleteTicketModalOpen] = useState(false); 
   const [ticketToDelete, setTicketToDelete] = useState<null | number>(null); 
 
+  // RELEASE TICKET
   const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false); 
   const [ticketToRelease, setTicketToRelease] = useState<null | Ticket>(null); 
-  const [releasedTickets, setReleasedTickets] = useState<Set<number>>(new Set());
+  // const [releasedTickets, setReleasedTickets] = useState<Set<number>>(new Set());
 
-  const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false); // State for the discount modal
+  // CLOSE TICKET
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
+  const [ticketToClose, setTicketToClose] = useState<null | Ticket>(null);
+  // const [closedTickets, setClosedTickets] = useState<Set<number>>(new Set());
 
   
+  
+  //===========================
+  // EDIT DISCOUNT
+  // const [isDiscountModalOpen, setDiscountIsModalOpen] = useState<boolean>(false);
+  const [selectedDiscount, setSelectedDiscount] = useState<EventDiscountResponse | null>(null);
+  const [isEditDiscountModalOpen, setIsEditDiscountModalOpen] = useState(false); 
+
+
+  // RELEASE DISCOUNT
+  const [isReleaseDiscountModalOpen, setIsReleaseDiscountModalOpen] = useState(false); 
+  const [discountToRelease, setDiscountToRelease] = useState<null | EventDiscountResponse>(null); 
+  // const [releasedDiscount, setReleasedDiscount] = useState<Set<number>>(new Set());
+
+  // DELETE DISCOUNT
+  const [isDeleteDiscountModalOpen, setIsDeleteDiscountModalOpen] = useState(false); 
+  const [discountToDelete, setDiscountToDelete] = useState<null | number>(null); 
+
+  // CLOSE DISCOUNT
+  const [isCloseDiscountModalOpen, setIsCloseDiscountModalOpen] = useState(false);
+  const [discountToClose, setDiscountToClose] = useState<null | EventDiscountResponse>(null);
+  // const [closedDiscount, setClosedDiscount] = useState<Set<number>>(new Set());
+
+
+
   const { data: session } = useSession();
   const { showToast } = useToast();
 
+
+  // EDIT TICKET
   const handleEditTicket = (ticket: Ticket) => {
     setSelectedTicket(ticket);
     setIsEditModalOpen(true); 
@@ -56,43 +88,167 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
     setIsEditModalOpen(false); 
   };
 
-  const showDeleteModal = (): void => {
-    setIsModalOpen(true);
-  }
-
+  // DELETE TICKET
   const hideDeleteModal = (): void => {
     setIsModalOpen(false);
   }  
-
   const showDeleteTicketModal = (ticketId: number): void => {
     setTicketToDelete(ticketId); 
     setIsDeleteTicketModalOpen(true); 
   };
-
   const hideDeleteTicketModal = (): void => {
     setIsDeleteTicketModalOpen(false); 
     setTicketToDelete(null); 
   };
+  const showDeleteModal = (): void => {
+    setIsModalOpen(true);
+  }
 
+  
+  // RELEASE TICKET
   const showReleaseModal = (ticket: Ticket): void => {
     setTicketToRelease(ticket); 
     setIsReleaseModalOpen(true); 
   };
-
   const hideReleaseModal = (): void => {
     setIsReleaseModalOpen(false); 
     setTicketToRelease(null); 
   };
 
-  const handleAddDiscountClick = () => {
-    setIsDiscountModalOpen(true); // Open the modal
+  // CLOSE TICKET
+  const showCloseModal = (ticket: Ticket): void => {
+    setTicketToClose(ticket); 
+    setIsCloseModalOpen(true); 
+  };
+  const hideCloseModal = (): void => {
+    setIsCloseModalOpen(false);
+    setTicketToClose(null); 
   };
 
-  const handleCloseDiscountModal = () => {
-    setIsDiscountModalOpen(false); // Close the modal
+
+  // =================================
+  // EDIT DISCOUNT
+  // const handleEditDiscount = (discount: EventDiscountResponse) => {
+  //   setSelectedDiscount(discount);
+  //   setIsEditDiscountModalOpen(true); 
+  // };
+
+  const closeEditDiscountModal = () => {
+    setSelectedDiscount(null);
+    setIsEditDiscountModalOpen(false); 
+  };
+
+  // RELEASE DISCOUNT
+  const showReleaseDiscountModal = (discount: EventDiscountResponse): void => {
+    setDiscountToRelease(discount); 
+    setIsReleaseDiscountModalOpen(true); 
+  };
+  const hideReleaseDiscountModal = (): void => {
+    setIsReleaseDiscountModalOpen(false); 
+    setDiscountToRelease(null); 
+  };
+  
+
+  // DELETE DISCOUNT
+  const showDeleteDiscountModal = (discountId: number): void => {
+    setDiscountToDelete(discountId); 
+    setIsDeleteDiscountModalOpen(true);
+  }
+  const hideDeleteDiscountModal = (): void => {
+    setIsDeleteDiscountModalOpen(false); 
+    setDiscountToDelete(null); 
+  };
+
+  // CLOSE DISCOUNT
+  const showCloseDiscountModal = (discount: EventDiscountResponse): void => {
+    setDiscountToClose(discount); 
+    setIsCloseDiscountModalOpen(true); 
+  };
+  const hideCloseDiscountModal = (): void => {
+    setIsCloseDiscountModalOpen(false);
+    setDiscountToClose(null); 
+  };
+
+
+  // =================================
+  // HANDLING CUY
+
+  const handleEditDiscount = (discount: EventDiscountResponse) => {
+    setSelectedDiscount(discount);
+    setIsEditDiscountModalOpen(true);
+  }
+
+  // const handleAddDiscountClick = () => {
+  //   setIsDiscountModalOpen(true); // Open the modal
+  // };
+
+  // const handleCloseDiscountModal = () => {
+  //   setIsDiscountModalOpen(false); // Close the modal
+  // };
+
+  // HANDLING RELEASE
+  const handleReleaseTicket = async (ticketId: number): Promise<void> => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket/${ticketId}/release`, 
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (data.success) {
+        showToast(data.message, "success");
+        // setReleasedTickets((prev) => new Set(prev).add(ticketId)); 
+        refetchEvents(); 
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        showToast(error.response?.data.message, "error");
+      } else {
+        showToast("An unexpected error occurred. Please try again.", "error");
+      }
+    } finally {
+      hideReleaseModal(); 
+    }
+  };
+  const handleReleaseDiscount = async (discountId: number): Promise<void> => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/event_discount/${discountId}/release`, 
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (data.success) {
+        showToast(data.message, "success");
+        // setReleasedTickets((prev) => new Set(prev).add(discountId)); 
+        refetchEvents(); 
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        showToast(error.response?.data.message, "error");
+      } else {
+        showToast("An unexpected error occurred. Please try again.", "error");
+      }
+    } finally {
+      hideReleaseDiscountModal(); 
+    }
   };
 
   
+  
+  // HANDLING DELETE
   const handleDeleteEvent = async(event: Event): Promise<void> => {
     if(!event.id) return;
   
@@ -122,8 +278,6 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
       hideDeleteModal(); 
     } 
   }
-
-  // New function to handle ticket deletion
   const handleDeleteTicket = async (ticketId: number): Promise<void> => {
     try {
       const { data } = await axios.delete(
@@ -151,13 +305,10 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
       hideDeleteTicketModal(); 
     }
   };
-
-  // Function to handle ticket release
-  const handleReleaseTicket = async (ticketId: number): Promise<void> => {
+  const handleDeleteDiscount = async (discountId: number): Promise<void> => {
     try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket/${ticketId}/release`, 
-        {},
+      const { data } = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/event_discount/${discountId}`, 
         {
           headers: {
             Authorization: `Bearer ${session?.accessToken}`,
@@ -167,7 +318,6 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
       );
       if (data.success) {
         showToast(data.message, "success");
-        setReleasedTickets((prev) => new Set(prev).add(ticketId)); 
         refetchEvents(); 
       } else {
         showToast(data.message, "error");
@@ -179,7 +329,72 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
         showToast("An unexpected error occurred. Please try again.", "error");
       }
     } finally {
-      hideReleaseModal(); 
+      hideDeleteDiscountModal(); 
+    }
+  };
+
+
+
+
+
+
+
+  const handleCloseTicket = async (ticketId: number): Promise<void> => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket/${ticketId}/close`, 
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (data.success) {
+        showToast(data.message, "success");
+        // setClosedTickets((prev) => new Set(prev).add(ticketId)); 
+        refetchEvents(); 
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        showToast(error.response?.data.message, "error");
+      } else {
+        showToast("An unexpected error occurred. Please try again.", "error");
+      }
+    } finally {
+      hideCloseModal(); 
+    }
+  };
+  const handleCloseDiscount = async (discountId: number): Promise<void> => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/event_discount/${discountId}/close`, 
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (data.success) {
+        showToast(data.message, "success");
+        // setClosedTickets((prev) => new Set(prev).add(discountId)); 
+        refetchEvents(); 
+      } else {
+        showToast(data.message, "error");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        showToast(error.response?.data.message, "error");
+      } else {
+        showToast("An unexpected error occurred. Please try again.", "error");
+      }
+    } finally {
+      hideCloseDiscountModal(); 
     }
   };
 
@@ -190,20 +405,19 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
     <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
       <div 
         className="flex gap-5 items-center flex-col lg:flex-row" 
-        key={event.id}
-      >
+        key={event.id}>
         <Image
           className="rounded-md w-[100px] h-[50px] object-cover"
-          src="/images/carousel-1.svg"
+          src={event.imageUrl ? event.imageUrl : "/images/carousel-1.svg"}
           width={50}
           height={100}
-          alt="Picture of the author"
+          alt="Event Image"
         />
         <div className="flex flex-col gap-2 w-full">
-          <div className="flex flex-col lg:flex-row justify-between">
+          <div className="flex flex-col lg:flex-row lg:justify-between">
             <div className="font-semibold mb-3 lg:mb-0">{event.title}</div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-end gap-2">
               <AddTicketModal
                 eventId={event.id}
                 eventTitle={event.title}
@@ -214,15 +428,6 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
                 eventId={event.id} 
                 eventTitle={event.title} 
                 refetchEvents={refetchEvents} 
-              />
-
-            
-              
-              <ActionButton
-                label="Add Discount"
-                onClick={() => console.log("Add Discount")}
-                icon={faPlus}
-                className="bg-true-blue text-white"
               />
 
               <Link href={`/organizer_event/edit_event/${event.id}`}>
@@ -297,7 +502,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
         
     
 
-      {/* Delete Confirmation Modal */}
+        {/* Delete Confirmation Modal */}
         <Modal show={isModalOpen} onClose={hideDeleteModal}>
           <Modal.Header>Confirm Delete</Modal.Header>
           <Modal.Body>
@@ -312,33 +517,40 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
             </Button>
           </Modal.Footer>
         </Modal>
-
-        
-    </div>
-    {/* Please for ticket */}
-    <h4>Tickets</h4>
-    <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {event.tickets.map((ticket) => (
-        <TicketCard
-          key={ticket.id}
-          title={ticket.name}
-          available={ticket.availableSeat}
-          sold={ticket.soldSeat}
-          price={`IDR ${ticket.price}`}
-          onEdit={() => handleEditTicket(ticket)} 
-          onRelease={() => showReleaseModal(ticket)} 
-          onClose={() => console.log(`Close ${ticket.name}`)}
-          onDelete={() => showDeleteTicketModal(ticket.id)} 
-          isReleased={ticket.isReleased} 
-        />
-      ))}
-    </div>
+      </div>
+      {/* Place for ticket */}
+      <h2 className="font-semibold mb-3 lg:mb-0">Tickets</h2>
+      {
+        event.tickets.length === 0 ? (
+          <div className="text-sm text-slate-gray text-center">No tickets available.</div>
+        ) :
+        (
+          <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {event.tickets.map((ticket) => (
+              <TicketCard
+                key={ticket.id}
+                title={ticket.name}
+                available={ticket.availableSeat}
+                sold={ticket.soldSeat}
+                price={`IDR ${ticket.price}`}
+                onEdit={() => handleEditTicket(ticket)} 
+                onRelease={() => showReleaseModal(ticket)} 
+                onClose={() => showCloseModal(ticket)}
+                onDelete={() => showDeleteTicketModal(ticket.id)} 
+                isReleased={ticket.isReleased} 
+                isClosed={ticket.isClosed}
+              />
+            ))}
+          </div>
+        )
+      }
+    
       
       
     {/* Edit Ticket Modal */}
     {isEditModalOpen && selectedTicket && (
         <EditTicketModal
-          eventId={event.id}
+          // eventId={event.id}
           eventTitle={event.title}
           refetchEvents={refetchEvents}
           ticket={selectedTicket} 
@@ -352,28 +564,54 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
         <Modal.Body>
           <p>Are you sure you want to delete this ticket?</p>
         </Modal.Body>
-        <Modal.Footer>
-          <Button color="failure" onClick={() => handleDeleteTicket(ticketToDelete!)}> 
-            Delete Ticket
-          </Button>
+        <Modal.Footer className="flex justify-between">
+          
           <Button color="gray" onClick={hideDeleteTicketModal}>
             Cancel
           </Button>
+
+          <Button color="blue" onClick={() => handleDeleteTicket(ticketToDelete!)}> 
+            Delete Ticket
+          </Button>
+
+
         </Modal.Footer>
       </Modal>
+      
+      
 
-      {/* Release Confirmation Modal for Ticket */}
+      {/* Close Confirmation Modal for Ticket */}
       <Modal show={isReleaseModalOpen} onClose={hideReleaseModal}>
         <Modal.Header>Confirm Release Ticket</Modal.Header>
         <Modal.Body>
           <p>Are you sure you want to release this ticket? This action cannot be undone.</p>
         </Modal.Body>
-        <Modal.Footer>
-          <Button color="failure" onClick={() => handleReleaseTicket(ticketToRelease!.id)}> 
-            Release Ticket
-          </Button>
+        <Modal.Footer className="flex justify-between">
+          
           <Button color="gray" onClick={hideReleaseModal}>
             Cancel
+          </Button>
+
+          <Button color="blue" onClick={() => handleReleaseTicket(ticketToRelease!.id)}> 
+            Release Ticket
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      {/* Close Confirmation Modal for Ticket */}
+      <Modal show={isCloseModalOpen} onClose={hideCloseModal}>
+        <Modal.Header>Confirm Close Ticket</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to close this ticket? This action cannot be undone.</p>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-between">
+          
+          <Button color="gray" onClick={hideCloseModal}>
+            Cancel
+          </Button>
+
+          <Button color="blue" onClick={() => handleCloseTicket(ticketToClose!.id)}> 
+            Close Ticket
           </Button>
         </Modal.Footer>
       </Modal>
@@ -382,24 +620,97 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
     
 
     <div>
-      <h4>Discount</h4>
-      <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {event.tickets.map((ticket) => (
-        <DiscountCard
-          key={ticket.id}
-          title={ticket.name}
-          available={ticket.availableSeat}
+      <h2 className="font-semibold mb-3 lg:mb-0">Discount</h2>
+      {
+        event.eventDiscounts.length === 0 ? (
+          <div className="text-sm text-slate-gray text-center">No discounts available.</div>
+        ) : (
+          <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {event.eventDiscounts.map((discount) => (
+              <DiscountCard
+                key={discount.id}
+                title={discount.title}
+                description={discount.description}
+                amount={discount.amount}
+                isPercentage={discount.isPercentage}
+                used={discount.used}
+                available={discount.available}
+                code={discount.code}
+                expiredAt={discount.expiredAt}
+                isReleased={discount.isReleased} 
+                isClosed={discount.isClosed}
+                onEdit={() => handleEditDiscount(discount)} 
+                onRelease={() => showReleaseDiscountModal(discount)} 
+                onClose={() => showCloseDiscountModal(discount)}
+                onDelete={() => showDeleteDiscountModal(discount.id)} 
+              />
+            ))}
+            {isEditDiscountModalOpen && selectedDiscount && (
+              <EditDiscountModal
+                eventId={event.id}
+                eventTitle={event.title}
+                refetchEvents={refetchEvents}
+                discount={selectedDiscount as EventDiscountResponse} 
+                onClose={closeEditDiscountModal} 
+              />
+            )}
+            </div>
+        )
+      }
+      
+    {/* Release Confirmation Modal for Ticket */}
+    <Modal show={isReleaseDiscountModalOpen} onClose={hideReleaseDiscountModal}>
+        <Modal.Header>Confirm Release Discount</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to release this discount? This action cannot be undone.</p>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-between">
+          
+          <Button color="gray" onClick={hideReleaseDiscountModal}>
+            Cancel
+          </Button>
 
-          // sold={ticket.soldSeat}
-          // price={`IDR ${ticket.price}`}
-          onEdit={() => handleEditTicket(ticket)} 
-          onRelease={() => showReleaseModal(ticket)} 
-          onClose={() => console.log(`Close ${ticket.name}`)}
-          onDelete={() => showDeleteTicketModal(ticket.id)} 
-          isReleased={ticket.isReleased} 
-        />
-      ))}
-    </div>
+          <Button color="blue" onClick={() => handleReleaseDiscount(discountToRelease!.id)}> 
+            Release Discount
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Delete Confirmation Modal for Discount */}
+      <Modal show={isDeleteDiscountModalOpen} onClose={hideDeleteDiscountModal}>
+        <Modal.Header>Confirm Delete Discount</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete this discount?</p>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-between">
+          
+          <Button color="gray" onClick={hideDeleteDiscountModal}>
+            Cancel
+          </Button>
+
+          <Button color="blue" onClick={() => handleDeleteDiscount(discountToDelete!)}> 
+            Delete Discount
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Close Confirmation Modal for Ticket */}
+      <Modal show={isCloseDiscountModalOpen} onClose={hideCloseDiscountModal}>
+        <Modal.Header>Confirm Close Discount</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to close this discount? This action cannot be undone.</p>
+        </Modal.Body>
+        <Modal.Footer className="flex justify-between">
+          
+          <Button color="gray" onClick={hideCloseDiscountModal}>
+            Cancel
+          </Button>
+
+          <Button color="blue" onClick={() => handleCloseDiscount(discountToClose!.id)}> 
+            Close Discount
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   </div>
   )

@@ -5,6 +5,7 @@ export interface EventDatatableResponse {
 }
 
 export interface Event {
+  [x: string]: EventDiscountResponse;
   id: number;
   user: UserEvent;
   title: string;

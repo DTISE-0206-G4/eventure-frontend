@@ -23,19 +23,19 @@ const uploadToBuilder = async (file: File): Promise<string> => {
 
     // Return the uploaded file URL
     return response.data.url; // Assuming the response contains the uploaded URL
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error uploading to Builder.io:", error);
-    if (error.response) {
-      // Server responded with a status code outside the 2xx range
-      console.error("Response error:", error.response.data);
-      console.error("Status code:", error.response.status);
-    } else if (error.request) {
-      // Request was made, but no response received
-      console.error("Request error:", error.request);
-    } else {
-      // Something else happened
-      console.error("Error message:", error.message);
-    }
+    // if (error.response) {
+    //   // Server responded with a status code outside the 2xx range
+    //   console.error("Response error:", error.response.data);
+    //   console.error("Status code:", error.response.status);
+    // } else if (error.request) {
+    //   // Request was made, but no response received
+    //   console.error("Request error:", error.request);
+    // } else {
+    //   // Something else happened
+    //   console.error("Error message:", error.message);
+    // }
     throw new Error("Failed to upload image.");
   }
 };

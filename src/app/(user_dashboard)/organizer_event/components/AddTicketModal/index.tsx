@@ -15,6 +15,12 @@ interface AddTicketModalProps {
   eventTitle: string;
 }
 
+interface IForm {
+  name: string; 
+  price: number; 
+  availableSeat: number; 
+}
+
 const TicketFormSchema = Yup.object().shape({
   name: Yup.string().required("Ticket name is required"),
   price: Yup.number()
@@ -43,7 +49,7 @@ const AddTicketModal: FC<AddTicketModalProps> = ({
       price: number; 
       availableSeat: number; 
     }, 
-    { resetForm }: FormikHelpers<any>
+    { resetForm }: FormikHelpers<IForm>
   ) => {
     try {
       const { data } = await axios.post(

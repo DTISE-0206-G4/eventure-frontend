@@ -79,10 +79,16 @@ const OrganizerEventPage: FC = () => {
       </div>
 
       <div className="flex flex-col gap-5">
+        {
+          eventsData.data.length === 0 && (
+            <div className="text-center">No events found.</div>
+          )
+        }
         {eventsData?.data.map((event: Event) => (
           <EventContainer
             key={event.id}
             event={event}
+            // discount={event.discount}
             handleClick={() => handleEventClick(event.id)}
             refetchEvents={refetch}
           />
