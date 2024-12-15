@@ -62,10 +62,14 @@ const TicketPage: FC = () => {
             >
               <Image
                 className="rounded-md w-[100px] h-[50px] object-cover"
-                src="/images/carousel-1.svg"
+                src={
+                  transaction.ticket.event.imageUrl
+                    ? transaction.ticket.event.imageUrl
+                    : "/images/carousel-1.svg"
+                }
                 width={50}
                 height={100}
-                alt="Picture of the author"
+                alt="Event Image"
               />
               <div className="flex flex-col gap-2 w-full">
                 <div className="flex max-lg:flex-col max-lg:gap-5 lg:justify-between">

@@ -32,8 +32,8 @@ const EventDetailsSection: FC<EventDetailsSectionProps> = ({ event }) => {
 
         <div className="flex gap-2 items-center justify-start">
           <Image
-            className="rounded-full"
-            src="/images/default-profile.jpg"
+            className="rounded-md"
+            src={event.user.profileImage ?? "/images/default-profile.jpg"}
             width={45}
             height={45}
             alt="User Profile"
