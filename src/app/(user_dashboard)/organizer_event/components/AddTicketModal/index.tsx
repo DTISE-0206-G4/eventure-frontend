@@ -8,20 +8,18 @@ import { useToast } from "@/providers/ToastProvider";
 import { useSession } from "next-auth/react";
 import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Ticket } from "@/types/event";
 
 interface AddTicketModalProps {
   refetchEvents: () => void;
   eventId: number;
   eventTitle: string;
-  onTicketAdded: (ticket: Ticket) => void;
 }
 
 const TicketFormSchema = Yup.object().shape({
   name: Yup.string().required("Ticket name is required"),
   price: Yup.number()
     .required("Price is required")
-    .min(1, "Price must be greater than 0"),
+    .min(0, "Type 0 if it is free"),
   availableSeat: Yup.number()
     .required("Available seats are required")
     .min(1, "There must be at least one seat"),
@@ -31,7 +29,6 @@ const AddTicketModal: FC<AddTicketModalProps> = ({
   eventId, 
   eventTitle, 
   refetchEvents,
-  onTicketAdded
  }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { showToast } = useToast();
@@ -68,24 +65,10 @@ const AddTicketModal: FC<AddTicketModalProps> = ({
       );
   
       if (data.success) {
-        const newTicket: Ticket = {
-          id: data.ticket.id,
-          eventId: eventId, 
-          name: data.ticket.name,
-          price: data.ticket.price,
-          availableSeat: data.ticket.availableSeat,
-          soldSeat: data.ticket.soldSeat || 0,
-          createdAt: data.ticket.createdAt, 
-          updatedAt: data.ticket.updatedAt, 
-          deletedAt: data.ticket.deletedAt, 
-          isReleased: false,
-          isClosed: false, 
-        };
-        onTicketAdded(newTicket); // Pass the new ticket to parent
         showToast(data.message, "success");
         resetForm();
         handleCloseModal();
-        console.log("New ticket:", newTicket);
+        refetchEvents();
       } else {
         showToast(data.message, "error");
       }
