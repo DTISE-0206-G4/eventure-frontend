@@ -10,6 +10,7 @@ import useCategories from "@/hooks/useCategories";
 import { useToast } from "@/providers/ToastProvider";
 import ConfirmationModal from "@/common/ConfirmationModal";
 import CustomSpinner from "@/common/CustomSpinner";
+import ImageUploader from "./components/ImageUploader";
 
 interface FormValues {
   title: string;
@@ -37,6 +38,7 @@ const validationSchema = Yup.object().shape({
 const AddEventPage: React.FC = () => {
   const [isModalConfirmationOpen, setIsModalConfirmationOpen] =
     useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -55,6 +57,7 @@ const AddEventPage: React.FC = () => {
         ...values,
         startTime: parseAndReformatDateTime(values.startTime),
         endTime: parseAndReformatDateTime(values.endTime),
+        imageUrl: imageUrl ?? "",
       };
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/event`,
@@ -117,6 +120,15 @@ const AddEventPage: React.FC = () => {
               {errors.title && touched.title && (
                 <div className="text-red-500">{errors.title}</div>
               )}
+            </div>
+            <div>
+              <label
+                className="block text-slate-gray text-sm font-bold mb-2"
+                htmlFor="description"
+              >
+                Event Image
+              </label>
+              <ImageUploader setImageUrl={setImageUrl} />
             </div>
             <div>
               <label

@@ -22,7 +22,7 @@ interface SubmitProps {
 const ProfilePage: FC = () => {
   const { data: session } = useSession();
   const { showToast } = useToast();
-  const { error, isLoading, profile } = useProfile(
+  const { error, isLoading, profile, refetch } = useProfile(
     session?.accessToken as string
   );
   const [openModalPassword, setOpenModalPassword] = useState(false);
@@ -59,7 +59,10 @@ const ProfilePage: FC = () => {
   return (
     <>
       <div className="font-semibold text-xl">Profile Settings</div>
-      <ProfileImageSection />
+      <ProfileImageSection
+        profile={profile as ProfileResponse}
+        refetch={refetch}
+      />
       <Formik
         initialValues={{
           name: profile?.name || "",

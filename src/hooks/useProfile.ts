@@ -19,6 +19,7 @@ const useProfile = (accessToken: string) => {
     isLoading,
     error,
     data: profile,
+    refetch,
   } = useQuery({
     queryKey: ["fetchProfile", accessToken],
     queryFn: async () => fetchProfile(accessToken),
@@ -29,6 +30,7 @@ const useProfile = (accessToken: string) => {
     isLoading,
     error,
     profile,
+    refetch,
   };
 };
 export default useProfile;

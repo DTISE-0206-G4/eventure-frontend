@@ -13,7 +13,9 @@ export interface Event {
   startTime: string;
   endTime: string;
   location: string;
+  imageUrl: string | null;
   categories: Category[];
+  eventDiscounts: EventDiscount[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string;

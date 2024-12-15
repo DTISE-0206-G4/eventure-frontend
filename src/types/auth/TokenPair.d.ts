@@ -8,6 +8,7 @@ export interface TokenPair {
 export interface TokenClaims extends JwtPayload {
   userId: string;
   scope: string;
+  profileImage: string;
 }
 
 export interface LoginResponse {

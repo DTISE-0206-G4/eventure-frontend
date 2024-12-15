@@ -56,7 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const decodedToken = jwtDecode<TokenClaims>(data.accessToken);
 
         // Extract claims from the decoded token
-        const { sub, scope, userId } = decodedToken;
+        const { sub, scope, userId, profileImage } = decodedToken;
 
         const parsedResponse: User = {
           email: sub,
@@ -72,6 +72,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
           roles: scope.split(" "),
           userId: parseInt(userId),
+          profileImage: profileImage,
         };
 
         return parsedResponse ?? null;
@@ -87,6 +88,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         roles: token.roles,
         id: token.accessToken.claims.userId,
         email: token.accessToken.claims.sub ?? "",
+        profileImage: (token.profileImage as string) ?? "",
       };
       return session;
     },
@@ -104,6 +106,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
           roles: user.roles,
           userId: user.userId,
+          profileImage: user.profileImage,
         };
       }
 

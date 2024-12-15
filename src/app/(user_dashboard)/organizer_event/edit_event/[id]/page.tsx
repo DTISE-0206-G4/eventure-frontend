@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import { notFound, useRouter } from "next/navigation";
 import { FC, use, useState } from "react";
 import * as Yup from "yup";
+import ImageUploader from "./components/ImageUploader";
 interface PageProps {
   params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
 }
@@ -56,6 +57,10 @@ const EditEventPage: FC<PageProps> = ({ params }) => {
 
   const { showToast } = useToast();
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  console.log("image " + imageUrl);
+
   if (isLoadingEvent) return <CustomSpinner />;
 
   const handleSubmitEditEvent = async (
@@ -67,6 +72,7 @@ const EditEventPage: FC<PageProps> = ({ params }) => {
         ...values,
         startTime: parseAndReformatDateTime(values.startTime),
         endTime: parseAndReformatDateTime(values.endTime),
+        imageUrl: imageUrl ?? event?.imageUrl,
       };
       const { data } = await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/event/${event?.id}`,
@@ -132,6 +138,18 @@ const EditEventPage: FC<PageProps> = ({ params }) => {
                 {errors.title && touched.title && (
                   <div className="text-red-500">{errors.title}</div>
                 )}
+              </div>
+              <div>
+                <label
+                  className="block text-slate-gray text-sm font-bold mb-2"
+                  htmlFor="description"
+                >
+                  Event Image
+                </label>
+                <ImageUploader
+                  setImageUrl={setImageUrl}
+                  imageUrl={event.imageUrl}
+                />
               </div>
               <div>
                 <label

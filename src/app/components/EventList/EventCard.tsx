@@ -33,7 +33,7 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
     >
       <Image
         className="rounded-md w-[100px] h-[50px] object-cover"
-        src="/images/carousel-1.svg"
+        src={event.imageUrl ? event.imageUrl : "/images/carousel-1.svg"}
         width={50}
         height={100}
         alt="Event Image"
