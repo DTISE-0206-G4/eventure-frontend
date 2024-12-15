@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationDot,
   faClock,
+  faPlus,
   faUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FC } from "react";
@@ -26,7 +27,7 @@ import EditDiscountModal from "../EditDiscountModal";
 
 interface IEventContainer {
   event: Event;
-  discount: EventDiscountResponse;
+  // discount: EventDiscountResponse;
   handleClick: (eventId: number) => void;
   refetchEvents: () => void;
 }
@@ -157,10 +158,6 @@ const EventContainer: FC<IEventContainer> = ({
 
   // const handleAddDiscountClick = () => {
   //   setIsDiscountModalOpen(true); // Open the modal
-  // };
-
-  // const handleCloseDiscountModal = () => {
-  //   setIsDiscountModalOpen(false); // Close the modal
   // };
 
   const handleDeleteEvent = async (event: Event): Promise<void> => {
