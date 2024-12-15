@@ -23,6 +23,7 @@ import EditTicketModal from "../EditTicketModal";
 import AddDiscountModal from "../AddDiscountModal";
 import DiscountCard from "../DiscountCard";
 import EditDiscountModal from "../EditDiscountModal";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface IEventContainer {
   event: Event;
@@ -511,7 +512,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
               title={ticket.name}
               available={ticket.availableSeat}
               sold={ticket.soldSeat}
-              price={`IDR ${ticket.price}`}
+              price={`IDR ${formatCurrency(ticket.price)}`}
               onEdit={() => handleEditTicket(ticket)}
               onRelease={() => showReleaseModal(ticket)}
               onClose={() => showCloseModal(ticket)}
