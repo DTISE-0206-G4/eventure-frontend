@@ -1,8 +1,13 @@
-'use client'
+"use client";
 import { useState } from "react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot, faClock, faPlus, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLocationDot,
+  faClock,
+  faPlus,
+  faUpRightFromSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import { FC } from "react";
 import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
 import { Event, Ticket } from "@/types/event";
@@ -21,67 +26,66 @@ import DiscountCard from "../DiscountCard";
 
 interface IEventContainer {
   event: Event;
-  discount: EventDiscountResponse;
+  // discount: EventDiscountResponse;
   handleClick: (eventId: number) => void;
   refetchEvents: () => void;
 }
 
-const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount }) => {
-  
-
+const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedTicket, setSelectedTicket] = useState<null | Ticket>(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const [isDeleteTicketModalOpen, setIsDeleteTicketModalOpen] = useState(false); 
-  const [ticketToDelete, setTicketToDelete] = useState<null | number>(null); 
+  const [isDeleteTicketModalOpen, setIsDeleteTicketModalOpen] = useState(false);
+  const [ticketToDelete, setTicketToDelete] = useState<null | number>(null);
 
-  const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false); 
-  const [ticketToRelease, setTicketToRelease] = useState<null | Ticket>(null); 
-  const [releasedTickets, setReleasedTickets] = useState<Set<number>>(new Set());
+  const [isReleaseModalOpen, setIsReleaseModalOpen] = useState(false);
+  const [ticketToRelease, setTicketToRelease] = useState<null | Ticket>(null);
+  const [releasedTickets, setReleasedTickets] = useState<Set<number>>(
+    new Set()
+  );
 
   const [isDiscountModalOpen, setIsDiscountModalOpen] = useState(false); // State for the discount modal
 
-  
   const { data: session } = useSession();
   const { showToast } = useToast();
 
   const handleEditTicket = (ticket: Ticket) => {
     setSelectedTicket(ticket);
-    setIsEditModalOpen(true); 
+    setIsEditModalOpen(true);
   };
 
   const closeEditModal = () => {
     setSelectedTicket(null);
-    setIsEditModalOpen(false); 
+    setIsEditModalOpen(false);
   };
 
   const showDeleteModal = (): void => {
     setIsModalOpen(true);
-  }
+  };
 
   const hideDeleteModal = (): void => {
     setIsModalOpen(false);
-  }  
+  };
 
   const showDeleteTicketModal = (ticketId: number): void => {
-    setTicketToDelete(ticketId); 
-    setIsDeleteTicketModalOpen(true); 
+    setTicketToDelete(ticketId);
+    setIsDeleteTicketModalOpen(true);
   };
 
   const hideDeleteTicketModal = (): void => {
-    setIsDeleteTicketModalOpen(false); 
-    setTicketToDelete(null); 
+    setIsDeleteTicketModalOpen(false);
+    setTicketToDelete(null);
   };
 
   const showReleaseModal = (ticket: Ticket): void => {
-    setTicketToRelease(ticket); 
-    setIsReleaseModalOpen(true); 
+    setTicketToRelease(ticket);
+    setIsReleaseModalOpen(true);
   };
 
   const hideReleaseModal = (): void => {
-    setIsReleaseModalOpen(false); 
-    setTicketToRelease(null); 
+    setIsReleaseModalOpen(false);
+    setTicketToRelease(null);
   };
 
   const handleAddDiscountClick = () => {
@@ -92,10 +96,9 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
     setIsDiscountModalOpen(false); // Close the modal
   };
 
-  
-  const handleDeleteEvent = async(event: Event): Promise<void> => {
-    if(!event.id) return;
-  
+  const handleDeleteEvent = async (event: Event): Promise<void> => {
+    if (!event.id) return;
+
     try {
       const { data } = await axios.delete(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/event/${event.id}`,
@@ -119,15 +122,15 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
         showToast("An unexpected error occurred. Please try again.", "error");
       }
     } finally {
-      hideDeleteModal(); 
-    } 
-  }
+      hideDeleteModal();
+    }
+  };
 
   // New function to handle ticket deletion
   const handleDeleteTicket = async (ticketId: number): Promise<void> => {
     try {
       const { data } = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket/${ticketId}`, 
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket/${ticketId}`,
         {
           headers: {
             Authorization: `Bearer ${session?.accessToken}`,
@@ -137,7 +140,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
       );
       if (data.success) {
         showToast(data.message, "success");
-        refetchEvents(); 
+        refetchEvents();
       } else {
         showToast(data.message, "error");
       }
@@ -148,7 +151,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
         showToast("An unexpected error occurred. Please try again.", "error");
       }
     } finally {
-      hideDeleteTicketModal(); 
+      hideDeleteTicketModal();
     }
   };
 
@@ -156,7 +159,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
   const handleReleaseTicket = async (ticketId: number): Promise<void> => {
     try {
       const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket/${ticketId}/release`, 
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ticket/${ticketId}/release`,
         {},
         {
           headers: {
@@ -167,8 +170,8 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
       );
       if (data.success) {
         showToast(data.message, "success");
-        setReleasedTickets((prev) => new Set(prev).add(ticketId)); 
-        refetchEvents(); 
+        setReleasedTickets((prev) => new Set(prev).add(ticketId));
+        refetchEvents();
       } else {
         showToast(data.message, "error");
       }
@@ -179,17 +182,14 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
         showToast("An unexpected error occurred. Please try again.", "error");
       }
     } finally {
-      hideReleaseModal(); 
+      hideReleaseModal();
     }
   };
 
-
-
-
   return (
     <div className="flex flex-col gap-5 bg-white rounded-md w-full p-5 border border-platinum">
-      <div 
-        className="flex gap-5 items-center flex-col lg:flex-row" 
+      <div
+        className="flex gap-5 items-center flex-col lg:flex-row"
         key={event.id}
       >
         <Image
@@ -210,14 +210,12 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
                 refetchEvents={refetchEvents}
               />
 
-              <AddDiscountModal 
-                eventId={event.id} 
-                eventTitle={event.title} 
-                refetchEvents={refetchEvents} 
+              <AddDiscountModal
+                eventId={event.id}
+                eventTitle={event.title}
+                refetchEvents={refetchEvents}
               />
 
-            
-              
               <ActionButton
                 label="Add Discount"
                 onClick={() => console.log("Add Discount")}
@@ -250,24 +248,18 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
                   icon={faUpRightFromSquare}
                   className="bg-true-blue text-white"
                 />
-              
               </Link>
-            
             </div>
           </div>
 
           <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row justify-between items-center">
-            
             <div className="flex flex-col lg:flex-row gap-5">
-
               <div className="flex gap-2 items-center">
                 <FontAwesomeIcon
                   className="w-[15px] h-[15px] shrink-0 text-slate-gray"
                   icon={faLocationDot}
                 />
-                <div className="text-sm text-slate-gray">
-                  {event.location}
-                </div>
+                <div className="text-sm text-slate-gray">{event.location}</div>
               </div>
 
               <div className="flex  gap-2 items-center">
@@ -283,21 +275,18 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
 
             <div className="flex gap-2 flex-wrap flex-row-reverse">
               {event.categories.map((category, index) => (
-                <div key={index} className="text-slate-gray rounded-full px-2 border border-slate-gray">
+                <div
+                  key={index}
+                  className="text-slate-gray rounded-full px-2 border border-slate-gray"
+                >
                   {category.name}
                 </div>
               ))}
             </div>
-
           </div>
         </div>
 
-      
-
-        
-    
-
-      {/* Delete Confirmation Modal */}
+        {/* Delete Confirmation Modal */}
         <Modal show={isModalOpen} onClose={hideDeleteModal}>
           <Modal.Header>Confirm Delete</Modal.Header>
           <Modal.Body>
@@ -312,37 +301,34 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
             </Button>
           </Modal.Footer>
         </Modal>
+      </div>
+      {/* Please for ticket */}
+      <h4>Tickets</h4>
+      <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {event.tickets.map((ticket) => (
+          <TicketCard
+            key={ticket.id}
+            title={ticket.name}
+            available={ticket.availableSeat}
+            sold={ticket.soldSeat}
+            price={`IDR ${ticket.price}`}
+            onEdit={() => handleEditTicket(ticket)}
+            onRelease={() => showReleaseModal(ticket)}
+            onClose={() => console.log(`Close ${ticket.name}`)}
+            onDelete={() => showDeleteTicketModal(ticket.id)}
+            isReleased={ticket.isReleased}
+          />
+        ))}
+      </div>
 
-        
-    </div>
-    {/* Please for ticket */}
-    <h4>Tickets</h4>
-    <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {event.tickets.map((ticket) => (
-        <TicketCard
-          key={ticket.id}
-          title={ticket.name}
-          available={ticket.availableSeat}
-          sold={ticket.soldSeat}
-          price={`IDR ${ticket.price}`}
-          onEdit={() => handleEditTicket(ticket)} 
-          onRelease={() => showReleaseModal(ticket)} 
-          onClose={() => console.log(`Close ${ticket.name}`)}
-          onDelete={() => showDeleteTicketModal(ticket.id)} 
-          isReleased={ticket.isReleased} 
-        />
-      ))}
-    </div>
-      
-      
-    {/* Edit Ticket Modal */}
-    {isEditModalOpen && selectedTicket && (
+      {/* Edit Ticket Modal */}
+      {isEditModalOpen && selectedTicket && (
         <EditTicketModal
           eventId={event.id}
           eventTitle={event.title}
           refetchEvents={refetchEvents}
-          ticket={selectedTicket} 
-          onClose={closeEditModal} 
+          ticket={selectedTicket}
+          onClose={closeEditModal}
         />
       )}
 
@@ -353,7 +339,10 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
           <p>Are you sure you want to delete this ticket?</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button color="failure" onClick={() => handleDeleteTicket(ticketToDelete!)}> 
+          <Button
+            color="failure"
+            onClick={() => handleDeleteTicket(ticketToDelete!)}
+          >
             Delete Ticket
           </Button>
           <Button color="gray" onClick={hideDeleteTicketModal}>
@@ -366,10 +355,16 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
       <Modal show={isReleaseModalOpen} onClose={hideReleaseModal}>
         <Modal.Header>Confirm Release Ticket</Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to release this ticket? This action cannot be undone.</p>
+          <p>
+            Are you sure you want to release this ticket? This action cannot be
+            undone.
+          </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button color="failure" onClick={() => handleReleaseTicket(ticketToRelease!.id)}> 
+          <Button
+            color="failure"
+            onClick={() => handleReleaseTicket(ticketToRelease!.id)}
+          >
             Release Ticket
           </Button>
           <Button color="gray" onClick={hideReleaseModal}>
@@ -378,33 +373,27 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount })
         </Modal.Footer>
       </Modal>
 
-
-    
-
-    <div>
-      <h4>Discount</h4>
-      <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {event.tickets.map((ticket) => (
-        <DiscountCard
-          key={ticket.id}
-          title={ticket.name}
-          available={ticket.availableSeat}
-
-          // sold={ticket.soldSeat}
-          // price={`IDR ${ticket.price}`}
-          onEdit={() => handleEditTicket(ticket)} 
-          onRelease={() => showReleaseModal(ticket)} 
-          onClose={() => console.log(`Close ${ticket.name}`)}
-          onDelete={() => showDeleteTicketModal(ticket.id)} 
-          isReleased={ticket.isReleased} 
-        />
-      ))}
+      <div>
+        <h4>Discount</h4>
+        <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {/* {event.tickets.map((ticket) => (
+            <DiscountCard
+              key={ticket.id}
+              title={ticket.name}
+              available={ticket.availableSeat}
+              // sold={ticket.soldSeat}
+              // price={`IDR ${ticket.price}`}
+              onEdit={() => handleEditTicket(ticket)}
+              onRelease={() => showReleaseModal(ticket)}
+              onClose={() => console.log(`Close ${ticket.name}`)}
+              onDelete={() => showDeleteTicketModal(ticket.id)}
+              isReleased={ticket.isReleased}
+            />
+          ))} */}
+        </div>
+      </div>
     </div>
-    </div>
-  </div>
-  )
-}
+  );
+};
 
 export default EventContainer;
-
-
