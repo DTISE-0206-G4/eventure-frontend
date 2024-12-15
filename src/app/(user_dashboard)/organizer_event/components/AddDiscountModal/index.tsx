@@ -8,6 +8,7 @@ import { useToast } from "@/providers/ToastProvider";
 import { useSession } from "next-auth/react";
 import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import parseAndReformatDateTime from "@/utils/formatDateTimeForm";
 
 interface AddDiscountModalProps {
   refetchEvents: () => void;
@@ -49,24 +50,20 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
       isPercentage: boolean;
       available: number;
       code: string;
-      expiredAt: Date | null;
+      expiredAt: string;
     },
     { resetForm }: FormikHelpers<any>
   ) => {
     try {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/event_discount`,
+        
         {
+          ...values,
+          expiredAt: parseAndReformatDateTime(values.expiredAt),
           eventId,
-          title: values.title,
-          description: values.description,
-          amount: values.amount,
-          isPercentage: values.isPercentage,
-          available: values.available,
-          code: values.code,
           isReleased: false,
           isClosed: false,
-          expiredAt: values.expiredAt,
         },
         {
           headers: {
@@ -113,7 +110,7 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
               isPercentage: false,
               available: 0,
               code: "",
-              expiredAt: null,
+              expiredAt: "",
             }}
             validationSchema={DiscountFormSchema}
             onSubmit={handleSubmit}
@@ -222,7 +219,7 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
                     Expiry Date
                   </label>
                   <Field
-                    type="date"
+                    type="datetime-local"
                     id="expiredAt"
                     name="expiredAt"
                     className="w-full mt-1 p-2 border border-gray-300 rounded-md"

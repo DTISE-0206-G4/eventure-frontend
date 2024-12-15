@@ -6,6 +6,7 @@ import { faLocationDot, faClock, faPlus, faUpRightFromSquare } from "@fortawesom
 import { FC } from "react";
 import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
 import { Event, Ticket } from "@/types/event";
+import { EventDiscountResponse } from "@/types/eventDiscountType";
 import formatDate from "@/utils/formatDate";
 import { Modal, Button } from "flowbite-react";
 import { useSession } from "next-auth/react";
@@ -16,14 +17,16 @@ import AddTicketModal from "../AddTicketModal";
 import TicketCard from "../TicketCard";
 import EditTicketModal from "../EditTicketModal";
 import AddDiscountModal from "../AddDiscountModal";
+import DiscountCard from "../DiscountCard";
 
 interface IEventContainer {
   event: Event;
+  discount: EventDiscountResponse;
   handleClick: (eventId: number) => void;
   refetchEvents: () => void;
 }
 
-const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
+const EventContainer: FC<IEventContainer> = ({ event, refetchEvents, discount }) => {
   
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -295,7 +298,7 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
     
 
       {/* Delete Confirmation Modal */}
-      <Modal show={isModalOpen} onClose={hideDeleteModal}>
+        <Modal show={isModalOpen} onClose={hideDeleteModal}>
           <Modal.Header>Confirm Delete</Modal.Header>
           <Modal.Body>
             <p>Are you sure you want to delete this event? {event.title}</p>
@@ -380,6 +383,23 @@ const EventContainer: FC<IEventContainer> = ({ event, refetchEvents }) => {
 
     <div>
       <h4>Discount</h4>
+      <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {event.tickets.map((ticket) => (
+        <DiscountCard
+          key={ticket.id}
+          title={ticket.name}
+          available={ticket.availableSeat}
+
+          // sold={ticket.soldSeat}
+          // price={`IDR ${ticket.price}`}
+          onEdit={() => handleEditTicket(ticket)} 
+          onRelease={() => showReleaseModal(ticket)} 
+          onClose={() => console.log(`Close ${ticket.name}`)}
+          onDelete={() => showDeleteTicketModal(ticket.id)} 
+          isReleased={ticket.isReleased} 
+        />
+      ))}
+    </div>
     </div>
   </div>
   )
