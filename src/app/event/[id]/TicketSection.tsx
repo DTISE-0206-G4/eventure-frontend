@@ -1,7 +1,7 @@
 "use client";
 import ConfirmationModal from "@/common/ConfirmationModal";
 import CustomSpinner from "@/common/CustomSpinner";
-import useEventDiscounts from "@/hooks/useEventDiscounts";
+import useEventDiscountsPublic from "@/hooks/useEventDiscountsPublic";
 import useUserDiscounts from "@/hooks/useUserDiscounts";
 import { useToast } from "@/providers/ToastProvider";
 import { Event, Ticket } from "@/types/event";
@@ -31,7 +31,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
     isLoading: isLoadingEventDiscount,
     error: errorEventDiscount,
     refetch: refetchEventDiscounts,
-  } = useEventDiscounts(session?.accessToken as string, event.id);
+  } = useEventDiscountsPublic(session?.accessToken as string, event.id);
   const { showToast } = useToast();
   const [openModal, setOpenModal] = useState(false);
   const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
@@ -294,6 +294,9 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                       </div>
                       <div className="text-sm text-slate-gray">
                         Available : {discount.available - discount.used}
+                      </div>
+                      <div className="text-sm text-slate-gray">
+                        Expired : {formatDate(discount.expiredAt)}
                       </div>
                     </div>
                   </div>
