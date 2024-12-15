@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faClock } from "@fortawesome/free-solid-svg-icons";
 import { Event } from "@/types/event";
 import formatDate from "@/utils/formatDate";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 interface EventCardProps {
   event: Event;
@@ -21,7 +22,7 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
     { min: Infinity, max: -Infinity }
   );
   return (
-    <div  
+    <div
       key={event.id}
       onClick={() => {
         handleClick(event.id);
@@ -47,7 +48,8 @@ const EventCard: FC<EventCardProps> = ({ event, handleClick }) => {
               <>
                 {event.tickets.length > 0 ? (
                   <>
-                    IDR {ticketPriceRange.min} - IDR {ticketPriceRange.max}
+                    IDR {formatCurrency(ticketPriceRange.min)} - IDR{" "}
+                    {formatCurrency(ticketPriceRange.max)}
                   </>
                 ) : null}
               </>

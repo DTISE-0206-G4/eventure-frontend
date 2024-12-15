@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { FC, use, useRef } from "react";
 import html2canvas from "html2canvas";
 import CustomSpinner from "@/common/CustomSpinner";
+import { formatCurrency } from "@/utils/formatCurrency";
 interface PageProps {
   params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
 }
@@ -91,7 +92,7 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
                 {invoice?.ticket.event.title} - [{invoice?.ticket.name}]
               </div>
               <div className="w-1/5 text-right">
-                IDR {invoice?.ticket.price}
+                IDR {formatCurrency(invoice?.ticket.price as number)}
               </div>
             </div>
 
@@ -111,9 +112,11 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
                 </div>
                 <div className="w-1/5 text-right">
                   IDR -
-                  {discount.isPercentage
-                    ? (discount.amount * (invoice?.ticket.price ?? 0)) / 100
-                    : discount.amount}
+                  {formatCurrency(
+                    discount.isPercentage
+                      ? (discount.amount * (invoice?.ticket.price ?? 0)) / 100
+                      : discount.amount
+                  )}
                 </div>
               </div>
             ))}
@@ -130,9 +133,11 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
                 </div>
                 <div className="w-1/5 text-right">
                   IDR -
-                  {discount.isPercentage
-                    ? (discount.amount * (invoice?.ticketPrice ?? 0)) / 100
-                    : discount.amount}
+                  {formatCurrency(
+                    discount.isPercentage
+                      ? (discount.amount * (invoice?.ticketPrice ?? 0)) / 100
+                      : discount.amount
+                  )}
                 </div>
               </div>
             ))}
@@ -143,7 +148,7 @@ const InvoicePage: FC<PageProps> = ({ params }) => {
             <div className="w-full sm:w-1/3">
               <div className="flex justify-between border-t border-gray-200 pt-4 font-semibold text-gray-800">
                 <span>Total:</span>
-                <span>IDR {invoice?.totalPrice}</span>
+                <span>IDR {formatCurrency(invoice?.totalPrice as number)}</span>
               </div>
             </div>
           </div>
