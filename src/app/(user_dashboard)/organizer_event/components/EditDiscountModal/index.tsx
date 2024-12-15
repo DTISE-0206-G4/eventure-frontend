@@ -1,19 +1,22 @@
 import { FC } from "react";
-import { useState } from "react";
+// import { useState } from "react";
 import { Modal, Button } from "flowbite-react";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useToast } from "@/providers/ToastProvider";
 import { useSession } from "next-auth/react";
-import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import parseAndReformatDateTime from "@/utils/formatDateTimeForm";
+// import ActionButton from "@/app/(user_dashboard)/organizer_event/components/ActionButton";
+// import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import parseAndReformatDateTime, { formatDateTimeForInput } from "@/utils/formatDateTimeForm";
+import { EventDiscountResponse } from "@/types/eventDiscountType";
 
-interface AddDiscountModalProps {
+interface EditDiscountModalProps {
   refetchEvents: () => void;
   eventId: number;
   eventTitle: string;
+  discount: EventDiscountResponse;
+  onClose: () => void;
 }
 
 interface IForm {
@@ -40,17 +43,19 @@ const DiscountFormSchema = Yup.object().shape({
   isPercentage: Yup.boolean(),
 });
 
-const AddDiscountModal: FC<AddDiscountModalProps> = ({
+const EditDiscountModal: FC<EditDiscountModalProps> = ({
   eventId,
   eventTitle,
   refetchEvents,
+  discount,
+  onClose
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const { showToast } = useToast();
   const { data: session } = useSession();
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  // const handleOpenModal = () => setIsModalOpen(true);
+  // const handleCloseModal = () => setIsModalOpen(false);
 
   const handleSubmit = async (
     values: {
@@ -65,8 +70,8 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
     { resetForm }: FormikHelpers<IForm>
   ) => {
     try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/event_discount`,
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/event_discount/${discount.id}`,
         
         {
           ...values,
@@ -86,7 +91,7 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
       if (data.success) {
         showToast(data.message, "success");
         resetForm();
-        handleCloseModal();
+        // handleCloseModal();
         refetchEvents();
       } else {
         showToast(data.message, "error");
@@ -97,30 +102,28 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
       } else {
         showToast("An unexpected error occurred. Please try again.", "error");
       }
+    } finally {
+      onClose();
     }
+
   };
 
   return (
     <>
-      <ActionButton
-        label="Add Discount"
-        onClick={handleOpenModal}
-        icon={faPlus}
-        className="bg-true-blue text-white"
-      />
+      
 
-      <Modal show={isModalOpen} onClose={handleCloseModal} size="lg">
-        <Modal.Header>Create Discount for {eventTitle}</Modal.Header>
+      <Modal show={true} onClose={onClose} size="lg">
+        <Modal.Header>Edit Discount for {eventTitle}</Modal.Header>
         <Modal.Body>
           <Formik
             initialValues={{
-              title: "",
-              description: "",
-              amount: 0,
-              isPercentage: false,
-              available: 0,
-              code: "",
-              expiredAt: "",
+              title: discount.title,
+              description: discount.description,
+              amount: discount.amount,
+              isPercentage: discount.isPercentage,
+              available: discount.available,
+              code: discount.code,
+              expiredAt: formatDateTimeForInput(discount.expiredAt),
             }}
             validationSchema={DiscountFormSchema}
             onSubmit={handleSubmit}
@@ -241,12 +244,12 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
                   />
                 </div>
 
-                <div className="mt-4 flex justify-end gap-2">
-                  <Button type="button" color="gray" onClick={handleCloseModal}>
+                <div className="mt-4 flex justify-between gap-2">
+                  <Button type="button" color="gray" onClick={onClose}>
                     Cancel
                   </Button>
                   <Button type="submit" color="blue" disabled={isSubmitting}>
-                    {isSubmitting ? "Creating..." : "Create Discount"}
+                    {isSubmitting ? "Updating..." : "Update Discount"}
                   </Button>
                 </div>
               </Form>
@@ -258,4 +261,4 @@ const AddDiscountModal: FC<AddDiscountModalProps> = ({
   );
 };
 
-export default AddDiscountModal;
+export default EditDiscountModal;

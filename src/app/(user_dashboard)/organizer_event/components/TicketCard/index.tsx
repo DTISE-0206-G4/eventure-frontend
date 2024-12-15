@@ -6,10 +6,11 @@ interface TicketCardProps {
   sold: number;
   price: string;
   onEdit: () => void;
-  onRelease: () => void; // Ensure onRelease is defined
+  isReleased: boolean;
+  onRelease: () => void;
+  isClosed: boolean;
   onClose: () => void;
   onDelete: () => void;
-  isReleased: boolean; // New prop to track if the ticket is released
 }
 
 const TicketCard: FC<TicketCardProps> = ({
@@ -21,14 +22,15 @@ const TicketCard: FC<TicketCardProps> = ({
   onRelease,
   onClose,
   onDelete,
-  isReleased
+  isReleased,
+  isClosed
   
 }) => {
   
 
 
   return (
-    <div className="border border-red-600 rounded-lg py-2 px-5 text-center w-fit">
+    <div className="border border-platinum hover:cursor-pointer hover:bg-azureish-white rounded-lg py-2 px-5 text-center w-fit">
       <div className="font-semibold text-lg">{title}</div>
       <div>Available : {available}</div>
       <div>Sold: {sold}</div>
@@ -49,14 +51,14 @@ const TicketCard: FC<TicketCardProps> = ({
           {isReleased ? "Released" : "Release"} {/* Change button text based on release status */}
         </button>
         <button
-          className="border border-red-500 rounded-lg py-2 px-5 text-red-500"
+          className={`${isClosed ? "bg-slate-500" : "bg-red-700"} rounded-lg py-2 px-5 text-white `}
           onClick={onClose}
         >
           Close
         </button>
         <button
           // className="border border-red-500 rounded-lg py-2 px-5 text-white bg-red-700"
-          className={`${isReleased ? "bg-slate-500" : "bg-red-700"} border border-red-500 rounded-lg py-2 px-5 text-white `}
+          className={`${isReleased ? "bg-slate-500" : "bg-red-700"} rounded-lg py-2 px-5 text-white `}
           onClick={onDelete}
           disabled={isReleased ? true : false} 
         >
