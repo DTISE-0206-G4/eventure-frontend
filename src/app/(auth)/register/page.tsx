@@ -86,7 +86,7 @@ const RegisterPage: FC = () => {
                 id="email"
                 name="email"
                 placeholder="Email"
-                className="w-full  p-2 rounded-lg border-2 "
+                className="w-full p-2 rounded-sm border border-platinum"
               />
               {errors.email && touched.email ? (
                 <div className="text-red-500">{errors.email}</div>

@@ -59,6 +59,7 @@ export interface EventTransaction {
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
+  imageUrl: string | null;
 }
 
 export interface CategoryTransaction {

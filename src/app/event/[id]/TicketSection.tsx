@@ -161,7 +161,11 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
       {session?.user?.roles.includes("ATTENDEE") && (
         <>
           {event?.tickets.map((ticket) => {
-            if (ticket.availableSeat - ticket.soldSeat > 0) {
+            if (
+              ticket.availableSeat - ticket.soldSeat > 0 &&
+              ticket.isReleased &&
+              !ticket.isClosed
+            ) {
               return (
                 <div
                   onClick={() => {
@@ -184,7 +188,9 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                   className="bg-platinum text-white rounded-lg py-2 px-5 text-center hover:cursor-pointer"
                 >
                   <div className="font-semibold text-lg">{ticket.name}</div>
-                  <div>Available : 0</div>
+                  <div>
+                    Available : {ticket.availableSeat - ticket.soldSeat}
+                  </div>
                   <div>IDR {formatCurrency(ticket.price)}</div>
                 </div>
               );

@@ -26,6 +26,7 @@ export interface UserEvent {
   id: number;
   name: string;
   email: string;
+  profileImage: string | null;
 }
 
 export interface Category {
