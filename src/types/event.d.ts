@@ -15,6 +15,7 @@ export interface Event {
   location: string;
   imageUrl: string | null;
   categories: Category[];
+  eventDiscounts: EventDiscount[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
