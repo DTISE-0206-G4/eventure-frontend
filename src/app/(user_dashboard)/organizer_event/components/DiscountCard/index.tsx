@@ -1,38 +1,45 @@
 import { FC } from "react";
 
-interface TicketCardProps {
+interface DicountCardProps {
   title: string;
+  description: string;
+  amount: number;
+  isPercentage: boolean;
   available: number;
-  sold: number;
-  price: string;
+  code: string;
+  expiredAt: string;
+  isReleased: boolean;
+  isClosed: boolean;
   onEdit: () => void;
-  onRelease: () => void; // Ensure onRelease is defined
+  onRelease: () => void;
   onClose: () => void;
   onDelete: () => void;
-  isReleased: boolean; // New prop to track if the ticket is released
 }
 
-const TicketCard: FC<TicketCardProps> = ({
+const DicountCard: FC<DicountCardProps> = ({
   title,
+  description,
+  amount,
+  isPercentage,
   available,
-  sold,
-  price,
+  code,
+  expiredAt,
+  isReleased,
+  isClosed,
   onEdit,
   onRelease,
   onClose,
-  onDelete,
-  isReleased
-  
+  onDelete
 }) => {
-  
-
-
   return (
     <div className="border border-red-600 rounded-lg py-2 px-5 text-center w-fit">
       <div className="font-semibold text-lg">{title}</div>
-      <div>Available : {available}</div>
-      <div>Sold: {sold}</div>
-      <div>{price}</div>
+      <div>{description}</div>
+      <div>Amount: {amount}</div>
+      <div>Available: {available}</div>
+      <div>Code: {code}</div>
+      <div>Expired At: {expiredAt}</div>
+      {/* <div>{price}</div> */}
       <div className="flex gap-2 mt-2 flex-wrap justify-center">
       <button
           className={`${isReleased ? "bg-slate-500" : "bg-true-blue"} rounded-lg py-2 px-5 text-white`}
@@ -67,4 +74,4 @@ const TicketCard: FC<TicketCardProps> = ({
   );
 };
 
-export default TicketCard;
+export default DicountCard;

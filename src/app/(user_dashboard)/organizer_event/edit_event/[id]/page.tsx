@@ -15,7 +15,7 @@ import { FC, use, useState } from "react";
 import * as Yup from "yup";
 import ImageUploader from "./components/ImageUploader";
 interface PageProps {
-  params: Promise<{ id: string }>; // params is a Promise<{ id: string }>
+  params: Promise<{ id: string }>; 
 }
 interface FormValues {
   title: string;
