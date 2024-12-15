@@ -69,7 +69,11 @@ const Header: FC = () => {
                 <div className="flex gap-2 items-start justify-start text-start flex-wrap max-lg:me-2">
                   <Image
                     className="rounded-md"
-                    src="/images/default-profile.jpg"
+                    src={
+                      session.user.profileImage != ""
+                        ? session.user.profileImage
+                        : "/images/default-profile.jpg"
+                    }
                     width={45}
                     height={45}
                     alt="User Profile"

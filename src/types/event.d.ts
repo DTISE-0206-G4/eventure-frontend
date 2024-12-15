@@ -13,6 +13,7 @@ export interface Event {
   startTime: string;
   endTime: string;
   location: string;
+  imageUrl: string | null;
   categories: Category[];
   createdAt: string;
   updatedAt: string;
