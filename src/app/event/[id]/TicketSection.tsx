@@ -7,6 +7,7 @@ import { useToast } from "@/providers/ToastProvider";
 import { Event, Ticket } from "@/types/event";
 import { EventDiscountResponse } from "@/types/eventDiscountType";
 import { UserDiscountResponse } from "@/types/userDiscountType";
+import { formatCurrency } from "@/utils/formatCurrency";
 import formatDate from "@/utils/formatDate";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -173,7 +174,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                   <div>
                     Available : {ticket.availableSeat - ticket.soldSeat}
                   </div>
-                  <div>IDR {ticket.price}</div>
+                  <div>IDR {formatCurrency(ticket.price)}</div>
                 </div>
               );
             } else {
@@ -184,7 +185,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                 >
                   <div className="font-semibold text-lg">{ticket.name}</div>
                   <div>Available : 0</div>
-                  <div>IDR {ticket.price}</div>
+                  <div>IDR {formatCurrency(ticket.price)}</div>
                 </div>
               );
             }
@@ -315,7 +316,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                     Price:
                   </div>
                   <div className="text-lg font-semibold text-gray-900">
-                    IDR {modalTicket?.price}
+                    IDR {formatCurrency((modalTicket?.price as number) || 0)}
                   </div>
                 </div>
 
@@ -336,8 +337,11 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                       <div className="text-lg font-semibold text-red-600">
                         IDR -
                         {discount.isPercentage
-                          ? (discount.amount * (modalTicket?.price ?? 0)) / 100
-                          : discount.amount}
+                          ? formatCurrency(
+                              (discount.amount * (modalTicket?.price ?? 0)) /
+                                100
+                            )
+                          : formatCurrency(discount.amount)}
                       </div>
                     </div>
                   ))}
@@ -353,8 +357,11 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                       <div className="text-lg font-semibold text-red-600">
                         IDR -
                         {discount.isPercentage
-                          ? (discount.amount * (modalTicket?.price ?? 0)) / 100
-                          : discount.amount}
+                          ? formatCurrency(
+                              (discount.amount * (modalTicket?.price ?? 0)) /
+                                100
+                            )
+                          : formatCurrency(discount.amount)}
                       </div>
                     </div>
                   ))}
@@ -369,7 +376,7 @@ const TicketSection: FC<TicketSectionProps> = ({ event }) => {
                     Total:
                   </div>
                   <div className="text-lg font-bold text-gray-900">
-                    IDR {totalPrice}
+                    IDR {formatCurrency(totalPrice)}
                   </div>
                 </div>
               </div>

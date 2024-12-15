@@ -2,6 +2,7 @@
 import CustomSpinner from "@/common/CustomSpinner";
 import useAnalytics from "@/hooks/useAnalytics";
 import { RevenueData, TicketSoldData } from "@/types/analytic";
+import { formatCurrency } from "@/utils/formatCurrency";
 import { faMoneyBill, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown, DropdownItem } from "flowbite-react";
@@ -101,7 +102,7 @@ const AnalyticsPage: FC = () => {
             />
             <div className="font-semibold text-lg">Total Revenue</div>
             <div className="text-xl font-bold">
-              IDR {analyticsData?.totalRevenue}
+              IDR {formatCurrency(analyticsData?.totalRevenue)}
             </div>
           </div>
         </div>
@@ -131,7 +132,7 @@ const AnalyticsPage: FC = () => {
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-2 justify-start items-start">
-        <div className="text-lg font-medium text-slate-gray">Tickets Sold</div>
+        <div className="text-lg font-medium text-slate-gray">Revenue</div>
         <div style={{ width: "100%", height: 400 }}>
           <ResponsiveContainer>
             <LineChart
